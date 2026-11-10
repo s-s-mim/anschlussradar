@@ -1,0 +1,49 @@
+name: infra
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Environment"
+        type: choice
+        options: [dev, prod]
+        default: dev
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  what-if:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Preview changes
+        run: |
+          az deployment group what-if \
+            --resource-group rg-anschlussradar-${{ inputs.env }} \
+            --template-file infra/main.bicep \
+            --parameters infra/main.${{ inputs.env }}.bicepparam
+
+  deploy:
+    needs: what-if
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.env }}   # add a required reviewer to this environment in GitHub
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy
+        run: |
+          az deployment group create \
+            --resource-group rg-anschlussradar-${{ inputs.env }} \
+            --template-file infra/main.bicep \
+            --parameters infra/main.${{ inputs.env }}.bicepparam

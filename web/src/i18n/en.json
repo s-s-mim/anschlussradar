@@ -1,0 +1,13 @@
+{
+  "banner": {
+    "title": "AnschlussRadar is still learning.",
+    "liveOnly": "Live delays are accurate from today. Reliability scores will appear in about two weeks.",
+    "early": "Live delays are accurate from today. Reliability scores are early estimates and improve with every week of data."
+  },
+  "score": {
+    "earlyEstimate": "early estimate",
+    "limitedData": "limited data",
+    "basedOn_one": "based on {{count}} trip",
+    "basedOn_other": "based on {{count}} trips"
+  }
+}

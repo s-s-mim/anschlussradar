@@ -1,0 +1,50 @@
+name: retrain
+
+# Weekly champion/challenger run. See section 7 of the project documentation.
+on:
+  schedule:
+    - cron: "17 2 * * 1"   # Monday 02:17 UTC, after Sunday's trains have their facts
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # OpenID Connect login to Azure for the models container
+  contents: read
+
+concurrency:
+  group: retrain
+  cancel-in-progress: false
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    environment: prod
+    timeout-minutes: 60
+    env:
+      KUSTO_QUERY_URI: ${{ vars.KUSTO_QUERY_URI }}
+      KUSTO_DATABASE: anschlussradar
+      KUSTO_APP_ID: ${{ vars.KUSTO_APP_ID }}
+      KUSTO_TENANT_ID: ${{ vars.KUSTO_TENANT_ID }}
+      KUSTO_APP_SECRET: ${{ secrets.KUSTO_APP_SECRET }}
+      MODELS_ACCOUNT_URL: ${{ vars.MODELS_ACCOUNT_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -e ".[azure,ml]"
+
+      - name: Export training data from Data Explorer
+        run: python -m anschlussradar.ml.export --days 120 --out data/training/transfers.parquet
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Exit code 2: challenger rejected, champion stays live.
+      # Exit code 3: the live model no longer meets its stage, the banner returns.
+      # Either fails the job, and GitHub sends an e-mail.
+      - name: Train, compare, promote
+        run: python -m anschlussradar.ml.train --data data/training/transfers.parquet --store blob

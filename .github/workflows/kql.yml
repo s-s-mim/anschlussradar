@@ -1,0 +1,25 @@
+name: kql
+
+on:
+  push:
+    branches: [main]
+    paths: ["kql/**"]
+  workflow_dispatch:
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    environment: prod
+    env:
+      KUSTO_QUERY_URI: ${{ vars.KUSTO_QUERY_URI }}
+      KUSTO_DATABASE: anschlussradar
+      KUSTO_APP_ID: ${{ vars.KUSTO_APP_ID }}
+      KUSTO_TENANT_ID: ${{ vars.KUSTO_TENANT_ID }}
+      KUSTO_APP_SECRET: ${{ secrets.KUSTO_APP_SECRET }}   # needs the Admin role on the database
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[azure]"
+      - run: python scripts/apply_kql.py

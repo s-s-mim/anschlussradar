@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+data/
+functions/ingest/local.settings.json
+functions/ingest/anschlussradar/
+functions/ingest/config/
+*.zip
+node_modules/
+dist/
+ml/mlruns/
+infra/*.local.bicepparam
