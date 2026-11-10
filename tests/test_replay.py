@@ -23,7 +23,9 @@ def test_plan_without_eva_uses_requested_eva() -> None:
 def test_replay_rebuilds_planned_stops_from_raw_files(tmp_path: Path) -> None:
     sink = LocalSink(tmp_path)
     fetched = datetime(2026, 11, 8, 17, 55, 12, 345000, tzinfo=UTC)
-    sink.write_raw(raw_blob_path("plan", 8000105, fetched), (FIXTURES / "plan_no_eva.xml").read_bytes())
+    sink.write_raw(
+        raw_blob_path("plan", 8000105, fetched), (FIXTURES / "plan_no_eva.xml").read_bytes()
+    )
 
     files, rows, failed = replay(tmp_path / "raw", sink, "plan")
     assert (files, rows, failed) == (1, 3, 0)

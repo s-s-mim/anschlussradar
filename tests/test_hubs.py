@@ -23,4 +23,6 @@ def test_group_must_exist(tmp_path: Path) -> None:
 
 
 def test_cross_level_transfer_takes_longer() -> None:
-    assert min_transfer_minutes("S", "ICE", cross_level=True) == min_transfer_minutes("S", "ICE") + 2
+    assert (
+        min_transfer_minutes("S", "ICE", cross_level=True) == min_transfer_minutes("S", "ICE") + 2
+    )

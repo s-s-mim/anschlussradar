@@ -24,7 +24,7 @@ def _list(values: tuple[str, ...]) -> str:
 
 def render() -> str:
     group_cases = ", ".join(
-        f"c in ({_list(cats)}), \"{group}\"" for group, cats in f.CATEGORY_GROUPS.items()
+        f'c in ({_list(cats)}), "{group}"' for group, cats in f.CATEGORY_GROUPS.items()
     )
     bucket_cases = ", ".join(
         f'minutes between ({low} .. {high}), "{label}"' for low, high, label in f.BUFFER_BUCKETS
@@ -68,7 +68,9 @@ def render() -> str:
 def _groups() -> str:
     hubs = load_hubs(ROOT / "config" / "hubs.csv")
     # Only stations that belong to another EVA's group; all others are their own group.
-    pairs = [f"{h.eva}, {h.group_eva}" for h in sorted(hubs, key=lambda h: h.eva) if h.group_eva != h.eva]
+    pairs = [
+        f"{h.eva}, {h.group_eva}" for h in sorted(hubs, key=lambda h: h.eva) if h.group_eva != h.eva
+    ]
     return ", ".join(pairs)
 
 

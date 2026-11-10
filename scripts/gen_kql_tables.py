@@ -8,26 +8,56 @@ from pathlib import Path
 
 TABLES: dict[str, list[tuple[str, str]]] = {
     "PlannedStops": [
-        ("stop_id", "string"), ("eva", "long"), ("station_name", "string"),
-        ("service_date", "datetime"), ("category", "string"), ("number", "string"),
-        ("line", "string"), ("operator", "string"), ("filter_flag", "string"),
-        ("trip_type", "string"), ("arr_pt", "datetime"), ("dep_pt", "datetime"),
-        ("arr_pp", "string"), ("dep_pp", "string"), ("origin", "string"),
-        ("destination", "string"), ("arr_path", "dynamic"), ("dep_path", "dynamic"),
-        ("time_flag", "string"), ("observed_at", "datetime"),
+        ("stop_id", "string"),
+        ("eva", "long"),
+        ("station_name", "string"),
+        ("service_date", "datetime"),
+        ("category", "string"),
+        ("number", "string"),
+        ("line", "string"),
+        ("operator", "string"),
+        ("filter_flag", "string"),
+        ("trip_type", "string"),
+        ("arr_pt", "datetime"),
+        ("dep_pt", "datetime"),
+        ("arr_pp", "string"),
+        ("dep_pp", "string"),
+        ("origin", "string"),
+        ("destination", "string"),
+        ("arr_path", "dynamic"),
+        ("dep_path", "dynamic"),
+        ("time_flag", "string"),
+        ("observed_at", "datetime"),
     ],
     "StopChangeEvents": [
-        ("event_id", "string"), ("stop_id", "string"), ("eva", "long"),
-        ("endpoint", "string"), ("observed_at", "datetime"),
-        ("arr_ct", "datetime"), ("arr_cp", "string"), ("arr_cs", "string"), ("arr_clt", "datetime"),
-        ("dep_ct", "datetime"), ("dep_cp", "string"), ("dep_cs", "string"), ("dep_clt", "datetime"),
-        ("category", "string"), ("number", "string"), ("messages", "dynamic"),
+        ("event_id", "string"),
+        ("stop_id", "string"),
+        ("eva", "long"),
+        ("endpoint", "string"),
+        ("observed_at", "datetime"),
+        ("arr_ct", "datetime"),
+        ("arr_cp", "string"),
+        ("arr_cs", "string"),
+        ("arr_clt", "datetime"),
+        ("dep_ct", "datetime"),
+        ("dep_cp", "string"),
+        ("dep_cs", "string"),
+        ("dep_clt", "datetime"),
+        ("category", "string"),
+        ("number", "string"),
+        ("messages", "dynamic"),
         ("time_flag", "string"),
     ],
     "IngestionLog": [
-        ("run_id", "string"), ("endpoint", "string"), ("eva", "long"),
-        ("status_code", "int"), ("latency_ms", "int"), ("response_bytes", "long"),
-        ("events_written", "int"), ("error_text", "string"), ("fetched_at", "datetime"),
+        ("run_id", "string"),
+        ("endpoint", "string"),
+        ("eva", "long"),
+        ("status_code", "int"),
+        ("latency_ms", "int"),
+        ("response_bytes", "long"),
+        ("events_written", "int"),
+        ("error_text", "string"),
+        ("fetched_at", "datetime"),
     ],
 }
 
@@ -42,10 +72,8 @@ def render() -> str:
         schema = ", ".join(f"{c}:{t}" for c, t in cols)
         out.append(f".create-merge table {table} ({schema})")
         out.append("")
-        mapping = ",".join(
-            f'{{"column":"{c}","Properties":{{"Path":"$.{c}"}}}}' for c, _ in cols
-        )
-        out.append(f".create-or-alter table {table} ingestion json mapping \"{table}_json\"")
+        mapping = ",".join(f'{{"column":"{c}","Properties":{{"Path":"$.{c}"}}}}' for c, _ in cols)
+        out.append(f'.create-or-alter table {table} ingestion json mapping "{table}_json"')
         out.append(f"'[{mapping}]'")
         out.append("")
     out += [

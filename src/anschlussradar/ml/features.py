@@ -153,9 +153,7 @@ def shrunk_rates(h: HistoryCounts) -> tuple[float, float]:
     group_rate = (h.group_made + GROUP_PRIOR_WEIGHT * h.global_rate) / (
         h.group_n + GROUP_PRIOR_WEIGHT
     )
-    exact_rate = (h.exact_made + EXACT_PRIOR_WEIGHT * group_rate) / (
-        h.exact_n + EXACT_PRIOR_WEIGHT
-    )
+    exact_rate = (h.exact_made + EXACT_PRIOR_WEIGHT * group_rate) / (h.exact_n + EXACT_PRIOR_WEIGHT)
     return group_rate, exact_rate
 
 

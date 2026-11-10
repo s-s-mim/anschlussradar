@@ -53,7 +53,9 @@ def test_generated_kql_is_up_to_date() -> None:
 
 
 def test_shared_kql_is_generated_from_python() -> None:
-    spec = importlib.util.spec_from_file_location("gen_shared", ROOT / "scripts" / "gen_kql_shared.py")
+    spec = importlib.util.spec_from_file_location(
+        "gen_shared", ROOT / "scripts" / "gen_kql_shared.py"
+    )
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

@@ -107,11 +107,11 @@ az group create -n rg-anschlussradar-dev -l germanywestcentral
 az functionapp list-flexconsumption-locations -o table   # check your region is listed
 ```
 
-Fill in `infra/main.dev.bicepparam` (your object ID comes from `az ad signed-in-user show --query id -o tsv`), then:
+Copy `infra/main.dev.bicepparam` to `infra/main.dev.local.bicepparam` (ignored by Git, so your e-mail stays private) and fill it in (your object ID comes from `az ad signed-in-user show --query id -o tsv`), then:
 
 ```bash
 az deployment group create -g rg-anschlussradar-dev \
-  -f infra/main.bicep -p infra/main.dev.bicepparam
+  -f infra/main.bicep -p infra/main.dev.local.bicepparam
 ```
 
 Put the three secrets into the new Key Vault:
@@ -145,7 +145,7 @@ StopChangeEvents | take 20
 ### Step 7: Turn on weekly retraining (after about 3 weeks of data)
 
 1. Redeploy the Bicep template with `deployPrincipalId` set to the object ID of the GitHub Actions identity, so it may write to the models container.
-2. Add the repo variable `MODELS_ACCOUNT_URL` (the `modelsAccountUrl` output).
+2. Add the repo variables `MODELS_ACCOUNT_URL` (the `modelsAccountUrl` output), `KUSTO_QUERY_URI`, `KUSTO_APP_ID`, `KUSTO_TENANT_ID`, and the secret `KUSTO_APP_SECRET`.
 3. Run the `retrain` workflow once by hand. From then on it runs every Monday at 02:17 UTC.
 
 The job exports training data, trains a logistic regression and a LightGBM model, keeps the better one, and compares it with the live model on the most recent week. It then writes `status.json` and, last, `current.json`, which tells the API which model is live and which stage the app is in. The job summary shows the decision and the metrics.

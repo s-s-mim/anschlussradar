@@ -34,8 +34,12 @@ BASE = _m(0.70, 0.150, 0.02)
 def test_stage_rules() -> None:
     assert stage_for(None) is Stage.LIVE_ONLY
     assert stage_for(Evaluation(_m(0.69, 0.14, 0.03), BASE, 8)) is Stage.LIVE_ONLY  # below baseline
-    assert stage_for(Evaluation(_m(0.72, 0.14, 0.12), BASE, 8)) is Stage.LIVE_ONLY  # badly calibrated
-    assert stage_for(Evaluation(_m(0.72, 0.14, 0.06, n=500), BASE, 8)) is Stage.LIVE_ONLY  # too few rows
+    assert (
+        stage_for(Evaluation(_m(0.72, 0.14, 0.12), BASE, 8)) is Stage.LIVE_ONLY
+    )  # badly calibrated
+    assert (
+        stage_for(Evaluation(_m(0.72, 0.14, 0.06, n=500), BASE, 8)) is Stage.LIVE_ONLY
+    )  # too few rows
     assert stage_for(Evaluation(_m(0.72, 0.14, 0.06), BASE, 8)) is Stage.EARLY
     assert stage_for(Evaluation(_m(0.75, 0.14, 0.03), BASE, 3)) is Stage.EARLY  # only 3 weeks
     assert stage_for(Evaluation(_m(0.75, 0.14, 0.03), BASE, 6)) is Stage.FULL

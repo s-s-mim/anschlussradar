@@ -1,7 +1,7 @@
 """Local sink for development: files instead of Azure.
 
-  data/raw/...              same layout as the Blob container
-  data/tables/<Table>/<yyyy-MM-dd>.jsonl
+data/raw/...              same layout as the Blob container
+data/tables/<Table>/<yyyy-MM-dd>.jsonl
 """
 
 from __future__ import annotations

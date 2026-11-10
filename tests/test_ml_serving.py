@@ -14,7 +14,9 @@ from anschlussradar.ml.serving import (
 )
 from anschlussradar.ml.stages import Stage
 
-T = TransferInput(planned_buffer_min=8, min_transfer_min=5, hour=7, weekday=1, in_group="sbahn", out_group="long")
+T = TransferInput(
+    planned_buffer_min=8, min_transfer_min=5, hour=7, weekday=1, in_group="sbahn", out_group="long"
+)
 
 
 class FakeClock:
@@ -30,13 +32,21 @@ def fake_scorer(model_bytes: bytes):  # type: ignore[no-untyped-def]
     return lambda rows: [value for _ in rows]
 
 
-def _publish(reg: ModelRegistry, version: str, value: float, stage: str, feature_version: int = FEATURE_VERSION) -> None:
+def _publish(
+    reg: ModelRegistry,
+    version: str,
+    value: float,
+    stage: str,
+    feature_version: int = FEATURE_VERSION,
+) -> None:
     reg.save_version(
         version,
         {
             "model.onnx": str(value).encode(),
             "calibration.json": json.dumps({"x": [0.0, 1.0], "y": [0.0, 1.0]}).encode(),
-            "manifest.json": json.dumps({"feature_version": feature_version, "weeks_of_data": 7}).encode(),
+            "manifest.json": json.dumps(
+                {"feature_version": feature_version, "weeks_of_data": 7}
+            ).encode(),
         },
     )
     reg.set_current(version, stage)
@@ -100,7 +110,13 @@ def test_calibration_interpolates_and_clips() -> None:
 
 @pytest.mark.parametrize(
     ("buffer", "in_delay", "out_delay", "status"),
-    [(10, 0, 0, "ok"), (10, 3, 0, "tight"), (10, 4, 0, "at_risk"), (10, 6, 0, "missed"), (10, 6, 4, "tight")],
+    [
+        (10, 0, 0, "ok"),
+        (10, 3, 0, "tight"),
+        (10, 4, 0, "at_risk"),
+        (10, 6, 0, "missed"),
+        (10, 6, 4, "tight"),
+    ],
 )
 def test_live_check(buffer: int, in_delay: int, out_delay: int, status: str) -> None:
     assert live_check(buffer, in_delay, out_delay, min_transfer_min=5).status == status

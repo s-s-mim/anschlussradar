@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+from datetime import timedelta
 from pathlib import Path
 
 from ..config import get_settings
@@ -24,7 +25,8 @@ def export(days: int, out: Path) -> int:
     settings = get_settings()
     client = KustoClient(kusto_connection(settings.kusto_query_uri, settings))
     props = ClientRequestProperties()
-    props.set_option("servertimeout", "00:10:00")
+    # The SDK expects a timedelta here, not a "hh:mm:ss" string.
+    props.set_option(ClientRequestProperties.request_timeout_option_name, timedelta(minutes=10))
     # The free cluster limits result size; truncation is switched off for the export.
     props.set_option("notruncation", True)
     query = f"TransferTrainingData(ago({int(days)}d), now())"
@@ -43,7 +45,11 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     rows = export(args.days, args.out)
-    return 0 if rows > 0 else 1
+    if rows == 0:
+        # Not an error: early on there are no transfers yet. The training step then
+        # reports "fewer than 3 weeks of data" and keeps the app in live_only.
+        logging.warning("no training rows yet; the training step will wait for more data")
+    return 0
 
 
 if __name__ == "__main__":

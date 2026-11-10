@@ -95,17 +95,21 @@ def run_calls(
         try:
             resp = _fetch(client, call)
         except httpx.TransportError as exc:
-            return 0, 0, {
-                "run_id": summary.run_id,
-                "endpoint": call.endpoint.value,
-                "eva": call.eva,
-                "status_code": 0,
-                "latency_ms": 0,
-                "response_bytes": 0,
-                "events_written": 0,
-                "error_text": f"transport: {type(exc).__name__}",
-                "fetched_at": datetime.now(UTC).isoformat(),
-            }
+            return (
+                0,
+                0,
+                {
+                    "run_id": summary.run_id,
+                    "endpoint": call.endpoint.value,
+                    "eva": call.eva,
+                    "status_code": 0,
+                    "latency_ms": 0,
+                    "response_bytes": 0,
+                    "events_written": 0,
+                    "error_text": f"transport: {type(exc).__name__}",
+                    "fetched_at": datetime.now(UTC).isoformat(),
+                },
+            )
         return _process(call, resp, sink, summary.run_id)
 
     with ThreadPoolExecutor(max_workers=max_workers) as pool:

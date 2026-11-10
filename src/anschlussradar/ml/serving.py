@@ -1,8 +1,8 @@
 """Model serving for the API: hourly refresh, calibration, scores and the status endpoint.
 
-  holder = ModelHolder(ModelRegistry(HttpReadStore(MODELS_BASE_URL)))
-  result = score_transfer(holder.get(), transfer_input, history_counts)
-  status = model_status(holder)          # body of GET /api/v1/model/status
+holder = ModelHolder(ModelRegistry(HttpReadStore(MODELS_BASE_URL)))
+result = score_transfer(holder.get(), transfer_input, history_counts)
+status = model_status(holder)          # body of GET /api/v1/model/status
 """
 
 from __future__ import annotations
@@ -176,7 +176,9 @@ def score_transfer(model: LoadedModel, t: TransferInput, h: HistoryCounts) -> Tr
     if model.stage is Stage.LIVE_ONLY or model.scorer is None:
         return TransferScore(None, confidence_label(n), n, Stage.LIVE_ONLY, False)
     p = model.predict([feature_vector(t, h)])[0]
-    return TransferScore(round(p, 3), confidence_label(n), n, model.stage, model.stage is Stage.EARLY)
+    return TransferScore(
+        round(p, 3), confidence_label(n), n, model.stage, model.stage is Stage.EARLY
+    )
 
 
 @dataclass(frozen=True, slots=True)

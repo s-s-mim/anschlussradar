@@ -1,8 +1,8 @@
 """Release stages and the champion/challenger promotion rule.
 
-  live_only  no model is good enough yet: live delays only, learning banner
-  early      model beats the baseline and is roughly calibrated: "early estimate", banner
-  full       model meets the ship criteria on at least 6 weeks of data: no banner
+live_only  no model is good enough yet: live delays only, learning banner
+early      model beats the baseline and is roughly calibrated: "early estimate", banner
+full       model meets the ship criteria on at least 6 weeks of data: no banner
 """
 
 from __future__ import annotations
@@ -97,7 +97,9 @@ def decide(
     if ch_stage is Stage.LIVE_ONLY:
         return done(False, cp_stage, "challenger does not meet the early criteria")
     if ch_stage.rank < cp_stage.rank:
-        return done(False, cp_stage, f"challenger is {ch_stage.value}, champion is {cp_stage.value}")
+        return done(
+            False, cp_stage, f"challenger is {ch_stage.value}, champion is {cp_stage.value}"
+        )
 
     as_good = (
         challenger.model.brier <= champion.model.brier + BRIER_TOLERANCE

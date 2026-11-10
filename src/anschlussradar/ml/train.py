@@ -343,8 +343,8 @@ def train_and_publish(
     previous_stage = Stage(pointer["stage"]) if pointer else None
     pinned = bool(pointer and pointer.get("pinned"))
 
-    data = add_history(df)
-    split = split_by_week(data, now)
+    # No rows at all (the first days): nothing to compute, same path as too few weeks.
+    split = None if df.empty else split_by_week(add_history(df), now)
     if split is None:
         decision = Decision(False, previous_stage or Stage.LIVE_ONLY, "fewer than 3 weeks of data")
         status = {"run_at": now.isoformat(), "decision": decision.reason, "stage": decision.stage}
@@ -435,12 +435,17 @@ def summary_markdown(result: RunResult) -> str:
         "",
     ]
     if result.challenger:
-        lines += ["| Model | ROC AUC | Brier | Calibration error | Test rows |", "| --- | --- | --- | --- | --- |"]
+        lines += [
+            "| Model | ROC AUC | Brier | Calibration error | Test rows |",
+            "| --- | --- | --- | --- | --- |",
+        ]
         rows = [("Challenger", result.challenger.model), ("Baseline A", result.challenger.baseline)]
         if result.champion:
             rows.insert(1, ("Champion", result.champion.model))
         for name, m in rows:
-            lines.append(f"| {name} | {m.auc:.3f} | {m.brier:.4f} | {m.calibration_error:.3f} | {m.n} |")
+            lines.append(
+                f"| {name} | {m.auc:.3f} | {m.brier:.4f} | {m.calibration_error:.3f} | {m.n} |"
+            )
     return "\n".join(lines) + "\n"
 
 

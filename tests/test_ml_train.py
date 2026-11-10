@@ -160,7 +160,9 @@ def test_weekly_cycle_promote_keep_reject(tmp_path: Path) -> None:
     first = train_and_publish(data, reg, CANDIDATES, pickle_scorer, now=NOW)
     assert first.decision.promote, first.decision.reason
     assert first.decision.stage in (Stage.EARLY, Stage.FULL)
-    assert first.challenger is not None and first.challenger.model.auc > first.challenger.baseline.auc
+    assert (
+        first.challenger is not None and first.challenger.model.auc > first.challenger.baseline.auc
+    )
     assert reg.current()["version"] == first.version
     manifest = reg.read_json(first.version, "manifest.json")
     assert manifest["test_week"].startswith("2026-11-23")
@@ -173,7 +175,9 @@ def test_weekly_cycle_promote_keep_reject(tmp_path: Path) -> None:
     assert reg.current()["version"] == second.version
 
     # Week 3: a useless model is rejected; the champion stays live and the job fails.
-    third = train_and_publish(data, reg, (ConstantModel,), pickle_scorer, now=NOW + timedelta(seconds=2))
+    third = train_and_publish(
+        data, reg, (ConstantModel,), pickle_scorer, now=NOW + timedelta(seconds=2)
+    )
     assert not third.decision.promote
     assert reg.current()["version"] == second.version
     assert third.exit_code == 2
@@ -186,5 +190,15 @@ def test_unfinished_current_week_is_ignored(tmp_path: Path) -> None:
     monday_rows = data[data["service_day"] == data["service_day"].max()].copy()
     monday_rows["service_day"] = pd.Timestamp("2026-11-30")
     with_partial = pd.concat([data, monday_rows])
-    result = train_and_publish(with_partial, ModelRegistry(LocalStore(tmp_path)), CANDIDATES, pickle_scorer, now=NOW)
+    result = train_and_publish(
+        with_partial, ModelRegistry(LocalStore(tmp_path)), CANDIDATES, pickle_scorer, now=NOW
+    )
     assert result.status["weeks_of_data"] == 7
+
+
+def test_empty_export_stays_live_only(tmp_path: Path) -> None:
+    empty = synthetic(weeks=1).iloc[0:0]
+    reg = ModelRegistry(LocalStore(tmp_path))
+    result = train_and_publish(empty, reg, CANDIDATES, pickle_scorer, now=NOW)
+    assert not result.decision.promote and result.exit_code == 0
+    assert reg.current()["stage"] == "live_only"

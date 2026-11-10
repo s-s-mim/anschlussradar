@@ -57,7 +57,9 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         if args.command == "once":
-            summary = run_calls(calls_for_minute(hubs, datetime.now(UTC), args.budget), client, sink)
+            summary = run_calls(
+                calls_for_minute(hubs, datetime.now(UTC), args.budget), client, sink
+            )
             return 0 if summary.failed == 0 else 1
 
         # loop: start each run at the top of a minute
