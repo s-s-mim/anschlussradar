@@ -18,7 +18,7 @@ jobs:
       KUSTO_APP_SECRET: ${{ secrets.KUSTO_APP_SECRET }}   # needs the Admin role on the database
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
       - run: pip install -e ".[azure]"
