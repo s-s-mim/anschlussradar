@@ -1,0 +1,36 @@
+# Recording list. priority: 1 national hub, 2 regional hub, 3 added by a saved trip.
+# Verify every EVA number before the first run:
+#   python -m anschlussradar.ingest.cli station "Frankfurt Hbf"
+# group: EVA of the main station when one station has several EVAs (one per level).
+#   python -m anschlussradar.ingest.cli station "8000105" shows linked EVAs in 'meta'.
+# Grow this list to about 80 hubs; the scheduler stays within budget automatically.
+eva,name,state,priority,group
+8000105,Frankfurt (Main) Hbf,HE,1,
+8098105,Frankfurt Hbf (tief),HE,1,8000105
+8070003,Frankfurt (Main) Flughafen Fernbahnhof,HE,1,
+8000207,Köln Hbf,NW,1,
+8002549,Hamburg Hbf,HH,1,
+8000261,München Hbf,BY,1,
+8011160,Berlin Hbf,BE,1,
+8000244,Mannheim Hbf,BW,1,
+8000152,Hannover Hbf,NI,1,
+8000096,Stuttgart Hbf,BW,1,
+8000085,Düsseldorf Hbf,NW,1,
+8000284,Nürnberg Hbf,BY,1,
+8010205,Leipzig Hbf,SN,1,
+8000080,Dortmund Hbf,NW,1,
+8000098,Essen Hbf,NW,1,
+8000086,Duisburg Hbf,NW,1,
+8000191,Karlsruhe Hbf,BW,1,
+8000050,Bremen Hbf,HB,1,
+8010085,Dresden Hbf,SN,1,
+8010101,Erfurt Hbf,TH,1,
+8003200,Kassel-Wilhelmshöhe,HE,1,
+8000115,Fulda,HE,1,
+8000260,Würzburg Hbf,BY,1,
+8000240,Mainz Hbf,RP,2,
+8000250,Wiesbaden Hbf,HE,2,
+8000068,Darmstadt Hbf,HE,2,
+8000150,Hanau Hbf,HE,2,
+8000044,Bonn Hbf,NW,2,
+8002041,Frankfurt (Main) Süd,HE,2,

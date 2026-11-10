@@ -1,0 +1,52 @@
+// Machine learning: training export and history counts for the API.
+// Both use the shared definitions from 00_shared.kql, which are generated from
+// src/anschlussradar/ml/features.py, so training and serving agree.
+
+// One row per transfer, deduplicated, with the columns train.py expects.
+.create-or-alter function with (folder="ml", docstring="Training rows for the transfer model")
+TransferTrainingData(start:datetime, finish:datetime) {
+    TransferFacts
+    | where arr_pt between (start .. finish) and not(incomplete)
+    | summarize arg_max(built_at, *) by in_stop_id, out_stop_id
+    | extend local_arr = datetime_utc_to_local(arr_pt, "Europe/Berlin")
+    | project
+        service_day = startofday(local_arr),
+        eva, in_number, out_number, in_category, out_category,
+        in_group = CategoryGroup(in_category),
+        out_group = CategoryGroup(out_category),
+        planned_buffer_min, min_transfer_min,
+        buffer_bucket = BufferBucket(planned_buffer_min),
+        hour = hourofday(local_arr),
+        weekday = toint(dayofweek(local_arr) / 1d),
+        made
+}
+
+// History counts for scoring at `as_of`, with the same window as training:
+// the HistoryDays() full days before the local service day, today excluded.
+// The API filters this by the stations of a journey and builds HistoryCounts from
+// the rows whose row_kind is 'exact', 'group' or 'global'.
+.create-or-alter function with (folder="ml", docstring="History counts for the API")
+TransferHistory(as_of:datetime) {
+    let today = startofday(datetime_utc_to_local(as_of, "Europe/Berlin"));
+    let rows = TransferTrainingData(as_of - (HistoryDays() + 2) * 1d, as_of)
+        | where service_day >= today - HistoryDays() * 1d and service_day < today;
+    union
+        (rows
+         | summarize made = countif(made), n = count() by eva, in_number, out_number
+         | extend row_kind = "exact"),
+        (rows
+         | summarize made = countif(made), n = count() by eva, in_group, out_group, buffer_bucket
+         | extend row_kind = "group"),
+        (rows
+         | summarize made = countif(made), n = count()
+         | extend row_kind = "global")
+}
+
+// Drift check: share of transfers made per week, last 8 weeks. The retrain workflow
+// compares the newest week with the training average.
+.create-or-alter function with (folder="ml", docstring="Weekly share of transfers made")
+TransferMadeByWeek() {
+    TransferTrainingData(ago(60d), now())
+    | summarize share_made = avg(toint(made)), n = count() by week_start = startofweek(service_day)
+    | order by week_start asc
+}

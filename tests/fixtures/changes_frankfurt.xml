@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<timetable station="Frankfurt(Main)Hbf" eva="8000105">
+  <s id="-7874571842864554321-2611040612-11" eva="8000105">
+    <m id="r2161354" t="h" from="2611040600" to="2611041800" cat="Information" ts="2611040550" pr="2">Bauarbeiten zwischen Fulda und Frankfurt</m>
+    <ar ct="2611040827" cp="9">
+      <m id="r2163001" t="d" c="31" ts="2611040805"/>
+    </ar>
+    <dp ct="2611040832" cp="9"/>
+  </s>
+  <s id="5463238217735830913-2611040755-3" eva="8000105">
+    <ar ct="2611040818"/>
+    <dp ct="2611040819"/>
+  </s>
+  <s id="1186934025187264821-2611040831-1" eva="8000105">
+    <dp cs="c" clt="2611040750"/>
+  </s>
+</timetable>

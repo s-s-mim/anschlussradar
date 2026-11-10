@@ -1,0 +1,181 @@
+// Gold layer: latest state, final facts, transfers, reliability.
+// Run each command separately in the Data Explorer web UI, or with scripts/apply_kql.py.
+
+// ---------------------------------------------------------------------------
+// Latest known state
+// ---------------------------------------------------------------------------
+
+// Plans for the same stop can be loaded more than once (bootstrap, retries).
+.create ifnotexists materialized-view with (backfill=true) PlannedLatest on table PlannedStops
+{
+    PlannedStops
+    | summarize arg_max(observed_at, *) by stop_id
+}
+
+// Each 's' element in fchg and rchg carries the complete current change state of
+// that stop, so the newest observation wins. The hourly fchg resync repairs gaps.
+.create ifnotexists materialized-view with (backfill=true) StopLatest on table StopChangeEvents
+{
+    StopChangeEvents
+    | summarize arg_max(observed_at, *) by stop_id
+}
+
+// ---------------------------------------------------------------------------
+// Final facts: one row per stop, written once the train has left
+// ---------------------------------------------------------------------------
+
+.create-merge table StopFacts (
+    stop_id:string, eva:long, station_name:string, service_date:datetime,
+    category:string, number:string, line:string, operator:string, filter_flag:string,
+    origin:string, destination:string,
+    arr_pt:datetime, arr_actual:datetime, arr_delay_min:int, arr_cancelled:bool,
+    dep_pt:datetime, dep_actual:datetime, dep_delay_min:int, dep_cancelled:bool,
+    platform_changed:bool, has_change_data:bool, incomplete:bool,
+    message_codes:dynamic, built_at:datetime)
+
+// "actual" is the last forecast before departure (the API sends forecasts,
+// not confirmed times). No change record means the train ran as planned.
+.create-or-alter function with (folder="gold", docstring="Final stop facts for departed trains")
+BuildStopFacts(lookback:timespan, settle:timespan) {
+    let window_start = now() - lookback;
+    let window_end = now() - settle;
+    // A stop ID is <trip hash>-<origin departure yyMMddHHmm>-<stop index>.
+    // Hubs that had a polling gap of over 10 minutes in the window.
+    let gaps = IngestionLog
+        | where fetched_at between (window_start .. now()) and isempty(error_text) and endpoint == "rchg"
+        | summarize ts = make_list(fetched_at) by eva
+        | mv-apply t = ts to typeof(datetime) on (
+            order by t asc
+            | extend gap = t - prev(t)
+            | summarize max_gap = max(gap))
+        | where max_gap > 10m
+        | project eva, polling_gap = true;
+    PlannedLatest
+    | extend last_pt = coalesce(dep_pt, arr_pt)
+    | where last_pt between (window_start .. window_end)
+    | join kind=leftouter (StopLatest | project-rename change_observed_at = observed_at) on stop_id
+    | join kind=leftouter gaps on eva
+    | extend
+        arr_cancelled = arr_cs == "c",
+        dep_cancelled = dep_cs == "c",
+        arr_actual = iff(isnotnull(arr_pt), coalesce(arr_ct, arr_pt), datetime(null)),
+        dep_actual = iff(isnotnull(dep_pt), coalesce(dep_ct, dep_pt), datetime(null))
+    | project
+        stop_id, eva, station_name, service_date, category, number, line, operator,
+        filter_flag, origin, destination,
+        arr_pt, arr_actual,
+        arr_delay_min = toint(datetime_diff("minute", arr_actual, arr_pt)),
+        arr_cancelled,
+        dep_pt, dep_actual,
+        dep_delay_min = toint(datetime_diff("minute", dep_actual, dep_pt)),
+        dep_cancelled,
+        platform_changed = (isnotempty(arr_cp) and arr_cp != arr_pp)
+                           or (isnotempty(dep_cp) and dep_cp != dep_pp),
+        has_change_data = isnotempty(stop_id1),
+        incomplete = coalesce(polling_gap, false),
+        message_codes = iff(isnull(messages), dynamic([]), messages),
+        built_at = now()
+}
+
+// Idempotent append: only stops not yet in StopFacts. The fact builder function
+// runs this every 10 minutes (see functions/ingest/function_app.py).
+.create-or-alter function with (folder="gold") AppendStopFacts() {
+    BuildStopFacts(6h, 30m)
+    | join kind=leftanti (StopFacts | where built_at > ago(2d) | project stop_id) on stop_id
+}
+// Command used by the fact builder:
+// .set-or-append StopFacts <| AppendStopFacts()
+
+// ---------------------------------------------------------------------------
+// Transfers at hubs
+// ---------------------------------------------------------------------------
+
+.create-merge table TransferFacts (
+    eva:long, station_name:string, service_date:datetime,
+    in_stop_id:string, in_category:string, in_line:string, in_number:string,
+    out_stop_id:string, out_category:string, out_line:string, out_number:string,
+    arr_pt:datetime, dep_pt:datetime, planned_buffer_min:int,
+    arr_actual:datetime, dep_actual:datetime, actual_buffer_min:int,
+    min_transfer_min:int, made:bool, out_cancelled:bool, in_cancelled:bool,
+    incomplete:bool, built_at:datetime)
+
+// A transfer is an arrival and a departure of different trips at the same station
+// group, with a planned buffer between min_transfer and 30 minutes. A station group
+// joins the EVAs of one station's levels (Frankfurt Hbf and Frankfurt Hbf (tief)), so
+// S-Bahn to long-distance transfers are found. `eva` in TransferFacts is the group.
+.create-or-alter function with (folder="gold", docstring="Transfer outcomes from StopFacts")
+BuildTransferFacts(since:datetime) {
+    let facts = StopFacts | where built_at >= since or dep_pt >= since - 1h;
+    let arrivals = facts
+        | where isnotnull(arr_pt)
+        | project eva, station_name, service_date, in_stop_id = stop_id,
+                  in_trip = extract(@"^(.*)-\d+$", 1, stop_id),
+                  in_category = category, in_line = line, in_number = number,
+                  arr_pt, arr_actual, in_cancelled = arr_cancelled, in_incomplete = incomplete;
+    let departures = facts
+        | where isnotnull(dep_pt)
+        | project eva, out_stop_id = stop_id,
+                  out_trip = extract(@"^(.*)-\d+$", 1, stop_id),
+                  out_category = category, out_line = line, out_number = number,
+                  dep_pt, dep_actual, out_cancelled = dep_cancelled, out_incomplete = incomplete;
+    let groups = StationGroups();  // kql/00_shared.kql
+    arrivals
+    | lookup kind=leftouter groups on eva
+    | extend in_eva = eva, station_group = coalesce(group_eva, eva)
+    | project-away group_eva
+    | join kind=inner (
+        departures
+        | lookup kind=leftouter groups on eva
+        | extend out_eva = eva, station_group = coalesce(group_eva, eva)
+        | project-away group_eva, eva
+      ) on station_group
+    | where in_trip != out_trip
+    | extend eva = station_group
+    | extend min_transfer_min = MinTransferMinutes(in_category, out_category, in_eva != out_eva)
+    | extend planned_buffer_min = toint(datetime_diff("minute", dep_pt, arr_pt))
+    | where planned_buffer_min between (min_transfer_min .. 30)
+    | where not(in_cancelled)  // a cancelled arrival is not a transfer anyone could make
+    | extend actual_buffer_min = toint(datetime_diff("minute", dep_actual, arr_actual))
+    | project eva, station_name, service_date,
+              in_stop_id, in_category, in_line, in_number,
+              out_stop_id, out_category, out_line, out_number,
+              arr_pt, dep_pt, planned_buffer_min,
+              arr_actual, dep_actual, actual_buffer_min, min_transfer_min,
+              made = not(out_cancelled) and actual_buffer_min >= min_transfer_min,
+              out_cancelled, in_cancelled,
+              incomplete = in_incomplete or out_incomplete,
+              built_at = now()
+}
+// Command used by the fact builder:
+// .set-or-append TransferFacts <| BuildTransferFacts(ago(15m))
+//     | join kind=leftanti (TransferFacts | where built_at > ago(2d) | project in_stop_id, out_stop_id) on in_stop_id, out_stop_id
+
+// ---------------------------------------------------------------------------
+// Reliability aggregates for the app
+// ---------------------------------------------------------------------------
+
+.create ifnotexists materialized-view with (backfill=true) ReliabilityHourly on table StopFacts
+{
+    StopFacts
+    | where not(incomplete) and isnotnull(dep_pt)
+    | extend local_dep = datetime_utc_to_local(dep_pt, "Europe/Berlin")
+    | summarize
+        departures = count(),
+        on_time = countif(not(dep_cancelled) and dep_delay_min < 6),
+        cancelled = countif(dep_cancelled),
+        delay_sum = sum(iff(dep_cancelled, 0, dep_delay_min))
+      by eva, category, line,
+         weekday = toint(dayofweek(local_dep) / 1d),
+         hour = hourofday(local_dep)
+}
+
+.create ifnotexists materialized-view with (backfill=true) TransferReliability on table TransferFacts
+{
+    TransferFacts
+    | where not(incomplete)
+    | extend local_arr = datetime_utc_to_local(arr_pt, "Europe/Berlin")
+    | summarize attempts = count(), made = countif(made)
+      by eva, in_line, out_line, in_category, out_category,
+         weekday = toint(dayofweek(local_arr) / 1d),
+         hour = hourofday(local_arr)
+}

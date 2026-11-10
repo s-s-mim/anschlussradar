@@ -1,0 +1,49 @@
+name: deploy-ingest
+
+on:
+  push:
+    branches: [main]
+    paths: ["src/**", "functions/ingest/**", "config/hubs.csv"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # OpenID Connect login, no stored Azure secret
+  contents: read
+
+env:
+  FUNCTION_APP: ${{ vars.INGEST_FUNCTION_APP }}   # set in repo settings -> variables
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Test before deploy
+        run: |
+          pip install -e ".[dev]"
+          pytest -q
+
+      - name: Assemble the function package
+        run: |
+          cp -r src/anschlussradar functions/ingest/anschlussradar
+          mkdir -p functions/ingest/config
+          cp config/hubs.csv functions/ingest/config/hubs.csv
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Flex Consumption builds the Python dependencies remotely.
+      - uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.FUNCTION_APP }}
+          package: functions/ingest
+          sku: flexconsumption
+          remote-build: true

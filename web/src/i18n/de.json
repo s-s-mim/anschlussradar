@@ -1,0 +1,13 @@
+{
+  "banner": {
+    "title": "AnschlussRadar lernt noch.",
+    "liveOnly": "Live-Verspätungen sind ab sofort genau. Zuverlässigkeitswerte erscheinen in etwa zwei Wochen.",
+    "early": "Live-Verspätungen sind ab sofort genau. Die Zuverlässigkeitswerte sind erste Schätzungen und werden mit jeder Woche Daten besser."
+  },
+  "score": {
+    "earlyEstimate": "erste Schätzung",
+    "limitedData": "wenig Daten",
+    "basedOn_one": "basiert auf {{count}} Fahrt",
+    "basedOn_other": "basiert auf {{count}} Fahrten"
+  }
+}

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<timetable station="Frankfurt(Main)Hbf" eva="8000105">
+  <s id="-7874571842864554321-2611040612-11">
+    <tl f="F" t="p" o="80" c="ICE" n="579"/>
+    <ar pt="2611040820" pp="7" ppth="Hamburg-Altona|Hamburg Hbf|Hannover Hbf|Kassel-Wilhelmshöhe|Fulda"/>
+    <dp pt="2611040826" pp="7" ppth="Mannheim Hbf|Stuttgart Hbf|Ulm Hbf|Augsburg Hbf|München Hbf"/>
+  </s>
+  <s id="5463238217735830913-2611040755-3">
+    <tl f="S" t="p" o="800337" c="S" n="35128"/>
+    <ar pt="2611040818" pp="102" l="1" ppth="Wiesbaden Hbf|Kriftel"/>
+    <dp pt="2611040819" pp="102" l="1" ppth="Frankfurt(Main)Taunusanlage|Offenbach Ost"/>
+  </s>
+  <s id="1186934025187264821-2611040831-1">
+    <tl f="N" t="p" o="800486" c="RE" n="4561"/>
+    <dp pt="2611040831" pp="18" l="30" ppth="Friedberg(Hess)|Gießen|Marburg(Lahn)|Kassel Hbf"/>
+  </s>
+</timetable>

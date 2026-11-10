@@ -1,0 +1,64 @@
+// Data quality checks. Each function returns one row per failed check;
+// an empty result means everything passed.
+
+.create-merge table QualityResults (check_name:string, eva:long, value:real, threshold:real, severity:string, checked_at:datetime)
+
+.create-or-alter function with (folder="quality", docstring="Hubs with no successful rchg call in 10 minutes")
+CheckFreshness() {
+    IngestionLog
+    | where fetched_at > ago(1d) and endpoint == "rchg" and isempty(error_text)
+    | summarize last_ok = max(fetched_at) by eva
+    | extend minutes_since = datetime_diff("minute", now(), last_ok)
+    | where minutes_since > 10
+    | project check_name = "freshness", eva, value = todouble(minutes_since), threshold = 10.0,
+              severity = "alert", checked_at = now()
+}
+
+.create-or-alter function with (folder="quality", docstring="Change events this hour vs same hour last week")
+CheckVolume() {
+    let this_hour = StopChangeEvents | where observed_at > ago(1h) | summarize n = count() by eva;
+    let last_week = StopChangeEvents
+        | where observed_at between (ago(7d + 1h) .. ago(7d)) | summarize n_prev = count() by eva;
+    this_hour
+    | join kind=inner last_week on eva
+    | extend ratio = todouble(n) / n_prev
+    | where n_prev >= 20 and (ratio < 0.5 or ratio > 1.5)
+    | project check_name = "volume", eva, value = ratio, threshold = 0.5, severity = "warning",
+              checked_at = now()
+}
+
+.create-or-alter function with (folder="quality", docstring="Delays outside -10..600 minutes")
+CheckDelayRange() {
+    StopFacts
+    | where built_at > ago(1h)
+    | where dep_delay_min < -10 or dep_delay_min > 600 or arr_delay_min < -10 or arr_delay_min > 600
+    | summarize outliers = count() by eva
+    | project check_name = "delay_range", eva, value = todouble(outliers), threshold = 0.0,
+              severity = "warning", checked_at = now()
+}
+
+.create-or-alter function with (folder="quality", docstring="Stop IDs written to StopFacts more than once")
+CheckDuplicateFacts() {
+    StopFacts
+    | where built_at > ago(2d)
+    | summarize n = count() by stop_id, eva
+    | where n > 1
+    | summarize duplicates = count() by eva
+    | project check_name = "duplicate_facts", eva, value = todouble(duplicates), threshold = 0.0,
+              severity = "alert", checked_at = now()
+}
+
+.create-or-alter function with (folder="quality", docstring="Times hit by daylight saving gaps or overlaps")
+CheckTimeFlags() {
+    union PlannedStops, StopChangeEvents
+    | where observed_at > ago(1d) and time_flag != "ok"
+    | summarize flagged = count() by eva
+    | project check_name = "time_flags", eva, value = todouble(flagged), threshold = 0.0,
+              severity = "info", checked_at = now()
+}
+
+.create-or-alter function with (folder="quality") RunAllChecks() {
+    union CheckFreshness(), CheckVolume(), CheckDelayRange(), CheckDuplicateFacts(), CheckTimeFlags()
+}
+// Command used by the quality job:
+// .set-or-append QualityResults <| RunAllChecks()
