@@ -17,7 +17,7 @@ jobs:
   what-if:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.env }}   # add a required reviewer to this environment in GitHub
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
