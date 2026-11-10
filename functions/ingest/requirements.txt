@@ -6,6 +6,6 @@ pydantic>=2.7
 pydantic-settings>=2.3
 tzdata>=2024.1
 azure-identity>=1.17
-azure-storage-blob>=12.20
+azure-storage-blob>=12.31.1
 azure-kusto-data>=4.5
 azure-kusto-ingest>=4.5
