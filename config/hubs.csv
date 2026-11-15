@@ -34,3 +34,12 @@ eva,name,state,priority,group
 8000150,Hanau Hbf,HE,2,
 8000044,Bonn Hbf,NW,2,
 8002041,Frankfurt (Main) Süd,HE,2,
+8098261,München Hbf Gl.27-36,BY,1,8000261
+8098262,München Hbf Gl.5-10,BY,1,8000261
+8098263,München Hbf (tief),BY,1,8000261
+8098160,Berlin Hbf (tief),BE,1,8011160
+8089021,Berlin Hbf (S-Bahn),BE,1,8011160
+8089522,Berlin Hbf (S-Bahn tief),BE,1,8011160
+8098096,Stuttgart Hbf (tief),BW,1,8000096
+8098549,Hamburg Hbf (S-Bahn),HH,1,8002549
+8098205,Leipzig Hbf (tief),SN,1,8010205

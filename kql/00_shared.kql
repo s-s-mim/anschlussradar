@@ -25,5 +25,5 @@ HistoryDays() {
 
 .create-or-alter function with (folder="shared", docstring="EVA to station group, from config/hubs.csv")
 StationGroups() {
-    datatable(eva:long, group_eva:long) [8098105, 8000105]
+    datatable(eva:long, group_eva:long) [8089021, 8011160, 8089522, 8011160, 8098096, 8000096, 8098105, 8000105, 8098160, 8011160, 8098205, 8010205, 8098261, 8000261, 8098262, 8000261, 8098263, 8000261, 8098549, 8002549]
 }
