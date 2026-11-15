@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from anschlussradar.ingest.hubs import load_hubs
-from anschlussradar.ml.features import TransferInput, min_transfer_minutes
+from anschlussradar.ml.features import min_transfer_minutes
 
 ROOT = Path(__file__).resolve().parents[1]
 

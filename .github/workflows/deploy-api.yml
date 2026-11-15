@@ -1,0 +1,43 @@
+name: deploy-api
+
+on:
+  push:
+    branches: [main]
+    paths: ["src/**", "api/**", "config/hubs.csv"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    # Skipped until the API Function App exists (phase 4, part 3) and the variable is set.
+    if: ${{ vars.API_FUNCTION_APP != '' }}
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test before deploy
+        run: |
+          pip install -e ".[dev]"
+          pytest -q
+      - name: Assemble the function package
+        run: |
+          cp -r src/anschlussradar api/anschlussradar
+          mkdir -p api/config
+          cp config/hubs.csv api/config/hubs.csv
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ vars.API_FUNCTION_APP }}
+          package: api
+          sku: flexconsumption
+          remote-build: true

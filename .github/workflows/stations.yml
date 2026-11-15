@@ -1,0 +1,52 @@
+name: stations
+
+# Weekly station list for the search, built from the gtfs.de rail timetables
+# (DELFI data) and uploaded to the public models container.
+on:
+  schedule:
+    - cron: "43 3 * * 2"   # Tuesday 03:43 UTC
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: prod
+    env:
+      # Check the current feed addresses on gtfs.de; override with a repo variable if they change.
+      FEEDS: ${{ vars.GTFS_FEED_URLS || 'https://download.gtfs.de/germany/fv_free/latest.zip https://download.gtfs.de/germany/rv_free/latest.zip' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e .
+
+      - name: Download timetables
+        run: |
+          mkdir -p feeds
+          i=0
+          for url in $FEEDS; do
+            i=$((i+1))
+            curl -fsSL --retry 3 -o "feeds/feed$i.zip" "$url"
+          done
+          ls -la feeds
+
+      - name: Build stations.json
+        run: python scripts/build_station_list.py feeds/*.zip --out stations.json
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Upload to the models container
+        run: |
+          account=$(echo "${{ vars.MODELS_ACCOUNT_URL }}" | sed -E 's#https://([^.]+)\..*#\1#')
+          az storage blob upload --auth-mode login --account-name "$account" \
+            --container-name models --name stations/stations.json --file stations.json \
+            --content-type application/json --content-cache-control "public, max-age=3600" --overwrite

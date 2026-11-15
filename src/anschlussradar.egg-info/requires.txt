@@ -6,6 +6,7 @@ pydantic-settings>=2.3
 tzdata>=2024.1
 
 [azure]
+azure-communication-email>=1.0
 azure-identity>=1.17
 azure-storage-blob>=12.20
 azure-kusto-data>=4.5
