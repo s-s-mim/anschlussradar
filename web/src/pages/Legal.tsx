@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { useI18n } from "../i18n";
+import { NotList } from "../components/Why";
 import { store } from "../lib/storage";
 import { SITE, isPlaceholder } from "../site";
 
@@ -38,8 +39,10 @@ export function Impressum() {
   return (
     <div className="page prose wrap narrow">
       <h1>Impressum</h1>
-      {lang === "en" && (
-        <p className="muted">Legal notice required by German law. The information is the same in both languages.</p>
+      {lang !== "de" && (
+        <p className="muted" lang="en">
+          Legal notice required by German law. The information is the same in every language.
+        </p>
       )}
       <h2>Angaben gemäß § 5 DDG</h2>
       <Address />
@@ -103,6 +106,7 @@ function PrivacyDe() {
         nicht. Es lädt keine Schriften, Karten oder Skripte von fremden Servern. Hier steht genau, welche Daten
         trotzdem anfallen und warum.
       </p>
+      <NotList />
 
       <Section title="1. Verantwortlich">
         <Address />
@@ -219,6 +223,7 @@ function PrivacyEn() {
         In short: AnschlussRadar needs no account, sets no cookies, shows no ads and does not track you. It loads no
         fonts, maps or scripts from other servers. Here is exactly which data is still processed and why.
       </p>
+      <NotList />
 
       <Section title="1. Controller">
         <Address />
@@ -319,6 +324,18 @@ function PrivacyEn() {
 }
 
 export function Privacy() {
-  const { lang } = useI18n();
-  return <div className="page prose wrap narrow">{lang === "de" ? <PrivacyDe /> : <PrivacyEn />}</div>;
+  const { lang, dict } = useI18n();
+  if (lang === "de" || lang === "en") {
+    return <div className="page prose wrap narrow">{lang === "de" ? <PrivacyDe /> : <PrivacyEn />}</div>;
+  }
+  // Other languages: the short list translated, the policy itself in English (German is binding).
+  return (
+    <div className="page prose wrap narrow">
+      <NotList />
+      <p className="muted lang-note">{dict.about.onlyDeEn}</p>
+      <div lang="en" dir="ltr">
+        <PrivacyEn />
+      </div>
+    </div>
+  );
 }

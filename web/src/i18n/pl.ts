@@ -1,0 +1,202 @@
+import type { Translation } from "./de";
+
+// Polski. Station and train names stay as in the German timetable.
+export const pl: Translation = {
+  nav: {
+    search: "Szukaj",
+    help: "Pomoc",
+    about: "O aplikacji",
+    contact: "Kontakt",
+    imprint: "Nota prawna",
+    privacy: "Prywatność",
+    language: "Język",
+    skip: "Przejdź do treści",
+  },
+  home: {
+    title: "Czy zdążę na przesiadkę?",
+    lead: "AnschlussRadar pokazuje dla połączeń kolejowych w całych Niemczech, jak często przesiadka udawała się w przeszłości, i sprawdza na żywo, czy uda się dzisiaj.",
+    from: "Skąd",
+    to: "Dokąd",
+    swap: "Zamień start i cel",
+    date: "Data",
+    time: "Godzina",
+    departure: "Odjazd",
+    arrival: "Przyjazd",
+    now: "Teraz",
+    search: "Szukaj połączeń",
+    searching: "Szukam …",
+    pickStation: "Wybierz stację z listy.",
+    saved: "Zapisane trasy",
+    recent: "Ostatnio szukane",
+    remove: "Usuń",
+    whyTitle: "Co AnschlussRadar robi inaczej",
+    whyLink: "Co AnschlussRadar robi inaczej?",
+    growing:
+      "Połączenia znajdziesz już w całych Niemczech. Oceny niezawodności obejmują coraz więcej stacji, a kolejne środki transportu dojdą, także na podstawie waszych opinii.",
+    why: [
+      ["Prawdziwe doświadczenie, nie tylko rozkład", "Dla każdej przesiadki widzisz, jak często naprawdę się udawała w ostatnich tygodniach."],
+      ["Najpierw najpewniejsze połączenie", "Sortuj według szansy na dojazd, nie tylko według godziny przyjazdu."],
+      ["Kontrola na żywo w dniu podróży", "Jeśli pociągi mają dziś opóźnienie, od razu widzisz, czy przesiadka jeszcze się uda."],
+    ],
+  },
+  station: {
+    placeholder: "Stacja lub przystanek",
+    noMatch: "Nie znaleziono stacji. Sprawdź pisownię.",
+    loading: "Szukam …",
+  },
+  results: {
+    title: "{from} → {to}",
+    change: "Zmień wyszukiwanie",
+    fastest: "Najpierw najszybsze",
+    reliable: "Najpierw najpewniejsze",
+    sortLabel: "Sortowanie",
+    earlier: "Wcześniej",
+    later: "Później",
+    none: "Nie znaleziono połączenia kolejowego. Spróbuj innej godziny lub większej stacji w pobliżu.",
+    direct: "Bez przesiadek",
+    transfers_one: "{count} przesiadka",
+    transfers_few: "{count} przesiadki",
+    transfers_many: "{count} przesiadek",
+    transfers_other: "{count} przesiadki",
+    save: "Zapisz trasę",
+    unsave: "Zapisano",
+    reliability: "Niezawodność",
+    noScoreYet: "brak oceny",
+    details: "Szczegóły",
+    hideDetails: "Ukryj szczegóły",
+    track: "Tor {track}",
+    trackChanged: "Zmiana toru: teraz tor {track}",
+    cancelled: "odwołany",
+    towards: "Kierunek: {headsign}",
+    attribution: "Dane połączeń: Transitous",
+  },
+  transfer: {
+    at: "Przesiadka: {station}",
+    buffer: "{min} min na przesiadkę",
+    chance: "takich przesiadek się udaje",
+    notRecorded: "Dla tej stacji jeszcze nie zbieramy danych.",
+    notRail: "Dla autobusów, tramwajów i metra nie ma jeszcze ocen.",
+    cancelled: "Jeden z pociągów tej przesiadki jest odwołany.",
+    learning: "Ocena pojawi się, gdy model zbierze wystarczająco dużo danych.",
+    live: {
+      ok: "Na żywo: zdążysz, {min} min zapasu",
+      tight: "Na żywo: na styk, {min} min zapasu",
+      at_risk: "Na żywo: zagrożona",
+      missed: "Na żywo: raczej nie zdążysz",
+      cancelled: "Na żywo: pociąg odwołany",
+    },
+  },
+  feedback: {
+    question: "Czy ta przesiadka się udała?",
+    yes: "Tak, zdążyłem/am",
+    no: "Nie, nie zdążyłem/am",
+    thanks: "Dziękujemy! To pomaga sprawdzać oceny.",
+    failed: "Nie udało się zapisać. Spróbuj później.",
+  },
+  score: {
+    earlyEstimate: "pierwsza ocena",
+    limitedData: "mało danych",
+    basedOn_one: "z {count} przejazdu",
+    basedOn_few: "z {count} przejazdów",
+    basedOn_many: "z {count} przejazdów",
+    basedOn_other: "z {count} przejazdów",
+  },
+  banner: {
+    title: "AnschlussRadar wciąż się uczy.",
+    live_only: "Opóźnienia na żywo są dokładne już teraz. Oceny niezawodności pojawią się za około dwa tygodnie.",
+    early: "Opóźnienia na żywo są dokładne już teraz. Oceny niezawodności są wstępne i z każdym tygodniem lepsze.",
+  },
+  errors: {
+    offline: "Brak połączenia z internetem. Sprawdź sieć i spróbuj ponownie.",
+    planner: "Wyszukiwarka połączeń teraz nie odpowiada. Spróbuj za kilka minut.",
+    generic: "Nie udało się. Spróbuj ponownie.",
+    retry: "Spróbuj ponownie",
+  },
+  contact: {
+    title: "Kontakt",
+    lead: "Pytania, zgłoszenia błędów lub pomysły: napisz do mnie e-mail. Zwykle odpowiadam w ciągu kilku dni.",
+    privacyNote: "Twojego adresu e-mail używam tylko do odpowiedzi. Więcej w polityce prywatności.",
+    code: "Błędy w kodzie możesz też zgłosić bezpośrednio na",
+  },
+  privacy: {
+    clear: "Usuń dane zapisane na tym urządzeniu",
+    cleared: "Usunięto. Na tym urządzeniu nie ma już danych AnschlussRadar.",
+  },
+  footer: {
+    planner: "Wyszukiwanie połączeń: Transitous",
+    notDb: "To nie jest usługa Deutsche Bahn.",
+  },
+  notFound: {
+    title: "Ta strona nie istnieje.",
+    back: "Do wyszukiwania",
+  },
+  about: {
+    notTitle: "Czego AnschlussRadar nie robi",
+    not: [
+      "Nie wymaga konta ani logowania (poza fazą demo)",
+      "Bez plików cookie, bez śledzenia, bez usług statystycznych",
+      "Bez reklam, bez sprzedawania czy przekazywania danych",
+      "Bez biletów, bez płatności",
+      "To nie jest usługa Deutsche Bahn",
+      "Bez gwarancji: oceny to szacunki na podstawie przeszłych przejazdów",
+    ],
+    onlyDeEn: "Ta strona jest dostępna po niemiecku i angielsku. Poniżej wersja angielska.",
+  },
+  help: {
+    title: "Pomoc",
+    items: [
+      {
+        q: "Co oznacza procent?",
+        a: [
+          "„84 % takich przesiadek się udaje” oznacza: przy podobnych przesiadkach w ostatnich tygodniach (ta sama stacja, podobne pociągi, podobny czas na przesiadkę) połączenie udało się złapać w 84 przypadkach na 100.",
+          "Liczba obok połączenia to szansa, że udadzą się wszystkie jego przesiadki. W pociągu bez przesiadek nie ma czego przegapić, więc nie ma tam liczby.",
+        ],
+      },
+      {
+        q: "Co liczy się jako „zdążył”?",
+        a: [
+          "Przesiadka liczy się jako udana, gdy pociąg odjeżdża co najmniej minimalny czas przesiadki po faktycznym przyjeździe. To 3 minuty, a z pociągiem dalekobieżnym 5 minut. Przy zmianie poziomu (np. z podziemnych peronów S-Bahn na górę) dochodzą 2 minuty. Nie widzimy, czy ktoś biegł albo czy pociąg czekał.",
+        ],
+      },
+      {
+        q: "Dlaczego niektóre przesiadki nie mają oceny?",
+        a: [],
+        list: [
+          "Model wciąż się uczy. W pierwszych tygodniach jest tylko kontrola na żywo.",
+          "Przesiadka jest na stacji, dla której jeszcze nie zbieramy danych. Obecnie są to duże stacje przesiadkowe, a lista rośnie.",
+          "Część podróży to autobus, tramwaj lub metro. Dla nich nie ma jeszcze ocen.",
+        ],
+      },
+      {
+        q: "Co pokazuje kontrola na żywo?",
+        a: [
+          "W dniu podróży porównujemy aktualne opóźnienia obu pociągów z minimalnym czasem przesiadki. Zapas to czas, który zostaje ponad nim. „Zdążysz”: 5 minut zapasu lub więcej. „Na styk”: 2–4 minuty. „Zagrożona”: mniej niż 2 minuty, uda się tylko, jeśli wszystko pójdzie gładko. „Raczej nie zdążysz”: według aktualnych czasów pociąg odjedzie, zanim przyjedziesz.",
+        ],
+      },
+      {
+        q: "Do czego służy „Czy ta przesiadka się udała?”",
+        a: [
+          "Po przesiadce możesz jednym dotknięciem powiedzieć, czy się udała. Zapisywane są tylko przesiadka i twoja odpowiedź, żadne dane o tobie. Odpowiedzi pomagają sprawdzać oceny.",
+        ],
+      },
+      {
+        q: "Czy mogę na tym polegać?",
+        a: [
+          "Oceny to szacunki na podstawie przeszłych przejazdów, nie gwarancja. Awarie, prace budowlane lub strajki mogą wszystko zmienić. W drodze zwracaj uwagę na tablice i komunikaty w pociągu i na stacji.",
+        ],
+      },
+      {
+        q: "Czy mogę tu kupić bilet?",
+        a: ["Nie. AnschlussRadar pokazuje tylko połączenia i ich niezawodność."],
+      },
+      {
+        q: "Jak dodać aplikację do ekranu głównego?",
+        a: [
+          "iPhone: otwórz stronę w Safari, stuknij „Udostępnij”, a potem „Do ekranu początkowego”. Android: otwórz stronę w Chrome, stuknij menu (trzy kropki), a potem „Zainstaluj aplikację” lub „Dodaj do ekranu głównego”.",
+        ],
+      },
+    ],
+    more: "Masz jeszcze pytanie?",
+    moreLink: "Napisz do mnie.",
+  },
+};

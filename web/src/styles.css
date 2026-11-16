@@ -151,7 +151,7 @@ time,
 /* skip link */
 .skip {
   position: absolute;
-  left: 8px;
+  inset-inline-start: 8px;
   top: -48px;
   background: var(--surface);
   padding: 8px 12px;
@@ -218,30 +218,39 @@ time,
 }
 
 .lang {
+  position: relative;
   display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: 1.5px solid rgba(255, 255, 255, 0.55);
   border-radius: 999px;
-  background: transparent;
-  padding: 2px;
-  cursor: pointer;
+  padding: 7px 11px;
+  color: #fff;
   font: 600 0.8rem/1 var(--display);
+  cursor: pointer;
 }
 
-.lang span {
-  padding: 5px 8px;
-  border-radius: 999px;
-  color: rgba(255, 255, 255, 0.8);
+.lang::after {
+  content: "";
+  border: 4px solid transparent;
+  border-top-color: currentColor;
+  margin-top: 4px;
 }
 
-.lang span.on {
-  background: #fff;
-  color: var(--petrol-strong);
+/* The real select lies invisibly on top: tapping opens the phone's own picker. */
+.lang select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .lang span.on {
-    color: #0b2a2e;
-  }
+.lang:focus-within {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
 
 /* footer */
@@ -535,7 +544,7 @@ button {
 
 .route-link {
   flex: 1;
-  text-align: left;
+  text-align: start;
   background: none;
   border: 0;
   padding: 12px 0;
@@ -649,7 +658,7 @@ button {
   border: 0;
   background: none;
   color: inherit;
-  text-align: left;
+  text-align: start;
   padding: 14px 16px;
   cursor: pointer;
 }
@@ -726,7 +735,7 @@ button {
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  text-align: right;
+  text-align: end;
   min-width: 64px;
 }
 
@@ -782,13 +791,14 @@ button {
 
 .leg {
   position: relative;
-  padding: 10px 0 10px 26px;
+  padding-block: 10px;
+  padding-inline: 26px 0;
 }
 
 .leg::before {
   content: "";
   position: absolute;
-  left: 6px;
+  inset-inline-start: 6px;
   top: 20px;
   bottom: 20px;
   width: 4px;
@@ -811,7 +821,7 @@ button {
 .leg-stop::before {
   content: "";
   position: absolute;
-  left: -26px;
+  inset-inline-start: -26px;
   top: 5px;
   width: 16px;
   height: 16px;
@@ -859,12 +869,13 @@ button {
 
 .transfer {
   position: relative;
-  padding: 10px 0 10px 26px;
+  padding-block: 10px;
+  padding-inline: 26px 0;
 }
 
 .transfer .node {
   position: absolute;
-  left: -1px;
+  inset-inline-start: -1px;
   top: 12px;
   width: 18px;
   height: 18px;
@@ -981,7 +992,7 @@ button {
 }
 
 .prose ul {
-  padding-left: 1.2em;
+  padding-inline-start: 1.2em;
 }
 
 .prose li {
@@ -1077,7 +1088,7 @@ mark {
 
 .why-list li {
   position: relative;
-  padding-left: 30px;
+  padding-inline-start: 30px;
   display: grid;
   gap: 2px;
 }
@@ -1085,7 +1096,7 @@ mark {
 .why-list li::before {
   content: "";
   position: absolute;
-  left: 3px;
+  inset-inline-start: 3px;
   top: 5px;
   width: 12px;
   height: 12px;
@@ -1128,5 +1139,45 @@ mark {
 }
 
 .prose .why-list {
-  padding-left: 0;
+  padding-inline-start: 0;
+}
+
+.not-list h2 {
+  font-size: 1.05rem;
+}
+
+.not-list ul {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+.not-list li {
+  position: relative;
+  padding-inline-start: 24px;
+}
+
+/* A struck-through dot: "does not". */
+.not-list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 4px;
+  top: 0.55em;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  background: linear-gradient(135deg, transparent 43%, var(--muted) 43% 57%, transparent 57%);
+}
+
+.lang-note {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* Delays ("+4") and durations ("1:28 h") keep their order inside right-to-left text. */
+.delay,
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
 }

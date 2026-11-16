@@ -178,7 +178,7 @@ export function JourneyCard({ journey }: { journey: Journey }) {
           </span>
         </span>
         <span className="facts">
-          <span>{duration(journey.durationMinutes)}</span>
+          <span className="ltr">{duration(journey.durationMinutes)}</span>
           <span>
             {journey.transfersCount === 0 ? t("results.direct") : t("results.transfers", { count: journey.transfersCount })}
           </span>

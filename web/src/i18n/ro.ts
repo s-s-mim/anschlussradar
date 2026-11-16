@@ -1,0 +1,200 @@
+import type { Translation } from "./de";
+
+// Română. Station and train names stay as in the German timetable.
+export const ro: Translation = {
+  nav: {
+    search: "Căutare",
+    help: "Ajutor",
+    about: "Despre",
+    contact: "Contact",
+    imprint: "Date legale",
+    privacy: "Confidențialitate",
+    language: "Limbă",
+    skip: "Salt la conținut",
+  },
+  home: {
+    title: "Prind legătura?",
+    lead: "AnschlussRadar arată, pentru legăturile feroviare din toată Germania, cât de des a reușit un transfer în trecut și verifică în timp real dacă reușește astăzi.",
+    from: "De la",
+    to: "Până la",
+    swap: "Schimbă plecarea cu destinația",
+    date: "Data",
+    time: "Ora",
+    departure: "Plecare",
+    arrival: "Sosire",
+    now: "Acum",
+    search: "Caută legături",
+    searching: "Se caută …",
+    pickStation: "Alege o gară din listă.",
+    saved: "Trasee salvate",
+    recent: "Căutări recente",
+    remove: "Elimină",
+    whyTitle: "Ce face AnschlussRadar diferit",
+    whyLink: "Ce face AnschlussRadar diferit?",
+    growing:
+      "Găsești deja legături în toată Germania. Scorurile de fiabilitate acoperă tot mai multe gări, iar alte mijloace de transport vor fi adăugate, și pe baza părerilor voastre.",
+    why: [
+      ["Experiență reală, nu doar orar", "Pentru fiecare transfer vezi cât de des a reușit cu adevărat în ultimele săptămâni."],
+      ["Cea mai sigură legătură mai întâi", "Sortează după șansa de a ajunge, nu doar după ora de sosire."],
+      ["Verificare live în ziua călătoriei", "Dacă trenurile au întârziere azi, vezi imediat dacă transferul mai reușește."],
+    ],
+  },
+  station: {
+    placeholder: "Gară sau stație",
+    noMatch: "Nu am găsit nicio gară. Verifică scrierea.",
+    loading: "Se caută …",
+  },
+  results: {
+    title: "{from} → {to}",
+    change: "Modifică căutarea",
+    fastest: "Cele mai rapide",
+    reliable: "Cele mai sigure",
+    sortLabel: "Sortare",
+    earlier: "Mai devreme",
+    later: "Mai târziu",
+    none: "Nu am găsit nicio legătură feroviară. Încearcă altă oră sau o gară mai mare din apropiere.",
+    direct: "Direct",
+    transfers_one: "{count} transfer",
+    transfers_few: "{count} transferuri",
+    transfers_other: "{count} de transferuri",
+    save: "Salvează traseul",
+    unsave: "Salvat",
+    reliability: "Fiabilitate",
+    noScoreYet: "încă fără scor",
+    details: "Detalii",
+    hideDetails: "Ascunde detaliile",
+    track: "Linia {track}",
+    trackChanged: "Schimbare de linie: acum linia {track}",
+    cancelled: "anulat",
+    towards: "Direcția {headsign}",
+    attribution: "Date despre legături: Transitous",
+  },
+  transfer: {
+    at: "Transfer în {station}",
+    buffer: "{min} min pentru transfer",
+    chance: "dintre aceste transferuri reușesc",
+    notRecorded: "Pentru această gară încă nu colectăm date.",
+    notRail: "Pentru autobuz, tramvai și metrou nu există încă scoruri.",
+    cancelled: "Un tren din acest transfer este anulat.",
+    learning: "Scorul apare când modelul are destule date.",
+    live: {
+      ok: "Live: reușește, rezervă {min} min",
+      tight: "Live: la limită, rezervă {min} min",
+      at_risk: "Live: în pericol",
+      missed: "Live: probabil nu reușește",
+      cancelled: "Live: tren anulat",
+    },
+  },
+  feedback: {
+    question: "A reușit acest transfer?",
+    yes: "Da, am prins",
+    no: "Nu, l-am pierdut",
+    thanks: "Mulțumim! Asta ajută la verificarea scorurilor.",
+    failed: "Nu s-a putut salva. Încearcă mai târziu.",
+  },
+  score: {
+    earlyEstimate: "prima estimare",
+    limitedData: "puține date",
+    basedOn_one: "din {count} călătorie",
+    basedOn_few: "din {count} călătorii",
+    basedOn_other: "din {count} de călătorii",
+  },
+  banner: {
+    title: "AnschlussRadar încă învață.",
+    live_only: "Întârzierile live sunt corecte de acum. Scorurile de fiabilitate apar în aproximativ două săptămâni.",
+    early: "Întârzierile live sunt corecte de acum. Scorurile de fiabilitate sunt primele estimări și se îmbunătățesc în fiecare săptămână.",
+  },
+  errors: {
+    offline: "Nu există conexiune la internet. Verifică rețeaua și încearcă din nou.",
+    planner: "Serviciul de orar nu răspunde acum. Încearcă din nou peste câteva minute.",
+    generic: "Nu a funcționat. Încearcă din nou.",
+    retry: "Încearcă din nou",
+  },
+  contact: {
+    title: "Contact",
+    lead: "Întrebări, erori sau idei: scrie-mi un e-mail. De obicei răspund în câteva zile.",
+    privacyNote: "Folosesc adresa ta de e-mail doar ca să-ți răspund. Mai multe în politica de confidențialitate.",
+    code: "Erorile din cod le poți raporta și direct pe",
+  },
+  privacy: {
+    clear: "Șterge datele salvate pe acest dispozitiv",
+    cleared: "Șters. Pe acest dispozitiv nu mai este salvat nimic de la AnschlussRadar.",
+  },
+  footer: {
+    planner: "Căutare de legături: Transitous",
+    notDb: "Nu este un serviciu Deutsche Bahn.",
+  },
+  notFound: {
+    title: "Această pagină nu există.",
+    back: "Înapoi la căutare",
+  },
+  about: {
+    notTitle: "Ce nu face AnschlussRadar",
+    not: [
+      "Nu e nevoie de cont sau autentificare (în afara fazei demo)",
+      "Fără cookie-uri, fără urmărire, fără servicii de statistică",
+      "Fără reclame, fără vânzarea sau transmiterea datelor",
+      "Fără bilete, fără plăți",
+      "Nu este un serviciu Deutsche Bahn",
+      "Fără garanție: scorurile sunt estimări din călătorii trecute",
+    ],
+    onlyDeEn: "Această pagină există în germană și engleză. Mai jos este versiunea în engleză.",
+  },
+  help: {
+    title: "Ajutor",
+    items: [
+      {
+        q: "Ce înseamnă procentul?",
+        a: [
+          "„84 % dintre aceste transferuri reușesc” înseamnă: la transferuri asemănătoare din ultimele săptămâni (aceeași gară, trenuri asemănătoare, timp de transfer asemănător) legătura a fost prinsă în 84 din 100 de cazuri.",
+          "Numărul de lângă o legătură este șansa ca toate transferurile ei să reușească. La un tren direct nu ai ce pierde, așa că nu apare niciun număr.",
+        ],
+      },
+      {
+        q: "Ce înseamnă „reușit”?",
+        a: [
+          "Un transfer reușește dacă trenul de legătură pleacă la cel puțin timpul minim de transfer după sosirea reală. Acesta este de 3 minute, cu un tren de lung parcurs 5 minute. La schimbarea nivelului (de exemplu de pe peroanele subterane S-Bahn în sus) se adaugă 2 minute. Nu vedem dacă cineva a alergat sau dacă trenul a așteptat.",
+        ],
+      },
+      {
+        q: "De ce unele transferuri nu au scor?",
+        a: [],
+        list: [
+          "Modelul încă învață. În primele săptămâni există doar verificarea live.",
+          "Transferul are loc într-o gară pentru care încă nu colectăm date. Acum acestea sunt marile gări de transfer, iar lista crește.",
+          "O parte a călătoriei este cu autobuzul, tramvaiul sau metroul. Pentru acestea nu există încă scoruri.",
+        ],
+      },
+      {
+        q: "Ce arată verificarea live?",
+        a: [
+          "În ziua călătoriei comparăm întârzierile actuale ale ambelor trenuri cu timpul minim de transfer. Rezerva este timpul care rămâne în plus. „Reușește”: 5 minute de rezervă sau mai mult. „La limită”: 2–4 minute. „În pericol”: sub 2 minute, reușește doar dacă totul merge bine. „Probabil nu reușește”: după orele actuale, trenul de legătură pleacă înainte să ajungi.",
+        ],
+      },
+      {
+        q: "La ce folosește „A reușit acest transfer?”",
+        a: [
+          "După un transfer poți spune cu o atingere dacă a reușit. Se salvează doar transferul și răspunsul tău, nimic despre tine. Răspunsurile ajută la verificarea scorurilor.",
+        ],
+      },
+      {
+        q: "Mă pot baza pe asta?",
+        a: [
+          "Scorurile sunt estimări din călătorii trecute, nu o garanție. Deranjamentele, lucrările sau grevele pot schimba totul. Pe drum urmărește afișajele și anunțurile din tren și din gară.",
+        ],
+      },
+      {
+        q: "Pot cumpăra bilete aici?",
+        a: ["Nu. AnschlussRadar arată doar legături și cât de sigure sunt."],
+      },
+      {
+        q: "Cum pun aplicația pe ecranul principal?",
+        a: [
+          "iPhone: deschide pagina în Safari, apasă „Partajează”, apoi „Adaugă pe ecranul principal”. Android: deschide pagina în Chrome, apasă meniul (trei puncte), apoi „Instalează aplicația” sau „Adaugă pe ecranul de pornire”.",
+        ],
+      },
+    ],
+    more: "Mai ai o întrebare?",
+    moreLink: "Scrie-mi.",
+  },
+};

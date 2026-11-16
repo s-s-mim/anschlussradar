@@ -1,11 +1,10 @@
-import { useI18n } from "../i18n";
+import { LANGUAGES, useI18n } from "../i18n";
 import type { Lang } from "../i18n";
 import { Link } from "../lib/router";
 import { LogoMark } from "./Logo";
 
 export function Header({ path }: { path: string }) {
   const { t, lang, setLang } = useI18n();
-  const other: Lang = lang === "de" ? "en" : "de";
   return (
     <header className="site-header">
       <a className="skip" href="#main">
@@ -20,15 +19,19 @@ export function Header({ path }: { path: string }) {
           <Link href="/help" aria-current={path === "/help" ? "page" : undefined}>
             {t("nav.help")}
           </Link>
-          <button
-            type="button"
-            className="lang"
-            onClick={() => setLang(other)}
-            aria-label={`${t("nav.language")}: ${other === "de" ? "Deutsch" : "English"}`}
-          >
-            <span aria-hidden="true" className={lang === "de" ? "on" : ""}>DE</span>
-            <span aria-hidden="true" className={lang === "en" ? "on" : ""}>EN</span>
-          </button>
+          {/* A native menu: works with screen readers and opens the phone's own picker. */}
+          <label className="lang">
+            <span className="lang-code" aria-hidden="true">
+              {lang.toUpperCase()}
+            </span>
+            <select value={lang} aria-label={t("nav.language")} onChange={(e) => setLang(e.target.value as Lang)}>
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code} lang={l.code}>
+                  {l.name}
+                </option>
+              ))}
+            </select>
+          </label>
         </nav>
       </div>
     </header>

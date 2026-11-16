@@ -1,4 +1,5 @@
-// German is the main language. en.ts must have the same keys (TypeScript checks it).
+// German is the main language. Every other language file has the same keys; TypeScript checks it.
+// Plural forms: key_one, key_other, and where a language needs them key_two, key_few, key_many.
 export const de = {
   nav: {
     search: "Suche",
@@ -124,6 +125,78 @@ export const de = {
     title: "Diese Seite gibt es nicht.",
     back: "Zur Suche",
   },
+  about: {
+    notTitle: "Was AnschlussRadar nicht tut",
+    not: [
+      "Kein Konto und keine Anmeldung nötig (außer in der Demo-Phase)",
+      "Keine Cookies, kein Tracking, keine Statistik-Dienste",
+      "Keine Werbung, kein Verkauf oder Weitergeben von Daten",
+      "Keine Fahrkarten, keine Zahlungen",
+      "Kein Angebot der Deutschen Bahn",
+      "Keine Garantie: Die Werte sind Schätzungen aus vergangenen Fahrten",
+    ],
+    onlyDeEn: "Diese Seite gibt es auf Deutsch und Englisch. Hier ist die englische Fassung.",
+  },
+  help: {
+    title: "Hilfe",
+    items: [
+      {
+        q: "Was bedeutet die Prozentzahl?",
+        a: [
+          "„84 % dieser Umstiege klappen“ heißt: Bei vergleichbaren Umstiegen in den letzten Wochen, also am selben Bahnhof, mit ähnlichen Zügen und ähnlich viel Umsteigezeit, wurde der Anschluss in 84 von 100 Fällen erreicht.",
+          "Die Zahl rechts neben einer Verbindung ist die Chance, dass alle ihre Umstiege klappen. Bei einer Direktverbindung gibt es nichts zu verpassen, deshalb steht dort keine Zahl.",
+        ],
+      },
+      {
+        q: "Was zählt als geschafft?",
+        a: [
+          "Ein Umstieg zählt als geschafft, wenn der Anschlusszug nach der tatsächlichen Ankunft noch mindestens die Mindestumsteigezeit lässt. Die beträgt 3 Minuten, mit einem Fernzug 5 Minuten. Bei einem Wechsel zwischen Ebenen (zum Beispiel vom S-Bahn-Tiefbahnhof nach oben) kommen 2 Minuten dazu. Ob jemand gerannt ist oder ob der Zug gewartet hat, sehen wir nicht.",
+        ],
+      },
+      {
+        q: "Warum steht bei manchen Umstiegen kein Wert?",
+        a: [],
+        list: [
+          "Das Modell lernt noch. In den ersten Wochen gibt es nur den Live-Check.",
+          "Der Umstieg ist an einem Bahnhof, für den wir noch keine Daten sammeln. Im Moment sind das die großen Umsteigebahnhöfe, die Liste wächst.",
+          "Ein Teil der Fahrt ist ein Bus, eine Straßenbahn oder eine U-Bahn. Dafür gibt es noch keine Werte.",
+        ],
+      },
+      {
+        q: "Was zeigt der Live-Check?",
+        a: [
+          "Am Reisetag vergleichen wir die aktuellen Verspätungen beider Züge mit der Mindestumsteigezeit. Die Reserve ist die Zeit, die darüber hinaus bleibt. „Klappt“ heißt: 5 Minuten Reserve oder mehr. „Knapp“ heißt: 2 bis 4 Minuten. „Gefährdet“ heißt: weniger als 2 Minuten, es reicht nur, wenn alles glattgeht. „Wird wohl nicht klappen“ heißt: Nach den aktuellen Zeiten fährt der Anschluss vor dir ab.",
+        ],
+      },
+      {
+        q: "Wozu dient „Hat dieser Umstieg geklappt?“",
+        a: [
+          "Nach einem Umstieg kannst du mit einem Tipp sagen, ob er geklappt hat. Gespeichert werden nur der Umstieg und deine Antwort, keine Angaben über dich. Die Antworten helfen, die Werte zu prüfen.",
+        ],
+      },
+      {
+        q: "Kann ich mich darauf verlassen?",
+        a: [
+          "Die Werte sind Schätzungen aus vergangenen Fahrten, keine Garantie. Bei Störungen, Bauarbeiten oder Streiks kann es ganz anders kommen. Achte unterwegs auf die Anzeigen und Durchsagen im Zug und am Bahnhof.",
+        ],
+      },
+      {
+        q: "Kann ich hier Fahrkarten kaufen?",
+        a: ["Nein. AnschlussRadar zeigt nur Verbindungen und ihre Zuverlässigkeit."],
+      },
+      {
+        q: "Wie lege ich die App auf den Startbildschirm?",
+        a: [
+          "iPhone: Öffne die Seite in Safari, tippe auf „Teilen“ und dann auf „Zum Home-Bildschirm“. Android: Öffne die Seite in Chrome, tippe auf das Menü (drei Punkte) und dann auf „App installieren“ oder „Zum Startbildschirm hinzufügen“.",
+        ],
+      },
+    ],
+    more: "Noch eine Frage offen?",
+    moreLink: "Schreib mir.",
+  },
 };
 
 export type Dict = typeof de;
+
+/** Other languages: the same keys, plus extra plural forms where the language needs them. */
+export type Translation = { [K in keyof Dict]: Dict[K] & Record<string, unknown> };

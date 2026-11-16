@@ -20,7 +20,7 @@ function sortJourneys(list: Journey[], by: Sort): Journey[] {
 }
 
 export function Results({ search, onStage }: { search: URLSearchParams; onStage: (s: Stage) => void }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const parsed = fromParams(search);
   const key = search.toString();
   const [data, setData] = useState<JourneysResponse | null>(null);
@@ -77,7 +77,7 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
     navigate(`/connections?${toParams({ ...s, date: next.date, time: next.time, arriveBy: false })}`);
   };
 
-  const dateLabel = new Intl.DateTimeFormat(undefined, { weekday: "short", day: "numeric", month: "short" }).format(
+  const dateLabel = new Intl.DateTimeFormat(lang, { weekday: "short", day: "numeric", month: "short" }).format(
     new Date(`${s.date}T12:00:00`),
   );
 

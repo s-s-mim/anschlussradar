@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { WhyList } from "../components/Why";
+import { NotList, WhyList } from "../components/Why";
 import { useI18n } from "../i18n";
 import { Link } from "../lib/router";
 import { de } from "../i18n/de";
@@ -28,6 +28,7 @@ function De() {
         <WhyList />
       </div>
       <p>{GROWING_DE}</p>
+      <NotList />
       <h2>So funktioniert es</h2>
       <p>
         Rund um die Uhr fragt ein kleines Programm alle paar Minuten die Fahrplan- und Verspätungsdaten der großen
@@ -82,7 +83,7 @@ function De() {
   );
 }
 
-function En() {
+function En({ withWhy = true }: { withWhy?: boolean }) {
   return (
     <>
       <h1>About AnschlussRadar</h1>
@@ -90,15 +91,21 @@ function En() {
         Journey planners show whether a transfer is possible on paper. AnschlussRadar also shows how often it works in
         practice.
       </p>
-      <h2 id="anders">What AnschlussRadar does differently</h2>
-      <p>
-        Other planners show whether a transfer is possible on paper and warn about delays on the day. AnschlussRadar
-        answers the question before that: how often did exactly this transfer actually work in recent weeks?
-      </p>
-      <div className="about-why">
-        <WhyList />
-      </div>
-      <p>{GROWING_EN}</p>
+      {withWhy && (
+        <>
+          <h2 id="anders">What AnschlussRadar does differently</h2>
+          <p>
+            Other planners show whether a transfer is possible on paper and warn about delays on the day.
+            AnschlussRadar answers the question before that: how often did exactly this transfer actually work in
+            recent weeks?
+          </p>
+          <div className="about-why">
+            <WhyList />
+          </div>
+          <p>{GROWING_EN}</p>
+          <NotList />
+        </>
+      )}
       <h2>How it works</h2>
       <p>
         Around the clock, a small program fetches the timetable and delay data of the large transfer stations every
@@ -152,10 +159,28 @@ function En() {
 }
 
 export function About() {
-  const { lang } = useI18n();
+  const { lang, dict } = useI18n();
   useEffect(() => {
     // "/about#anders" from the start page: jump to that section.
     if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
   }, []);
-  return <div className="page prose wrap narrow">{lang === "de" ? <De /> : <En />}</div>;
+  if (lang === "de" || lang === "en") {
+    return <div className="page prose wrap narrow">{lang === "de" ? <De /> : <En />}</div>;
+  }
+  // Other languages: the key points translated, the rest in English.
+  return (
+    <div className="page prose wrap narrow">
+      <h1>AnschlussRadar</h1>
+      <h2 id="anders">{dict.home.whyTitle}</h2>
+      <div className="about-why">
+        <WhyList />
+      </div>
+      <p>{dict.home.growing}</p>
+      <NotList />
+      <p className="muted lang-note">{dict.about.onlyDeEn}</p>
+      <div lang="en" dir="ltr">
+        <En withWhy={false} />
+      </div>
+    </div>
+  );
 }

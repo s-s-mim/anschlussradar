@@ -1,0 +1,198 @@
+import type { Translation } from "./de";
+
+// Türkçe. Station and train names stay as in the German timetable.
+export const tr: Translation = {
+  nav: {
+    search: "Arama",
+    help: "Yardım",
+    about: "Hakkında",
+    contact: "İletişim",
+    imprint: "Künye",
+    privacy: "Gizlilik",
+    language: "Dil",
+    skip: "İçeriğe geç",
+  },
+  home: {
+    title: "Aktarmaya yetişebilecek miyim?",
+    lead: "AnschlussRadar, Almanya'daki tren bağlantılarında bir aktarmanın geçmişte ne sıklıkla başarılı olduğunu gösterir ve bugün işe yarayıp yaramayacağını canlı olarak kontrol eder.",
+    from: "Nereden",
+    to: "Nereye",
+    swap: "Kalkış ve varış yerini değiştir",
+    date: "Tarih",
+    time: "Saat",
+    departure: "Kalkış",
+    arrival: "Varış",
+    now: "Şimdi",
+    search: "Bağlantı ara",
+    searching: "Aranıyor …",
+    pickStation: "Lütfen listeden bir istasyon seçin.",
+    saved: "Kayıtlı güzergâhlar",
+    recent: "Son aramalar",
+    remove: "Kaldır",
+    whyTitle: "AnschlussRadar'ı farklı kılan ne?",
+    whyLink: "AnschlussRadar neyi farklı yapıyor?",
+    growing:
+      "Almanya'nın her yerinde bağlantı bulabilirsiniz. Güvenilirlik değerleri giderek daha fazla istasyonda sunuluyor ve geri bildirimlerinize göre başka ulaşım türleri de eklenecek.",
+    why: [
+      ["Sadece tarife değil, gerçek deneyim", "Her aktarmanın son haftalarda gerçekte ne sıklıkla başarılı olduğunu görürsünüz."],
+      ["Önce en güvenilir bağlantı", "Sadece varış saatine göre değil, varma şansınıza göre sıralayın."],
+      ["Yolculuk günü canlı kontrol", "Trenler bugün gecikiyorsa aktarmanızın hâlâ işe yarayıp yaramadığını hemen görürsünüz."],
+    ],
+  },
+  station: {
+    placeholder: "İstasyon veya durak",
+    noMatch: "İstasyon bulunamadı. Yazım doğru mu?",
+    loading: "Aranıyor …",
+  },
+  results: {
+    title: "{from} → {to}",
+    change: "Aramayı değiştir",
+    fastest: "Önce en hızlı",
+    reliable: "Önce en güvenilir",
+    sortLabel: "Sıralama",
+    earlier: "Daha erken",
+    later: "Daha geç",
+    none: "Tren bağlantısı bulunamadı. Başka bir saat ya da yakındaki daha büyük bir istasyonu deneyin.",
+    direct: "Aktarmasız",
+    transfers_one: "{count} aktarma",
+    transfers_other: "{count} aktarma",
+    save: "Güzergâhı kaydet",
+    unsave: "Kaydedildi",
+    reliability: "Güvenilirlik",
+    noScoreYet: "henüz değer yok",
+    details: "Ayrıntılar",
+    hideDetails: "Ayrıntıları gizle",
+    track: "Peron {track}",
+    trackChanged: "Peron değişti: şimdi peron {track}",
+    cancelled: "iptal",
+    towards: "Yön: {headsign}",
+    attribution: "Bağlantı verileri: Transitous",
+  },
+  transfer: {
+    at: "{station} aktarması",
+    buffer: "aktarma için {min} dk",
+    chance: "bu tür aktarmalarda başarı",
+    notRecorded: "Bu istasyon için henüz veri toplamıyoruz.",
+    notRail: "Otobüs, tramvay ve metro için henüz değer yok.",
+    cancelled: "Bu aktarmadaki bir tren iptal edildi.",
+    learning: "Model yeterli veri topladığında değer görünecek.",
+    live: {
+      ok: "Canlı: yetişirsiniz, {min} dk pay",
+      tight: "Canlı: sıkışık, {min} dk pay",
+      at_risk: "Canlı: risk altında",
+      missed: "Canlı: muhtemelen yetişemezsiniz",
+      cancelled: "Canlı: tren iptal",
+    },
+  },
+  feedback: {
+    question: "Bu aktarma başarılı oldu mu?",
+    yes: "Evet, yetiştim",
+    no: "Hayır, kaçırdım",
+    thanks: "Teşekkürler! Bu, değerleri kontrol etmeye yardımcı oluyor.",
+    failed: "Bu işe yaramadı. Lütfen daha sonra tekrar deneyin.",
+  },
+  score: {
+    earlyEstimate: "ilk tahmin",
+    limitedData: "az veri",
+    basedOn_one: "{count} yolculuktan",
+    basedOn_other: "{count} yolculuktan",
+  },
+  banner: {
+    title: "AnschlussRadar hâlâ öğreniyor.",
+    live_only: "Canlı gecikmeler şimdiden doğru. Güvenilirlik değerleri yaklaşık iki hafta içinde görünecek.",
+    early: "Canlı gecikmeler şimdiden doğru. Güvenilirlik değerleri ilk tahminlerdir ve her hafta daha iyi olur.",
+  },
+  errors: {
+    offline: "İnternet bağlantısı yok. Ağınızı kontrol edip tekrar deneyin.",
+    planner: "Sefer bilgisi servisi şu anda yanıt vermiyor. Birkaç dakika sonra tekrar deneyin.",
+    generic: "Bu işe yaramadı. Lütfen tekrar deneyin.",
+    retry: "Tekrar dene",
+  },
+  contact: {
+    title: "İletişim",
+    lead: "Sorular, hata bildirimleri veya fikirler için bana e-posta yazın. Genellikle birkaç gün içinde yanıt veririm.",
+    privacyNote: "E-postanızı yalnızca size yanıt vermek için kullanırım. Ayrıntılar gizlilik bildiriminde.",
+    code: "Koddaki hataları doğrudan da bildirebilirsiniz:",
+  },
+  privacy: {
+    clear: "Bu cihazdaki kayıtlı verileri sil",
+    cleared: "Silindi. Bu cihazda artık AnschlussRadar'a ait hiçbir şey kayıtlı değil.",
+  },
+  footer: {
+    planner: "Sefer bilgisi: Transitous",
+    notDb: "Deutsche Bahn'ın bir hizmeti değildir.",
+  },
+  notFound: {
+    title: "Bu sayfa mevcut değil.",
+    back: "Aramaya dön",
+  },
+  about: {
+    notTitle: "AnschlussRadar'ın yapmadıkları",
+    not: [
+      "Hesap ve giriş gerekmez (demo dönemi hariç)",
+      "Çerez yok, izleme yok, istatistik servisi yok",
+      "Reklam yok, veri satışı veya paylaşımı yok",
+      "Bilet satışı yok, ödeme yok",
+      "Deutsche Bahn'ın bir hizmeti değildir",
+      "Garanti yok: değerler geçmiş yolculuklardan yapılan tahminlerdir",
+    ],
+    onlyDeEn: "Bu sayfa Almanca ve İngilizce olarak mevcuttur. Aşağıda İngilizce sürümü var.",
+  },
+  help: {
+    title: "Yardım",
+    items: [
+      {
+        q: "Yüzde ne anlama geliyor?",
+        a: [
+          "\"%84 bu tür aktarmalarda başarı\" şu demektir: Son haftalardaki benzer aktarmalarda (aynı istasyon, benzer trenler, benzer aktarma süresi) bağlantıya 100 seferden 84'ünde yetişildi.",
+          "Bir bağlantının yanındaki sayı, tüm aktarmalarının başarılı olma şansıdır. Aktarmasız bir trende kaçırılacak bir şey olmadığı için sayı gösterilmez.",
+        ],
+      },
+      {
+        q: "Ne zaman \"başarılı\" sayılır?",
+        a: [
+          "Bağlantı treni gerçek varıştan en az asgari aktarma süresi sonra kalkıyorsa aktarma başarılı sayılır. Bu süre 3 dakika, uzun mesafe treniyle 5 dakikadır. Katlar arasında geçişte (örneğin yer altındaki S-Bahn peronlarından yukarı) 2 dakika eklenir. Birinin koşup koşmadığını ya da trenin bekleyip beklemediğini göremeyiz.",
+        ],
+      },
+      {
+        q: "Bazı aktarmalarda neden değer yok?",
+        a: [],
+        list: [
+          "Model hâlâ öğreniyor. İlk haftalarda yalnızca canlı kontrol var.",
+          "Aktarma, henüz veri toplamadığımız bir istasyonda. Şu anda bunlar büyük aktarma istasyonlarıdır ve liste büyüyor.",
+          "Yolculuğun bir kısmı otobüs, tramvay veya metro. Bunlar için henüz değer yok.",
+        ],
+      },
+      {
+        q: "Canlı kontrol neyi gösterir?",
+        a: [
+          "Yolculuk günü her iki trenin güncel gecikmelerini asgari aktarma süresiyle karşılaştırırız. Pay, bunun üzerine kalan süredir. \"Yetişirsiniz\": 5 dakika veya daha fazla pay. \"Sıkışık\": 2 ila 4 dakika. \"Risk altında\": 2 dakikadan az, ancak her şey yolunda giderse yetişirsiniz. \"Muhtemelen yetişemezsiniz\": güncel saatlere göre bağlantı treni siz varmadan kalkıyor.",
+        ],
+      },
+      {
+        q: "\"Bu aktarma başarılı oldu mu?\" ne işe yarar?",
+        a: [
+          "Bir aktarmadan sonra tek dokunuşla başarılı olup olmadığını söyleyebilirsiniz. Yalnızca aktarma ve cevabınız saklanır, sizinle ilgili hiçbir bilgi saklanmaz. Cevaplar değerlerin kontrol edilmesine yardımcı olur.",
+        ],
+      },
+      {
+        q: "Buna güvenebilir miyim?",
+        a: [
+          "Değerler geçmiş yolculuklardan yapılan tahminlerdir, garanti değildir. Arızalar, inşaat çalışmaları veya grevler her şeyi değiştirebilir. Yolculuk sırasında trendeki ve istasyondaki ekranları ve anonsları takip edin.",
+        ],
+      },
+      {
+        q: "Burada bilet alabilir miyim?",
+        a: ["Hayır. AnschlussRadar yalnızca bağlantıları ve ne kadar güvenilir olduklarını gösterir."],
+      },
+      {
+        q: "Uygulamayı ana ekrana nasıl eklerim?",
+        a: [
+          "iPhone: Sayfayı Safari'de açın, \"Paylaş\"a ve ardından \"Ana Ekrana Ekle\"ye dokunun. Android: Sayfayı Chrome'da açın, menüye (üç nokta) ve ardından \"Uygulamayı yükle\" veya \"Ana ekrana ekle\"ye dokunun.",
+        ],
+      },
+    ],
+    more: "Başka sorunuz mu var?",
+    moreLink: "Bana yazın.",
+  },
+};

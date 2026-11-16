@@ -1,6 +1,6 @@
-import type { Dict } from "./de";
+import type { Translation } from "./de";
 
-export const en: Dict = {
+export const en: Translation = {
   nav: {
     search: "Search",
     help: "Help",
@@ -124,5 +124,74 @@ export const en: Dict = {
   notFound: {
     title: "This page doesn't exist.",
     back: "Go to search",
+  },
+  about: {
+    notTitle: "What AnschlussRadar doesn't do",
+    not: [
+      "No account or sign-in needed (except during the demo phase)",
+      "No cookies, no tracking, no analytics services",
+      "No ads, no selling or passing on of data",
+      "No tickets, no payments",
+      "Not a Deutsche Bahn service",
+      "No guarantee: the scores are estimates from past trips",
+    ],
+    onlyDeEn: "This page is available in German and English. Here is the English version.",
+  },
+  help: {
+    title: "Help",
+    items: [
+      {
+        q: "What does the percentage mean?",
+        a: [
+          "\"84% of these transfers work\" means: for similar transfers in recent weeks (same station, similar trains, similar time to change), the connection was made in 84 out of 100 cases.",
+          "The number next to a journey is the chance that all of its transfers work. A direct train has nothing to miss, so it gets no number.",
+        ],
+      },
+      {
+        q: "What counts as made?",
+        a: [
+          "A transfer counts as made when the connecting train leaves at least the minimum transfer time after the actual arrival. That time is 3 minutes, or 5 minutes with a long-distance train, plus 2 minutes when you change between levels (for example from the underground S-Bahn platforms). We can't see whether someone ran or whether the train waited.",
+        ],
+      },
+      {
+        q: "Why do some transfers have no score?",
+        a: [],
+        list: [
+          "The model is still learning. During the first weeks there is only the live check.",
+          "The transfer is at a station we don't collect data for yet. Right now these are the large transfer stations, and the list is growing.",
+          "Part of the trip is a bus, tram or underground line. There are no scores for those yet.",
+        ],
+      },
+      {
+        q: "What does the live check show?",
+        a: [
+          "On the day of travel we compare the current delays of both trains with the minimum transfer time. The time to spare is what's left on top of it. \"Fine\" means 5 minutes or more to spare. \"Tight\" means 2 to 4 minutes. \"At risk\" means less than 2 minutes, so it only works if nothing else goes wrong. \"Probably won't work\" means that by the current times the connection leaves before you arrive.",
+        ],
+      },
+      {
+        q: "What is \"Did this transfer work?\" for?",
+        a: [
+          "After a transfer you can say with one tap whether it worked. Only the transfer and your answer are stored, nothing about you. The answers help check the scores.",
+        ],
+      },
+      {
+        q: "Can I rely on it?",
+        a: [
+          "The scores are estimates from past trips, not a promise. Disruptions, engineering work or strikes can change everything. On the way, follow the displays and announcements on the train and at the station.",
+        ],
+      },
+      {
+        q: "Can I buy tickets here?",
+        a: ["No. AnschlussRadar only shows connections and how reliable they are."],
+      },
+      {
+        q: "How do I add the app to my home screen?",
+        a: [
+          "iPhone: open the page in Safari, tap \"Share\", then \"Add to Home Screen\". Android: open the page in Chrome, tap the menu (three dots), then \"Install app\" or \"Add to Home screen\".",
+        ],
+      },
+    ],
+    more: "Still have a question?",
+    moreLink: "Write to me.",
   },
 };
