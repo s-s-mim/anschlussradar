@@ -89,7 +89,8 @@ class LogisticModel:
         self.model.fit(x, y)
 
     def predict_proba(self, x: np.ndarray) -> np.ndarray:
-        return self.model.predict_proba(x)[:, 1]  # type: ignore[no-any-return]
+        proba: np.ndarray = self.model.predict_proba(x)[:, 1]
+        return proba
 
     def export(self) -> bytes:
         from skl2onnx import convert_sklearn
@@ -136,7 +137,8 @@ class LightGBMModel:
         )
 
     def predict_proba(self, x: np.ndarray) -> np.ndarray:
-        return self.model.predict_proba(x)[:, 1]  # type: ignore[no-any-return]
+        proba: np.ndarray = self.model.predict_proba(x)[:, 1]
+        return proba
 
     def export(self) -> bytes:
         from onnxmltools import convert_lightgbm
@@ -347,7 +349,11 @@ def train_and_publish(
     split = None if df.empty else split_by_week(add_history(df), now)
     if split is None:
         decision = Decision(False, previous_stage or Stage.LIVE_ONLY, "fewer than 3 weeks of data")
-        status = {"run_at": now.isoformat(), "decision": decision.reason, "stage": decision.stage}
+        status: dict[str, Any] = {
+            "run_at": now.isoformat(),
+            "decision": decision.reason,
+            "stage": decision.stage,
+        }
         registry.write_status(status)
         if pointer is None:
             registry.set_current(None, Stage.LIVE_ONLY.value, reason=decision.reason)
