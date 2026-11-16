@@ -1,4 +1,4 @@
-import type { ApiErrorBody, Board, Hub, JourneysResponse, ModelStatus, NetworkStation, Station } from "./types";
+import type { ApiErrorBody, Board, Hub, JourneysResponse, LineDetail, LineSummary, ModelStatus, NetworkStation, Station } from "./types";
 
 const BASE = (import.meta.env.VITE_API_BASE || "/api/v1").replace(/\/$/, "");
 
@@ -80,6 +80,14 @@ export function getHubs(): Promise<Hub[]> {
 
 export function getNetwork(): Promise<{ available: boolean; stations: NetworkStation[] }> {
   return request<{ available: boolean; stations: NetworkStation[] }>("/network");
+}
+
+export function getLines(): Promise<{ available: boolean; lines: LineSummary[] }> {
+  return request<{ available: boolean; lines: LineSummary[] }>("/lines");
+}
+
+export function getLine(id: string, signal?: AbortSignal): Promise<LineDetail> {
+  return request<LineDetail>(`/lines/${encodeURIComponent(id)}`, { signal });
 }
 
 export function getBoard(eva: number, signal?: AbortSignal): Promise<Board> {

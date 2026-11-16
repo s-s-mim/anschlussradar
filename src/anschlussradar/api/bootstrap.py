@@ -14,6 +14,7 @@ from .feedback import BlobFeedbackStore, FeedbackStore
 from .forecast import ForecastProvider, KustoForecast, NoForecast
 from .history import KustoHistory, kusto_query, kusto_runner
 from .journeys import HistoryProvider, NoHistory
+from .lines import Lines
 from .messages import KustoMessages, MessageProvider, NoMessages
 from .network import NetworkStatus
 from .push import Pusher, WebPusher
@@ -93,6 +94,7 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
     network = (
         NetworkStatus(kusto_runner(*kusto), hubs, stations) if settings.kusto_query_uri else None
     )
+    lines = Lines(kusto_runner(*kusto), hubs) if settings.kusto_query_uri else None
 
     return ApiService(
         stations=stations,
@@ -107,6 +109,7 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         messages=messages,
         boards=boards,
         network=network,
+        lines=lines,
         forecasts=forecasts,
         watches=watches,
         pusher=pusher,

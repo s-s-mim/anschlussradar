@@ -30,7 +30,13 @@ function DepartureRow({ d }: { d: BoardDeparture }) {
         )}
       </span>
       <span className="dep-main">
-        <span className="line-badge">{trainName(d)}</span> <span className="dep-dest">{d.destination}</span>
+        {d.lineId ? (
+          <Link className="line-badge" href={`/line?id=${d.lineId}`}>
+            {trainName(d)}
+          </Link>
+        ) : (
+          <span className="line-badge">{trainName(d)}</span>
+        )} <span className="dep-dest">{d.destination}</span>
         {d.cancelled && <span className="cancel-flag"> {t("results.cancelled")}</span>}
         {reasonText && <span className="dep-reason">{t("results.reason", { text: reasonText })}</span>}
       </span>
@@ -42,7 +48,7 @@ function DepartureRow({ d }: { d: BoardDeparture }) {
 }
 
 /** 24 bars, one per hour; the height is the share of punctual departures. */
-function HourlyChart({ hours }: { hours: HourStat[] }) {
+export function HourlyChart({ hours }: { hours: HourStat[] }) {
   const { t } = useI18n();
   return (
     <figure className="hourly">

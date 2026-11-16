@@ -68,6 +68,31 @@ export interface NetworkStation {
   week: NetworkWindow;
 }
 
+export interface LineSummary {
+  id: string;
+  category: string;
+  line: string;
+  name: string;
+  terminals: string[];
+  departures: number;
+  onTime: number | null;
+}
+
+export interface LineStation {
+  eva: number;
+  name: string;
+  departures: number;
+  onTime: number | null;
+  cancelled: number;
+  avgDelay: number | null;
+}
+
+export interface LineDetail extends LineSummary {
+  days: number;
+  stations: LineStation[];
+  hourly: HourStat[];
+}
+
 export interface BoardDeparture {
   category: string | null;
   number: string | null;
@@ -80,6 +105,8 @@ export interface BoardDeparture {
   platformPlanned: string | null;
   cancelled: boolean;
   messages: TrainNote[];
+  /** Line page for this departure, when AnschlussRadar has one. */
+  lineId?: string | null;
 }
 
 export interface HourStat {

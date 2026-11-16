@@ -6,6 +6,8 @@ GET  /api/v1/model/status
 GET  /api/v1/hubs                      recorded stations
 GET  /api/v1/hubs/{eva}/board          next departures and punctuality by hour
 GET  /api/v1/network                   punctuality of every recorded station (network map)
+GET  /api/v1/lines                     regional and S-Bahn lines seen at recorded stations
+GET  /api/v1/lines/{id}                one line: its stations in order and punctuality by hour
 GET  /api/v1/push/key                  public VAPID key for the browser
 POST /api/v1/watches                   watch a connection (device ID + push address)
 GET  /api/v1/watches/{device}          the device's watched connections
@@ -32,6 +34,7 @@ from .feedback import FeedbackError, FeedbackStore, TransferFeedback
 from .feedback import validate as validate_feedback
 from .forecast import ForecastProvider, NoForecast
 from .journeys import HistoryProvider, Journey, build_journeys, sort_journeys
+from .lines import Lines
 from .messages import MessageProvider, NoMessages
 from .network import NetworkStatus
 from .push import Pusher
@@ -69,6 +72,7 @@ class ApiService:
     messages: MessageProvider = field(default_factory=NoMessages)
     boards: StationBoards | None = None
     network: NetworkStatus | None = None
+    lines: Lines | None = None
     forecasts: ForecastProvider = field(default_factory=NoForecast)
     watches: WatchStore | None = None
     pusher: Pusher | None = None
@@ -204,6 +208,14 @@ class ApiService:
             return 200, {**body, "available": False}
         try:
             body["departures"] = self.boards.board(group_eva, evas, now or datetime.now(UTC))
+            if self.lines is not None:
+                try:
+                    body["departures"] = [
+                        {**d, "lineId": self.lines.line_for(d["category"], d["line"], group_eva)}
+                        for d in body["departures"]
+                    ]
+                except Exception:
+                    log.exception("line links failed")  # the board works without them
             body["hourly"] = self.boards.hourly(group_eva, evas)
         except Exception:
             log.exception("station board failed for %s", group_eva)
@@ -219,6 +231,27 @@ class ApiService:
             log.exception("network status failed")
             return error(502, "network_unavailable", "The network map is not available right now.")
         return 200, {"available": True, "stations": stations}
+
+    def get_lines(self) -> Response:
+        if self.lines is None:
+            return 200, {"available": False, "lines": []}
+        try:
+            return 200, {"available": True, "lines": self.lines.public_lines()}
+        except Exception:
+            log.exception("line list failed")
+            return error(502, "lines_unavailable", "Lines are not available right now.")
+
+    def get_line(self, lid: Any) -> Response:
+        if self.lines is None:
+            return error(404, "unknown_line", "Unknown line.")
+        try:
+            body = self.lines.detail(str(lid or ""))
+        except Exception:
+            log.exception("line %s failed", lid)
+            return error(502, "lines_unavailable", "Lines are not available right now.")
+        if body is None:
+            return error(404, "unknown_line", "Unknown line.")
+        return 200, body
 
     # watched connections ---------------------------------------------------------
 

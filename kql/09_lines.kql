@@ -1,0 +1,59 @@
+// Line pages: every regional and S-Bahn line seen at the recorded stations, and
+// for one line its stations in order and its punctuality by hour.
+// A line is category + line + operator: "S1" runs in Frankfurt, Munich and Berlin.
+// Punctual = less than 6 minutes late, the usual definition in Germany.
+
+.create-or-alter function with (folder = "api", docstring = "Lines with at least 100 departures at recorded stations")
+LineList(days: int) {
+    let f = StopFacts
+        | where not(incomplete) and isnotnull(dep_pt) and dep_pt > ago(days * 1d)
+        | where isnotempty(line) and isnotempty(category);
+    let ends = f
+        | summarize n = count() by category, line, operator, destination
+        | summarize terminals = make_list(bag_pack("d", destination, "n", n), 20) by category, line, operator;
+    f
+    | summarize
+        departures = count(),
+        on_time = countif(not(dep_cancelled) and dep_delay_min < 6),
+        cancelled = countif(dep_cancelled),
+        evas = make_set(eva, 200)
+      by category, line, operator
+    | where departures >= 100
+    | join kind=leftouter ends on category, line, operator
+    | project category, line, operator, departures, on_time, cancelled, evas, terminals
+}
+
+// Stations of one line. The order comes from the trips towards the most common
+// destination: the average position of each station on those trips.
+.create-or-alter function with (folder = "api", docstring = "Stations of one line in running order, with punctuality")
+LineStations(c: string, l: string, o: string, days: int) {
+    let f = StopFacts
+        | where not(incomplete) and isnotnull(dep_pt) and dep_pt > ago(days * 1d)
+        | where category == c and line == l and operator == o;
+    let main_dest = toscalar(f | summarize n = count() by destination | top 1 by n | project destination);
+    let order = f
+        | where destination == main_dest
+        | extend trip = strcat(number, "|", tostring(service_date))
+        | order by trip asc, dep_pt asc
+        | extend pos = row_number(1, prev(trip) != trip)
+        | summarize pos = avg(pos) by eva;
+    f
+    | summarize
+        departures = count(),
+        on_time = countif(not(dep_cancelled) and dep_delay_min < 6),
+        cancelled = countif(dep_cancelled),
+        avg_delay = avgif(dep_delay_min, not(dep_cancelled))
+      by eva
+    | join kind=leftouter order on eva
+    | project eva, departures, on_time, cancelled, avg_delay, pos
+}
+
+.create-or-alter function with (folder = "api", docstring = "Departures and punctuality of one line by local hour")
+LineHourly(c: string, l: string, o: string, days: int) {
+    StopFacts
+    | where not(incomplete) and isnotnull(dep_pt) and dep_pt > ago(days * 1d)
+    | where category == c and line == l and operator == o
+    | extend hour = hourofday(datetime_utc_to_local(dep_pt, "Europe/Berlin"))
+    | summarize departures = count(), on_time = countif(not(dep_cancelled) and dep_delay_min < 6),
+                cancelled = countif(dep_cancelled) by hour
+}

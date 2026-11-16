@@ -78,6 +78,16 @@ def network(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_network(), 600)
 
 
+@app.route(route="lines", methods=["GET"])
+def lines(req: func.HttpRequest) -> func.HttpResponse:
+    return respond(service().get_lines(), 3600)
+
+
+@app.route(route="lines/{id}", methods=["GET"])
+def line(req: func.HttpRequest) -> func.HttpResponse:
+    return respond(service().get_line(req.route_params.get("id")), 3600)
+
+
 @app.route(route="push/key", methods=["GET"])
 def push_key(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_push_key(), 3600)
