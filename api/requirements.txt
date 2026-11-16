@@ -11,3 +11,5 @@ azure-communication-email>=1.0
 numpy>=1.26
 onnxruntime>=1.18
 azure-storage-blob>=12.20
+azure-data-tables>=12.5
+pywebpush>=2.0

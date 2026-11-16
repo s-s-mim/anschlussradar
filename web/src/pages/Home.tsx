@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { LearningBanner } from "../components/LearningBanner";
 import { StationInput } from "../components/StationInput";
+import { WatchedList } from "../components/WatchedList";
 import { WhyList } from "../components/Why";
 import { useI18n } from "../i18n";
 import { fromParams, toParams } from "../lib/query";
@@ -115,6 +116,8 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
             <Link href="/about#anders">{t("home.whyLink")}</Link>
           </p>
         )}
+
+        <WatchedList />
 
         {saved.length > 0 && (
           <section className="routes">

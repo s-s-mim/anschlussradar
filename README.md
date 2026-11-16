@@ -187,6 +187,15 @@ The web app starts as a private demo: only people you invite can open it.
 
 To go public later: fill in `web/src/site.ts`, set `WEB_ACCESS` to `public` and run `deploy-web` again.
 
+### Step 9: Push alerts for watched connections
+
+1. Make the key pair once: `python scripts/make_vapid_keys.py` (if it says `No module named 'cryptography'`, run `pip install cryptography` first). It prints a PUBLIC and a PRIVATE key.
+2. Find your Key Vault name: `az keyvault list -g rg-anschlussradar-dev --query [].name -o tsv`
+3. Store the private key there, and only there: `az keyvault secret set --vault-name <vault name> --name vapid-private-key --value <PRIVATE>`
+4. Add the public key to `infra/main.dev.local.bicepparam`: `param vapidPublicKey = '<PUBLIC>'`, then run the deployment command from step 4 again.
+
+Without these steps the app works as before; only the "Check every day" button reports that alerts are not available.
+
 ## Design decisions
 
 - **Raw first.** Every response is stored unchanged before parsing, so a parser bug can be fixed and replayed from Blob Storage.

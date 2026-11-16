@@ -28,6 +28,9 @@ param deployWebApp bool = false
 @description('Create the API Function App that serves the web app (phase 4)')
 param deployApi bool = false
 
+@description('Public VAPID key for push alerts (scripts/make_vapid_keys.py). Empty: alerts stay off.')
+param vapidPublicKey string = ''
+
 @description('Extra web addresses allowed to call the API, e.g. https://anschlussradar.de once the domain exists')
 param extraWebOrigins array = []
 
@@ -487,6 +490,10 @@ resource apiApp 'Microsoft.Web/sites@2024-04-01' = if (deployApi) {
         { name: 'STATIONS_PATH', value: 'stations/stations.json' }
         { name: 'FEEDBACK_ACCOUNT_URL', value: funcStorage.properties.primaryEndpoints.blob }
         { name: 'FEEDBACK_CONTAINER', value: 'feedback' }
+        // Watched connections: two tables in the same account, push keys from Key Vault
+        { name: 'WATCH_TABLE_URL', value: funcStorage.properties.primaryEndpoints.table }
+        { name: 'VAPID_PUBLIC_KEY', value: vapidPublicKey }
+        { name: 'VAPID_PRIVATE_KEY', value: empty(vapidPublicKey) ? '' : '@Microsoft.KeyVault(${kvRef}vapid-private-key)' }
         { name: 'HUBS_FILE', value: 'config/hubs.csv' }
         { name: 'TRANSITOUS_CONTACT', value: 'https://github.com/s-s-mim/anschlussradar' }
         { name: 'KUSTO_QUERY_URI', value: kustoQueryUri }

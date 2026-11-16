@@ -136,7 +136,7 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
       {!loading && !error && journeys.length > 0 && (
         <div className="journeys">
           {journeys.map((j, i) => (
-            <JourneyCard key={`${j.departure}-${j.arrival}-${i}`} journey={j} />
+            <JourneyCard key={`${j.departure}-${j.arrival}-${i}`} journey={j} from={s.from} to={s.to} />
           ))}
         </div>
       )}

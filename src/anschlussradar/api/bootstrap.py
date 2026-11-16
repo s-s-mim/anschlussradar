@@ -14,10 +14,12 @@ from .feedback import BlobFeedbackStore, FeedbackStore
 from .history import KustoHistory, kusto_query, kusto_runner
 from .journeys import HistoryProvider, NoHistory
 from .messages import KustoMessages, MessageProvider, NoMessages
+from .push import Pusher, WebPusher
 from .service import ApiService
 from .settings import ApiSettings
 from .stations import HubMatcher, StationIndex
 from .transitous import TransitousClient
+from .watch import TableWatchStore, WatchStore
 
 log = logging.getLogger(__name__)
 
@@ -74,6 +76,15 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         except Exception:
             log.exception("could not set up the feedback store")
 
+    watches: WatchStore | None = None
+    pusher: Pusher | None = None
+    if settings.watch_table_url and settings.vapid_private_key and settings.vapid_public_key:
+        try:
+            watches = TableWatchStore(settings.watch_table_url)
+            pusher = WebPusher(settings.vapid_private_key, settings.vapid_subject)
+        except Exception:
+            log.exception("could not set up watched connections")
+
     return ApiService(
         stations=stations,
         hubs=HubMatcher(load_hubs(Path(settings.hubs_file))),
@@ -86,4 +97,7 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         feedback=feedback,
         messages=messages,
         boards=boards,
+        watches=watches,
+        pusher=pusher,
+        vapid_public_key=settings.vapid_public_key if pusher else "",
     )

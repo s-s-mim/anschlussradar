@@ -73,6 +73,51 @@ def station_board(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_station_board(req.route_params.get("eva")), 60)
 
 
+@app.route(route="push/key", methods=["GET"])
+def push_key(req: func.HttpRequest) -> func.HttpResponse:
+    return respond(service().get_push_key(), 3600)
+
+
+@app.route(route="watches", methods=["POST"])
+def add_watch(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        body = req.get_json()
+    except ValueError:
+        body = None
+    return respond(service().post_watch(body, _client(req)))
+
+
+@app.route(route="watches/{device}", methods=["GET", "DELETE"])
+def device_watches(req: func.HttpRequest) -> func.HttpResponse:
+    device = req.route_params.get("device")
+    if req.method == "DELETE":
+        return respond(service().delete_device(device))
+    return respond(service().get_watches(device))
+
+
+@app.route(route="watches/{device}/{watch}", methods=["DELETE"])
+def remove_watch(req: func.HttpRequest) -> func.HttpResponse:
+    return respond(
+        service().delete_watch(req.route_params.get("device"), req.route_params.get("watch"))
+    )
+
+
+@app.timer_trigger(schedule="0 */10 * * * *", arg_name="timer", run_on_startup=False)
+def check_watches(timer: func.TimerRequest) -> None:
+    from anschlussradar.api.watcher import check_watches as run
+
+    result = run(service())
+    if result.checked:
+        logging.info("watches checked: %s", result)
+
+
+@app.timer_trigger(schedule="0 23 3 * * *", arg_name="timer", run_on_startup=False)
+def cleanup_watches(timer: func.TimerRequest) -> None:
+    from anschlussradar.api.watcher import cleanup
+
+    logging.info("inactive devices deleted: %s", cleanup(service()))
+
+
 def _client(req: func.HttpRequest) -> str:
     # Used only for the in-memory rate limit, hashed there, never stored.
     return (req.headers.get("x-forwarded-for") or "unknown").split(",")[0].strip()

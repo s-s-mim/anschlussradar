@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import { useI18n } from "../i18n";
 import { NotList } from "../components/Why";
+import { removeAllWatches } from "../lib/push";
 import { store } from "../lib/storage";
 import { SITE, isPlaceholder } from "../site";
 
@@ -73,7 +74,7 @@ function ClearButton() {
         className="ghost"
         onClick={() => {
           store.clearAll();
-          setDone(true);
+          removeAllWatches().finally(() => setDone(true));
         }}
       >
         {t("privacy.clear")}
@@ -194,7 +195,24 @@ function PrivacyDe() {
         </p>
       </Section>
 
-      <Section title="7. Deine Rechte">
+      <Section title="7. Benachrichtigungen für beobachtete Verbindungen">
+        <p>
+          Wenn du für eine Verbindung „Jeden Tag prüfen“ einschaltest, speichere ich: eine zufällige Gerätekennung, die
+          dein Browser erzeugt, die Push-Adresse, die dein Browser dafür ausgibt, die beiden Bahnhöfe, die Abfahrtszeit,
+          die Wochentage und die Sprache. Etwa eine Stunde vor Abfahrt sucht der Server die Verbindung und schickt nur
+          dann eine Nachricht, wenn ein Umstieg gefährdet ist. Die Nachricht läuft über den Push-Dienst deines
+          Browser-Herstellers (zum Beispiel Apple, Google oder Mozilla), der sie an dein Gerät zustellt; dabei können
+          Daten in die USA gelangen.
+        </p>
+        <p>
+          Die Daten liegen in Microsoft Azure (Frankfurt). Sie werden gelöscht, sobald du die Benachrichtigungen
+          ausschaltest, mit dem Knopf oben, oder automatisch 90 Tage nachdem du die App zuletzt geöffnet hast.
+          Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG), die du jederzeit
+          widerrufen kannst, indem du die Benachrichtigungen ausschaltest.
+        </p>
+      </Section>
+
+      <Section title="8. Deine Rechte">
         <p>
           Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung
           der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage
@@ -303,7 +321,22 @@ function PrivacyEn() {
         </p>
       </Section>
 
-      <Section title="7. Your rights">
+      <Section title="7. Alerts for watched connections">
+        <p>
+          When you turn on "Check every day" for a connection, I store: a random device ID made by your browser, the
+          push address your browser hands out for it, the two stations, the departure time, the weekdays and the
+          language. About an hour before departure the server looks up the connection and only sends a message if a
+          change is at risk. The message goes through the push service of your browser maker (for example Apple, Google
+          or Mozilla), which delivers it to your device; data may reach the US in the process.
+        </p>
+        <p>
+          The data is stored in Microsoft Azure (Frankfurt). It is deleted as soon as you turn alerts off, with the
+          button above, or automatically 90 days after you last opened the app. The legal basis is your consent (Art.
+          6(1)(a) GDPR, § 25(1) TDDDG), which you can withdraw at any time by turning alerts off.
+        </p>
+      </Section>
+
+      <Section title="8. Your rights">
         <p>
           You have the right of access (Art. 15 GDPR), rectification (Art. 16), erasure (Art. 17), restriction of
           processing (Art. 18), data portability (Art. 20) and to object to processing based on Art. 6(1)(f) (Art.

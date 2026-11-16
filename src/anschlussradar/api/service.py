@@ -5,6 +5,10 @@ GET  /api/v1/journeys?from=<id or lat,lon>&to=...&time=<ISO>&arriveBy=false&sort
 GET  /api/v1/model/status
 GET  /api/v1/hubs                      recorded stations
 GET  /api/v1/hubs/{eva}/board          next departures and punctuality by hour
+GET  /api/v1/push/key                  public VAPID key for the browser
+POST /api/v1/watches                   watch a connection (device ID + push address)
+GET  /api/v1/watches/{device}          the device's watched connections
+DEL  /api/v1/watches/{device}/{id}     stop watching one; DEL /watches/{device}: all
 POST /api/v1/feedback   'Hat's geklappt?' after a transfer
 POST /api/v1/contact    (unused by the web app for now)
 GET  /api/v1/health
@@ -27,8 +31,18 @@ from .feedback import FeedbackError, FeedbackStore, TransferFeedback
 from .feedback import validate as validate_feedback
 from .journeys import HistoryProvider, build_journeys, sort_journeys
 from .messages import MessageProvider, NoMessages
+from .push import Pusher
 from .stations import HubMatcher, StationIndex
 from .transitous import TransitousClient, TransitousError
+from .watch import (
+    MAX_WATCHES_PER_DEVICE,
+    Device,
+    WatchError,
+    WatchStore,
+    new_watch,
+    valid_device,
+)
+from .watch import validate as validate_watch
 
 log = logging.getLogger(__name__)
 Response = tuple[int, dict[str, Any]]
@@ -50,6 +64,10 @@ class ApiService:
     feedback: FeedbackStore | None = None
     messages: MessageProvider = field(default_factory=NoMessages)
     boards: StationBoards | None = None
+    watches: WatchStore | None = None
+    pusher: Pusher | None = None
+    vapid_public_key: str = ""
+    watch_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(10))
     contact_limiter: RateLimiter = field(default_factory=RateLimiter)
     feedback_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(FEEDBACK_PER_HOUR))
     started_at: float = field(default_factory=time.time)
@@ -157,6 +175,71 @@ class ApiService:
             log.exception("station board failed for %s", group_eva)
             return error(502, "board_unavailable", "Departures are not available right now.")
         return 200, {**body, "available": True}
+
+    # watched connections ---------------------------------------------------------
+
+    def _watch_ready(self) -> Response | None:
+        if self.watches is None or self.pusher is None or not self.vapid_public_key:
+            return error(503, "alerts_unavailable", "Alerts are not set up yet.")
+        return None
+
+    def get_push_key(self) -> Response:
+        return self._watch_ready() or (200, {"publicKey": self.vapid_public_key})
+
+    def post_watch(self, body: Any, client: str, now: datetime | None = None) -> Response:
+        if not_ready := self._watch_ready():
+            return not_ready
+        assert self.watches is not None
+        now = now or datetime.now(UTC)
+        try:
+            fields = validate_watch(body)
+        except WatchError as exc:
+            return error(400, "invalid_field", str(exc), field=exc.field)
+        if not self.watch_limiter.allow(client):
+            return error(429, "too_many", "Too many requests. Please try again later.")
+        if len(self.watches.watches(fields["device"])) >= MAX_WATCHES_PER_DEVICE:
+            return error(409, "too_many_watches", "At most 5 watched connections per device.")
+        self.watches.save_device(Device(fields["device"], fields["subscription"], now.isoformat()))
+        watch = new_watch(fields, now)
+        self.watches.save_watch(watch)
+        return 201, {"watch": watch.to_public()}
+
+    def get_watches(self, device: Any, now: datetime | None = None) -> Response:
+        if not_ready := self._watch_ready():
+            return not_ready
+        assert self.watches is not None
+        try:
+            device_id = valid_device(device)
+        except WatchError as exc:
+            return error(400, "invalid_field", str(exc), field=exc.field)
+        # Opening the app counts as use: the 90-day deletion clock starts again.
+        self.watches.touch_device(device_id, now or datetime.now(UTC))
+        return 200, {"watches": [w.to_public() for w in self.watches.watches(device_id)]}
+
+    def delete_watch(self, device: Any, watch_id: Any) -> Response:
+        if not_ready := self._watch_ready():
+            return not_ready
+        assert self.watches is not None
+        try:
+            device_id = valid_device(device)
+        except WatchError as exc:
+            return error(400, "invalid_field", str(exc), field=exc.field)
+        if not self.watches.delete_watch(device_id, str(watch_id)):
+            return error(404, "not_found", "No such watched connection.")
+        if not self.watches.watches(device_id):
+            self.watches.delete_device(device_id)  # nothing left to watch: forget the device
+        return 200, {"status": "deleted"}
+
+    def delete_device(self, device: Any) -> Response:
+        if not_ready := self._watch_ready():
+            return not_ready
+        assert self.watches is not None
+        try:
+            device_id = valid_device(device)
+        except WatchError as exc:
+            return error(400, "invalid_field", str(exc), field=exc.field)
+        self.watches.delete_device(device_id)
+        return 200, {"status": "deleted"}
 
     def post_feedback(self, body: Any, client: str, now: datetime | None = None) -> Response:
         if self.feedback is None:

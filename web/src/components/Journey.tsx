@@ -7,7 +7,8 @@ import { Link } from "../lib/router";
 import type { T } from "../i18n";
 import { duration, hhmm } from "../lib/time";
 import { pct, probabilityTone, transferTone } from "../lib/tone";
-import type { Journey, Leg, Transfer } from "../lib/types";
+import type { Journey, Leg, Station, Transfer } from "../lib/types";
+import { WatchPanel } from "./Watch";
 
 function lineName(leg: Leg): string {
   if (leg.category && leg.number && leg.category.length + leg.number.length <= 9) {
@@ -182,7 +183,7 @@ function LegRow({ leg }: { leg: Leg }) {
   );
 }
 
-export function JourneyCard({ journey }: { journey: Journey }) {
+export function JourneyCard({ journey, from, to }: { journey: Journey; from?: Station; to?: Station }) {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const first = journey.legs[0];
@@ -244,6 +245,11 @@ export function JourneyCard({ journey }: { journey: Journey }) {
             if (tr && next) rows.push(<TransferNode key={`t${i}`} tr={tr} legIn={leg} legOut={next} />);
             return rows;
           })}
+          {from && to && first?.departurePlanned && (
+            <li className="watch-row">
+              <WatchPanel from={from} to={to} departure={hhmm(first.departurePlanned)} />
+            </li>
+          )}
         </ol>
       )}
     </article>

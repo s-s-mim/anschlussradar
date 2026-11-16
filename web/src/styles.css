@@ -1315,3 +1315,75 @@ a.stop-name {
   font-size: 0.75rem;
   color: var(--muted);
 }
+
+/* watch a connection */
+.watch-row {
+  list-style: none;
+  padding-top: 8px;
+}
+
+.watch-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.watch-panel {
+  display: grid;
+  gap: 10px;
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.watch-panel fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.day {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 10px;
+  cursor: pointer;
+  background: var(--surface);
+  font-size: 0.875rem;
+}
+
+.day.on {
+  border-color: var(--petrol);
+  background: var(--petrol-soft);
+  color: var(--petrol-strong);
+  font-weight: 600;
+}
+
+.day input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.day:focus-within {
+  outline: 3px solid var(--focus);
+}
+
+.link-button {
+  background: none;
+  border: 0;
+  padding: 8px 0;
+  color: var(--petrol);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.watched small {
+  display: block;
+}

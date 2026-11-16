@@ -36,6 +36,14 @@ class ApiSettings(BaseSettings):
     kusto_app_secret: str = Field(default="", alias="KUSTO_APP_SECRET")
     kusto_tenant_id: str = Field(default="", alias="KUSTO_TENANT_ID")
 
+    # Watched connections and push alerts
+    watch_table_url: str = Field(default="", alias="WATCH_TABLE_URL")
+    vapid_public_key: str = Field(default="", alias="VAPID_PUBLIC_KEY")
+    vapid_private_key: str = Field(default="", alias="VAPID_PRIVATE_KEY")
+    vapid_subject: str = Field(
+        default="https://github.com/s-s-mim/anschlussradar", alias="VAPID_SUBJECT"
+    )
+
     # 'Hat's geklappt?' answers: a container in the Functions storage account.
     feedback_account_url: str = Field(default="", alias="FEEDBACK_ACCOUNT_URL")
     feedback_container: str = Field(default="feedback", alias="FEEDBACK_CONTAINER")
