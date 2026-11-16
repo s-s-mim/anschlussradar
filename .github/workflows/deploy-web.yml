@@ -1,0 +1,37 @@
+name: deploy-web
+
+# Builds the web app and uploads it to Azure Static Web Apps.
+# Stays switched off until the Static Web App exists (part 3): then set the
+# repository variable WEB_DEPLOY=true, API_BASE_URL, and the secret SWA_DEPLOYMENT_TOKEN.
+
+on:
+  push:
+    branches: [main]
+    paths: ["web/**", ".github/workflows/deploy-web.yml"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: ${{ vars.WEB_DEPLOY == 'true' }}
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build
+        working-directory: web
+        env:
+          VITE_API_BASE: ${{ vars.API_BASE_URL }}
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+      - name: Upload to Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.SWA_DEPLOYMENT_TOKEN }}
+          action: upload
+          app_location: web/dist
+          skip_app_build: true
+          skip_api_build: true

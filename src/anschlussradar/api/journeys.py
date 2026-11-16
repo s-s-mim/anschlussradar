@@ -183,7 +183,7 @@ class Transfer:
     early_estimate: bool = False
     live_status: str | None = None
     live_slack: int | None = None
-    note: str | None = None
+    note: str | None = None  # a code the web app translates: cancelled, not_rail
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -280,11 +280,11 @@ def _score(
         planned_buffer=minutes(arriving.arr_planned, departing.dep_planned),
     )
     if arriving.cancelled or departing.cancelled:
-        t.live_status, t.note = "cancelled", "A train on this transfer is cancelled."
+        t.live_status, t.note = "cancelled", "cancelled"
         t.probability = 0.0
         return t
     if not (arriving.is_rail and departing.is_rail):
-        t.note = "No score for buses, trams or underground lines yet."
+        t.note = "not_rail"  # no score for buses, trams or underground lines yet
         return t
     if arriving.arr_planned is None or departing.dep_planned is None:
         return t

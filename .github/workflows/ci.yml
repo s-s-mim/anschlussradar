@@ -28,6 +28,22 @@ jobs:
           python scripts/gen_kql_tables.py
           git diff --exit-code kql/01_tables.kql
 
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-audit --no-fund
+      - name: Type check
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
+
   bicep:
     runs-on: ubuntu-latest
     steps:

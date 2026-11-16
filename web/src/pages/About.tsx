@@ -1,0 +1,118 @@
+import { useI18n } from "../i18n";
+import { Link } from "../lib/router";
+import { SITE } from "../site";
+
+const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
+
+function De() {
+  return (
+    <>
+      <h1>Über AnschlussRadar</h1>
+      <p className="lead">
+        Fahrplanauskünfte zeigen, ob ein Umstieg laut Fahrplan möglich ist. AnschlussRadar zeigt zusätzlich, wie oft
+        er in der Praxis klappt.
+      </p>
+      <h2>So funktioniert es</h2>
+      <p>
+        Rund um die Uhr fragt ein kleines Programm alle paar Minuten die Fahrplan- und Verspätungsdaten der großen
+        Umsteigebahnhöfe ab. Daraus wird für jeden Umstieg berechnet, ob der Anschluss erreicht wurde. Ein
+        Machine-Learning-Modell lernt aus diesen Fällen und wird jede Woche neu trainiert. Ein neues Modell ersetzt
+        das alte nur, wenn es auf Daten, die es vorher nicht gesehen hat, nachweislich besser ist.
+      </p>
+      <p>
+        Die Verbindungen selbst kommen vom freien Routenplaner Transitous. AnschlussRadar ergänzt sie um die
+        Zuverlässigkeit der Umstiege und um den Live-Check.
+      </p>
+      <h2>Wer steckt dahinter?</h2>
+      <p>
+        AnschlussRadar ist ein privates, nicht kommerzielles Projekt von {SITE.operatorName}. Es gibt keine Werbung,
+        keine Konten und kein Tracking. Der Quellcode ist offen (MIT-Lizenz):{" "}
+        <a href={SITE.sourceCode} {...ext}>
+          {SITE.sourceCode.replace("https://", "")}
+        </a>
+        .
+      </p>
+      <h2>Daten und Dank</h2>
+      <ul>
+        <li>
+          Fahrplan- und Echtzeitdaten der Bahnhöfe: DB Timetables API der DB InfraGO AG, über den DB API Marketplace.
+        </li>
+        <li>
+          Verbindungssuche:{" "}
+          <a href="https://transitous.org/sources/" {...ext}>
+            Transitous und seine Datenquellen
+          </a>
+          .
+        </li>
+        <li>Liste der Bahnhöfe und Haltestellen: GTFS-Fahrplandaten von GTFS.DE.</li>
+      </ul>
+      <p>Alle Daten werden unter den Lizenzbedingungen der jeweiligen Anbieter genutzt.</p>
+      <h2>Keine Verbindung zur Deutschen Bahn</h2>
+      <p>
+        AnschlussRadar ist kein Angebot der Deutschen Bahn AG und steht in keiner Verbindung zu ihr. Namen von
+        Bahnhöfen und Zuggattungen wie ICE werden nur beschreibend verwendet.
+      </p>
+      <p>
+        Fragen oder Ideen? <Link href="/contact">Zum Kontaktformular</Link>
+      </p>
+    </>
+  );
+}
+
+function En() {
+  return (
+    <>
+      <h1>About AnschlussRadar</h1>
+      <p className="lead">
+        Journey planners show whether a transfer is possible on paper. AnschlussRadar also shows how often it works in
+        practice.
+      </p>
+      <h2>How it works</h2>
+      <p>
+        Around the clock, a small program fetches the timetable and delay data of the large transfer stations every
+        few minutes. From that it works out, for every transfer, whether the connection was made. A machine learning
+        model learns from these cases and is retrained every week. A new model only replaces the old one if it is
+        measurably better on data it hasn't seen before.
+      </p>
+      <p>
+        The connections themselves come from Transitous, a free journey planner. AnschlussRadar adds the reliability
+        of each transfer and the live check.
+      </p>
+      <h2>Who is behind it?</h2>
+      <p>
+        AnschlussRadar is a private, non-commercial project by {SITE.operatorName}. There are no ads, no accounts and
+        no tracking. The source code is open (MIT licence):{" "}
+        <a href={SITE.sourceCode} {...ext}>
+          {SITE.sourceCode.replace("https://", "")}
+        </a>
+        .
+      </p>
+      <h2>Data and thanks</h2>
+      <ul>
+        <li>Station timetables and real-time data: DB Timetables API by DB InfraGO AG, via the DB API Marketplace.</li>
+        <li>
+          Journey planning:{" "}
+          <a href="https://transitous.org/sources/" {...ext}>
+            Transitous and its data sources
+          </a>
+          .
+        </li>
+        <li>List of stations and stops: GTFS timetable data from GTFS.DE.</li>
+      </ul>
+      <p>All data is used under the licence terms of its providers.</p>
+      <h2>Not connected to Deutsche Bahn</h2>
+      <p>
+        AnschlussRadar is not a Deutsche Bahn AG service and is not affiliated with it. Names of stations and train
+        types such as ICE are only used to describe them.
+      </p>
+      <p>
+        Questions or ideas? <Link href="/contact">Use the contact form</Link>
+      </p>
+    </>
+  );
+}
+
+export function About() {
+  const { lang } = useI18n();
+  return <div className="page prose wrap narrow">{lang === "de" ? <De /> : <En />}</div>;
+}
