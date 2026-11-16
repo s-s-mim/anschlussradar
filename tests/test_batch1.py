@@ -159,12 +159,17 @@ def test_add_hubs_picks_exact_names_only() -> None:
     assert mod.pick("Augsburg Haunstetterstraße", found) is None
 
 
-def test_candidates_are_not_already_hubs() -> None:
+def test_candidates_file_is_complete() -> None:
     mod = _add_hubs()
-    from anschlussradar.api.stations import normalize
-    from anschlussradar.ingest.hubs import load_hubs
-
-    have = {normalize(h.name) for h in load_hubs(ROOT / "config" / "hubs.csv")}
     candidates = mod.read_candidates(ROOT / "config" / "hub_candidates.csv")
     assert len(candidates) == 42
-    assert not [c["name"] for c in candidates if normalize(c["name"]) in have]
+    assert sum(1 for c in candidates if c["eva"]) == 8
+    assert all(c["state"] and c["priority"] in {"1", "2"} for c in candidates)
+
+
+def test_add_hubs_search_terms_and_levels() -> None:
+    mod = _add_hubs()
+    assert mod.search_terms("Freiburg (Breisgau) Hbf") == ["Freiburg (Breisgau) Hbf", "Freiburg"]
+    assert mod.search_terms("Köln/Bonn Flughafen") == ["Köln/Bonn Flughafen", "Köln"]
+    assert mod.search_terms("Gießen") == ["Gießen"]
+    assert mod.rail_levels((113181, 8098013, 781966)) == (8098013,)

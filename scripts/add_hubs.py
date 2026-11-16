@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 import sys
 import time
 from dataclasses import dataclass
@@ -50,6 +51,22 @@ def parse_stations(xml: bytes) -> list[Found]:
     return found
 
 
+def search_terms(name: str) -> list[str]:
+    """The full name first, then its first word.
+
+    Brackets and slashes in a name ("Freiburg (Breisgau) Hbf", "Köln/Bonn Flughafen")
+    make the API return nothing, so the second search uses only the town and the
+    exact station is picked from its answer.
+    """
+    first = re.split(r"[\s(/-]", name, maxsplit=1)[0]
+    return [name] if first == name else [name, first]
+
+
+def rail_levels(meta: tuple[int, ...]) -> tuple[int, ...]:
+    """Linked EVAs that are rail stations (80xxxxx); the rest are bus stops and the like."""
+    return tuple(m for m in meta if 8000000 <= m < 8100000)
+
+
 def pick(candidate: str, found: list[Found]) -> Found | None:
     """The station whose normalized name equals the candidate's, else None."""
     want = normalize(candidate)
@@ -83,9 +100,20 @@ def main() -> int:
         for i, c in enumerate(read_candidates(CANDIDATES)):
             if i:
                 time.sleep(3)
-            resp = client.station(c["name"])
-            found = parse_stations(resp.body) if resp.ok and resp.body else []
-            hit = pick(c["name"], found)
+            hit, found = None, []
+            if c.get("eva"):
+                # Look up by number: accept it if the API knows exactly this EVA.
+                resp = client.station(c["eva"])
+                found = parse_stations(resp.body) if resp.ok and resp.body else []
+                hit = next((f for f in found if f.eva == int(c["eva"])), None)
+            for j, term in enumerate([] if hit else search_terms(c["name"])):
+                if j:
+                    time.sleep(3)
+                resp = client.station(term)
+                found = parse_stations(resp.body) if resp.ok and resp.body else []
+                hit = pick(c["name"], found)
+                if hit:
+                    break
             if hit is None:
                 problems += 1
                 names = ", ".join(f"{f.name} ({f.eva})" for f in found[:5]) or "nothing"
@@ -94,8 +122,9 @@ def main() -> int:
             if hit.eva in have:
                 print(f"--  {hit.name} ({hit.eva}) is already in hubs.csv")
                 continue
-            levels = f"   other levels: {', '.join(map(str, hit.meta))}" if hit.meta else ""
-            print(f"ok  {hit.name} ({hit.eva}){levels}")
+            levels = rail_levels(hit.meta)
+            levels_text = f"   other levels: {', '.join(map(str, levels))}" if levels else ""
+            print(f"ok  {hit.name} ({hit.eva}){levels_text}")
             rows.append(f"{hit.eva},{hit.name},{c['state']},{c['priority']},")
             have.add(hit.eva)
 

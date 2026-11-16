@@ -1,46 +1,48 @@
 # Stations to add to hubs.csv. Check them with:
 #   python scripts/add_hubs.py            (only shows what it finds)
 #   python scripts/add_hubs.py --write    (adds the verified ones to hubs.csv)
-name,state,priority
-Augsburg Hbf,BY,1
-Regensburg Hbf,BY,2
-Ingolstadt Hbf,BY,2
-Bamberg,BY,2
-München Ost,BY,2
-München-Pasing,BY,2
-Ulm Hbf,BW,1
-Freiburg (Breisgau) Hbf,BW,1
-Heidelberg Hbf,BW,2
-Offenburg,BW,2
-Saarbrücken Hbf,SL,1
-Kaiserslautern Hbf,RP,2
-Koblenz Hbf,RP,1
-Ludwigshafen (Rhein) Hbf,RP,2
-Wuppertal Hbf,NW,1
-Bochum Hbf,NW,1
-Hagen Hbf,NW,1
-Münster (Westf) Hbf,NW,1
-Bielefeld Hbf,NW,1
-Hamm (Westf) Hbf,NW,1
-Aachen Hbf,NW,1
-Köln Messe/Deutz,NW,1
-Düsseldorf Flughafen,NW,2
-Köln/Bonn Flughafen,NW,2
-Osnabrück Hbf,NI,1
-Braunschweig Hbf,NI,1
-Wolfsburg Hbf,NI,1
-Göttingen,NI,1
-Oldenburg (Oldb) Hbf,NI,2
-Kiel Hbf,SH,2
-Lübeck Hbf,SH,2
-Rostock Hbf,MV,2
-Magdeburg Hbf,ST,1
-Halle (Saale) Hbf,ST,1
-Chemnitz Hbf,SN,2
-Potsdam Hbf,BB,2
-Berlin Südkreuz,BE,1
-Berlin Ostbahnhof,BE,1
-Berlin-Spandau,BE,1
-Hamburg-Altona,HH,1
-Hamburg-Harburg,HH,1
-Gießen,HE,2
+# 'eva' is optional: for names the API cannot search (brackets, slashes) the
+# script looks the number up instead and shows the name the API knows it by.
+name,state,priority,eva
+Augsburg Hbf,BY,1,
+Regensburg Hbf,BY,2,
+Ingolstadt Hbf,BY,2,
+Bamberg,BY,2,
+München Ost,BY,2,
+München-Pasing,BY,2,
+Ulm Hbf,BW,1,
+Freiburg (Breisgau) Hbf,BW,1,8000107
+Heidelberg Hbf,BW,2,
+Offenburg,BW,2,
+Saarbrücken Hbf,SL,1,
+Kaiserslautern Hbf,RP,2,
+Koblenz Hbf,RP,1,
+Ludwigshafen (Rhein) Hbf,RP,2,8000236
+Wuppertal Hbf,NW,1,
+Bochum Hbf,NW,1,
+Hagen Hbf,NW,1,
+Münster (Westf) Hbf,NW,1,8000263
+Bielefeld Hbf,NW,1,
+Hamm (Westf) Hbf,NW,1,8000149
+Aachen Hbf,NW,1,
+Köln Messe/Deutz,NW,1,8003368
+Düsseldorf Flughafen,NW,2,
+Köln/Bonn Flughafen,NW,2,8003330
+Osnabrück Hbf,NI,1,
+Braunschweig Hbf,NI,1,
+Wolfsburg Hbf,NI,1,
+Göttingen,NI,1,
+Oldenburg (Oldb) Hbf,NI,2,8000291
+Kiel Hbf,SH,2,
+Lübeck Hbf,SH,2,
+Rostock Hbf,MV,2,
+Magdeburg Hbf,ST,1,
+Halle (Saale) Hbf,ST,1,8010159
+Chemnitz Hbf,SN,2,
+Potsdam Hbf,BB,2,
+Berlin Südkreuz,BE,1,
+Berlin Ostbahnhof,BE,1,
+Berlin-Spandau,BE,1,
+Hamburg-Altona,HH,1,
+Hamburg-Harburg,HH,1,
+Gießen,HE,2,
