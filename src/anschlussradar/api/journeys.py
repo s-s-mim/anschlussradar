@@ -26,6 +26,7 @@ from ..ml.features import (
 )
 from ..ml.serving import LoadedModel, live_check, score_transfer
 from ..ml.stages import Stage
+from .forecast import DelayForecast, ForecastProvider
 from .messages import MessageProvider, TrainMessage
 from .stations import HubMatcher
 
@@ -96,6 +97,7 @@ class Leg:
     messages: list[TrainMessage] = field(default_factory=list)
     from_hub: int | None = None  # station group EVA when the stop is a recorded hub
     to_hub: int | None = None
+    forecast: DelayForecast | None = None  # typical departure delay at a recorded hub
 
     @classmethod
     def from_motis(cls, leg: dict[str, Any]) -> Leg:
@@ -162,6 +164,7 @@ class Leg:
             "messages": [m.to_dict() for m in self.messages],
             "fromHub": self.from_hub,
             "toHub": self.to_hub,
+            "forecast": self.forecast.to_dict() if self.forecast else None,
         }
 
 
@@ -250,6 +253,7 @@ def build_journeys(
     history: HistoryProvider,
     today: datetime,
     messages: MessageProvider | None = None,
+    forecasts: ForecastProvider | None = None,
 ) -> list[Journey]:
     out: list[Journey] = []
     for it in [*plan.get("direct", []), *plan.get("itineraries", [])]:
@@ -271,6 +275,10 @@ def build_journeys(
             leg.to_hub = to_hub.group_eva if to_hub else None
             if messages is not None:
                 leg.messages = _leg_messages(leg, hubs, messages)
+            if forecasts is not None and from_hub is not None and leg.dep_planned is not None:
+                leg.forecast = forecasts.forecast(
+                    from_hub.eva, leg.number, leg.category, leg.dep_planned
+                )
         out.append(journey)
     return out
 

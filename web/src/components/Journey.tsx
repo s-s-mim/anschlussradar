@@ -135,6 +135,15 @@ function StopName({ name, hub }: { name: string | null; hub: number | null }) {
   );
 }
 
+function Forecast({ leg }: { leg: Leg }) {
+  const { t } = useI18n();
+  const f = leg.forecast;
+  if (!f) return null;
+  const vars = { typical: f.typical, high: f.high, count: f.trips };
+  const key = f.high <= 1 ? "forecast.always" : f.typical <= 1 ? "forecast.onTime" : "forecast.late";
+  return <p className="forecast small">{t(key, vars)}</p>;
+}
+
 function LegNotes({ leg }: { leg: Leg }) {
   const { t, lang } = useI18n();
   const notes = (leg.messages ?? [])
@@ -172,6 +181,7 @@ function LegRow({ leg }: { leg: Leg }) {
         {leg.headsign && <span className="muted small">{t("results.towards", { headsign: leg.headsign })}</span>}
         {leg.cancelled && <span className="cancel-flag">{t("results.cancelled")}</span>}
       </div>
+      <Forecast leg={leg} />
       <LegNotes leg={leg} />
       <div className="leg-stop">
         <time>{hhmm(leg.arrivalPlanned)}</time>

@@ -99,3 +99,44 @@ def test_better_transfer_station_in_the_same_result(tmp_path: Path) -> None:
     assert "transfer" in kinds
     t = next(t for t in risky["tips"] if t["kind"] == "transfer")
     assert t["station"] == "Mainz Hbf" and t["reliability"] == 0.93
+
+
+def test_delay_forecast_by_train_and_fallback() -> None:
+    from anschlussradar.api.forecast import KustoForecast
+
+    rows = [
+        {"row_kind": "train", "eva": 8000105, "number": "579", "category": "", "hour": -1,
+         "trips": 18, "p50": 3.0, "p80": 9.0, "late": 5},
+        {"row_kind": "train", "eva": 8000105, "number": "1", "category": "", "hour": -1,
+         "trips": 3, "p50": 0.0, "p80": 1.0, "late": 0},
+        {"row_kind": "group", "eva": 8000105, "number": "", "category": "ICE", "hour": 7,
+         "trips": 40, "p50": 2.0, "p80": 6.0, "late": 12},
+    ]  # fmt: skip
+    fc = KustoForecast(lambda: rows)
+    at = datetime(2026, 11, 16, 6, 56, tzinfo=UTC)  # 07:56 in Germany
+    a = fc.forecast(8000105, "579", "ICE", at)
+    assert a is not None and (a.typical, a.high, a.trips, a.basis) == (3, 9, 18, "train")
+    b = fc.forecast(8000105, "1", "ICE", at)  # too few trips for the train: group of the hour
+    assert b is not None and (b.typical, b.basis) == (2, "group")
+    assert fc.forecast(8000105, "1", "RB", at) is None
+    assert fc.forecast(8000999, "579", "ICE", at) is None
+
+
+def test_journey_legs_carry_the_forecast(tmp_path: Path) -> None:
+    from anschlussradar.api.forecast import DelayForecast
+
+    class Fixed:
+        def forecast(self, eva, number, category, departure):  # type: ignore[no-untyped-def]
+            return DelayForecast(3, 9, 0.28, 18, "train") if number == "579" else None
+
+    svc = service(tmp_path, [0.9], lambda r: httpx.Response(200, json={"itineraries": [LATE]}))
+    svc.forecasts = Fixed()
+    _, body = svc.get_journeys({"from": "s7", "to": "s5"}, now=NOW)
+    ice = next(leg for leg in body["journeys"][0]["legs"] if leg["number"] == "579")
+    assert ice["forecast"] == {
+        "typical": 3,
+        "high": 9,
+        "lateShare": 0.28,
+        "trips": 18,
+        "basis": "train",
+    }

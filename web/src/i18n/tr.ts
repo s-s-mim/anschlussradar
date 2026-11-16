@@ -128,6 +128,11 @@ export const tr: Translation = {
     title: "Bu sayfa mevcut değil.",
     back: "Aramaya dön",
   },
+  forecast: {
+    late: "Genellikle {typical} dk gecikmeli, kötü günlerde {high} dk ({count} sefer)",
+    onTime: "Genellikle zamanında, kötü günlerde {high} dk gecikmeli ({count} sefer)",
+    always: "Neredeyse her zaman zamanında ({count} sefer)",
+  },
   tips: {
     earlier: "İpucu: {time} treniyle ({min} dk önce) başarı %{pct}, şu an %{old}.",
     transfer: "İpucu: {station} aktarmasıyla başarı %{pct}, şu an %{old}; varış {arrival}.",

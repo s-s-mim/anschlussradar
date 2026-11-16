@@ -29,6 +29,7 @@ from .contact import ContactError, EmailSender, RateLimiter, validate
 from .feedback import MAX_PER_HOUR as FEEDBACK_PER_HOUR
 from .feedback import FeedbackError, FeedbackStore, TransferFeedback
 from .feedback import validate as validate_feedback
+from .forecast import ForecastProvider, NoForecast
 from .journeys import HistoryProvider, Journey, build_journeys, sort_journeys
 from .messages import MessageProvider, NoMessages
 from .push import Pusher
@@ -65,6 +66,7 @@ class ApiService:
     feedback: FeedbackStore | None = None
     messages: MessageProvider = field(default_factory=NoMessages)
     boards: StationBoards | None = None
+    forecasts: ForecastProvider = field(default_factory=NoForecast)
     watches: WatchStore | None = None
     pusher: Pusher | None = None
     vapid_public_key: str = ""
@@ -127,7 +129,9 @@ class ApiService:
             )
 
         model = self.models.get()
-        journeys = build_journeys(plan, model, self.hubs, self.history, now, self.messages)
+        journeys = build_journeys(
+            plan, model, self.hubs, self.history, now, self.messages, self.forecasts
+        )
         if model.stage.value != "live_only":
             self._add_tips(journeys, from_place, to_place, when, arrive_by, rail_only, model, now)
         return 200, {

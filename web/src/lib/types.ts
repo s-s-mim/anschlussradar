@@ -36,6 +36,8 @@ export interface Leg {
   /** Station group number when the stop is a recorded hub (it then has a station page). */
   fromHub: number | null;
   toHub: number | null;
+  /** Typical departure delay at a recorded hub over the last 4 weeks. */
+  forecast: { typical: number; high: number; lateShare: number; trips: number } | null;
 }
 
 export interface TrainNote {

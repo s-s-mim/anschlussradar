@@ -128,6 +128,11 @@ export const ur: Translation = {
     title: "یہ صفحہ موجود نہیں۔",
     back: "تلاش پر واپس جائیں",
   },
+  forecast: {
+    late: "عام طور پر {typical} منٹ لیٹ، برے دنوں میں {high} منٹ ({count} سفر)",
+    onTime: "عام طور پر وقت پر، برے دنوں میں {high} منٹ لیٹ ({count} سفر)",
+    always: "تقریباً ہمیشہ وقت پر ({count} سفر)",
+  },
   tips: {
     earlier: "مشورہ: {time} والی ٹرین ({min} منٹ پہلے) سے {pct} % بار کامیابی، بجائے {old} % کے۔",
     transfer: "مشورہ: {station} پر ٹرین بدلنے سے {pct} % بار کامیابی، بجائے {old} % کے، آمد {arrival}۔",

@@ -132,6 +132,11 @@ export const pl: Translation = {
     title: "Ta strona nie istnieje.",
     back: "Do wyszukiwania",
   },
+  forecast: {
+    late: "Zwykle {typical} min opóźnienia, w złe dni {high} min ({count} przejazdów)",
+    onTime: "Zwykle punktualnie, w złe dni {high} min opóźnienia ({count} przejazdów)",
+    always: "Prawie zawsze punktualnie ({count} przejazdów)",
+  },
   tips: {
     earlier: "Wskazówka: pociągiem o {time} ({min} min wcześniej) udaje się w {pct} % przypadków zamiast {old} %.",
     transfer: "Wskazówka: z przesiadką w {station} udaje się w {pct} % przypadków zamiast {old} %, przyjazd {arrival}.",

@@ -130,6 +130,11 @@ export const ro: Translation = {
     title: "Această pagină nu există.",
     back: "Înapoi la căutare",
   },
+  forecast: {
+    late: "De obicei {typical} min întârziere, în zilele proaste {high} min ({count} curse)",
+    onTime: "De obicei la timp, în zilele proaste {high} min întârziere ({count} curse)",
+    always: "Aproape mereu la timp ({count} curse)",
+  },
   tips: {
     earlier: "Sfat: cu trenul de la {time} (cu {min} min mai devreme) reușește în {pct} % din cazuri în loc de {old} %.",
     transfer: "Sfat: cu transfer în {station} reușește în {pct} % din cazuri în loc de {old} %, sosire {arrival}.",

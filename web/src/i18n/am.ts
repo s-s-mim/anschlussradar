@@ -128,6 +128,11 @@ export const am: Translation = {
     title: "ይህ ገጽ የለም።",
     back: "ወደ ፍለጋ ተመለስ",
   },
+  forecast: {
+    late: "ብዙውን ጊዜ {typical} ደቂቃ ይዘገያል፣ በመጥፎ ቀናት {high} ደቂቃ ({count} ጉዞዎች)",
+    onTime: "ብዙውን ጊዜ በሰዓቱ፣ በመጥፎ ቀናት {high} ደቂቃ ይዘገያል ({count} ጉዞዎች)",
+    always: "ሁልጊዜ ማለት ይቻላል በሰዓቱ ({count} ጉዞዎች)",
+  },
   tips: {
     earlier: "ምክር፡ በ{time} ባቡር ({min} ደቂቃ ቀደም ብሎ) ከ{old} % ይልቅ በ{pct} % ይሳካል።",
     transfer: "ምክር፡ በ{station} ቢቀይሩ ከ{old} % ይልቅ በ{pct} % ይሳካል፣ መድረሻ {arrival}።",

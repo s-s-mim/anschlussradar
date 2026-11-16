@@ -127,6 +127,11 @@ export const de = {
     title: "Diese Seite gibt es nicht.",
     back: "Zur Suche",
   },
+  forecast: {
+    late: "Fährt hier meist {typical} Min. zu spät ab, an schlechten Tagen {high} Min. ({count} Fahrten)",
+    onTime: "Meist pünktlich, an schlechten Tagen {high} Min. später ({count} Fahrten)",
+    always: "Fast immer pünktlich ({count} Fahrten)",
+  },
   tips: {
     earlier: "Tipp: Mit dem Zug um {time} ({min} Min. früher) klappt es in {pct} % statt {old} % der Fälle.",
     transfer: "Tipp: Mit Umstieg in {station} klappt es in {pct} % statt {old} % der Fälle, Ankunft {arrival}.",

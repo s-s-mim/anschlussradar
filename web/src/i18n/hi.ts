@@ -128,6 +128,11 @@ export const hi: Translation = {
     title: "यह पेज मौजूद नहीं है।",
     back: "खोज पर लौटें",
   },
+  forecast: {
+    late: "आम तौर पर {typical} मिनट देर, बुरे दिनों में {high} मिनट ({count} यात्राएँ)",
+    onTime: "आम तौर पर समय पर, बुरे दिनों में {high} मिनट देर ({count} यात्राएँ)",
+    always: "लगभग हमेशा समय पर ({count} यात्राएँ)",
+  },
   tips: {
     earlier: "सुझाव: {time} की ट्रेन ({min} मिनट पहले) से {pct} % बार सफलता, {old} % की जगह।",
     transfer: "सुझाव: {station} पर बदलने से {pct} % बार सफलता, {old} % की जगह, आगमन {arrival}।",

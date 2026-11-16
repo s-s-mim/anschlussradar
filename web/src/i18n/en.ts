@@ -127,6 +127,11 @@ export const en: Translation = {
     title: "This page doesn't exist.",
     back: "Go to search",
   },
+  forecast: {
+    late: "Usually leaves here {typical} min late, {high} min on bad days ({count} trips)",
+    onTime: "Usually on time, {high} min late on bad days ({count} trips)",
+    always: "Almost always on time ({count} trips)",
+  },
   tips: {
     earlier: "Tip: the train at {time} ({min} min earlier) works {pct}% of the time instead of {old}%.",
     transfer: "Tip: changing at {station} works {pct}% of the time instead of {old}%, arriving {arrival}.",

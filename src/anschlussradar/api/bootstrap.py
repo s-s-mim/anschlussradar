@@ -11,6 +11,7 @@ from ..ml.serving import ModelHolder
 from .board import StationBoards
 from .contact import AcsEmailSender, EmailSender
 from .feedback import BlobFeedbackStore, FeedbackStore
+from .forecast import ForecastProvider, KustoForecast, NoForecast
 from .history import KustoHistory, kusto_query, kusto_runner
 from .journeys import HistoryProvider, NoHistory
 from .messages import KustoMessages, MessageProvider, NoMessages
@@ -44,6 +45,7 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
     history: HistoryProvider = NoHistory()
     messages: MessageProvider = NoMessages()
     boards: StationBoards | None = None
+    forecasts: ForecastProvider = NoForecast()
     if settings.kusto_query_uri:
         kusto = (
             settings.kusto_query_uri,
@@ -55,6 +57,7 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         history = KustoHistory(kusto_query(*kusto))
         messages = KustoMessages(kusto_query(*kusto, query="RecentTrainMessages(12h)"))
         boards = StationBoards(kusto_runner(*kusto))
+        forecasts = KustoForecast(kusto_query(*kusto, query="DelayForecastStats(28)"))
 
     email: EmailSender | None = None
     if (
@@ -97,6 +100,7 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         feedback=feedback,
         messages=messages,
         boards=boards,
+        forecasts=forecasts,
         watches=watches,
         pusher=pusher,
         vapid_public_key=settings.vapid_public_key if pusher else "",

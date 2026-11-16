@@ -1412,3 +1412,8 @@ a.stop-name {
   padding: 0;
   font-weight: 600;
 }
+
+.forecast {
+  margin: -6px 0 8px;
+  color: var(--muted);
+}
