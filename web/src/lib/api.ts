@@ -53,20 +53,3 @@ export function findJourneys(q: JourneyQuery, signal?: AbortSignal): Promise<Jou
 export function getModelStatus(): Promise<ModelStatus> {
   return request<ModelStatus>("/model/status");
 }
-
-export interface ContactBody {
-  name: string;
-  topic: string;
-  email: string;
-  message: string;
-  website: string; // honeypot, stays empty for people
-  openedAt: number;
-}
-
-export function sendContact(body: ContactBody): Promise<{ status: string }> {
-  return request("/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-}

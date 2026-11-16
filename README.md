@@ -166,6 +166,27 @@ python -m anschlussradar.ml.export --days 120 --out data/training/transfers.parq
 python -m anschlussradar.ml.train --data data/training/transfers.parquet --store local
 ```
 
+### Step 8: Put the API and the web app online (phase 4)
+
+The web app starts as a private demo: only people you invite can open it.
+
+1. Add to `infra/main.dev.local.bicepparam`:
+
+   ```
+   param deployApi = true
+   param deployWebApp = true
+   param staticWebAppLocation = 'westeurope'
+   ```
+
+   Then run the same `az deployment group create` command as in step 4. If West Europe still refuses new Static Web Apps, try `centralus` or `eastus2` and change "in der EU" in the privacy policy (`web/src/pages/Legal.tsx`).
+2. Read the outputs: `az deployment group show -g rg-anschlussradar-dev -n main --query properties.outputs`
+3. Get the Static Web App deploy token: `az staticwebapp secrets list -n stapp-ar-dev --query properties.apiKey -o tsv`
+4. In the GitHub repo settings add the secret `SWA_DEPLOYMENT_TOKEN` (the token) and the variables `API_FUNCTION_APP` (`apiAppName` output), `API_BASE_URL` (`apiBaseUrl` output), `WEB_DEPLOY` = `true` and `WEB_ACCESS` = `demo`.
+5. Run the workflows `stations` (builds the station list), `deploy-api` and `deploy-web` by hand once.
+6. Invite yourself: Azure portal → the Static Web App → Role management → Invite. Provider GitHub, your GitHub user name, role `demo`. Open the invitation link and accept.
+
+To go public later: fill in `web/src/site.ts`, set `WEB_ACCESS` to `public` and run `deploy-web` again.
+
 ## Design decisions
 
 - **Raw first.** Every response is stored unchanged before parsing, so a parser bug can be fixed and replayed from Blob Storage.

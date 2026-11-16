@@ -3,11 +3,13 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { useI18n } from "../i18n";
-import { Link } from "../lib/router";
 import { store } from "../lib/storage";
 import { SITE, isPlaceholder } from "../site";
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
+
+// While the app is a demo, people sign in through Azure before they can open it.
+const DEMO = (import.meta.env.VITE_WEB_ACCESS || "demo") !== "public";
 
 function V({ children }: { children: string }) {
   return isPlaceholder(children) ? <mark>{children}</mark> : <>{children}</>;
@@ -44,8 +46,6 @@ export function Impressum() {
       <h2>Kontakt</h2>
       <p>
         E-Mail: <Email />
-        <br />
-        oder über das <Link href="/contact">Kontaktformular</Link>
       </p>
       <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
       <p>
@@ -128,6 +128,19 @@ function PrivacyDe() {
         <p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Mein berechtigtes Interesse ist ein sicherer und funktionierender Betrieb.</p>
       </Section>
 
+      {DEMO && (
+        <Section title="Anmeldung während der Demo-Phase">
+          <p>
+            Im Moment können nur eingeladene Personen AnschlussRadar öffnen. Du meldest dich dafür mit deinem GitHub-
+            oder Microsoft-Konto an. Die Anmeldung übernimmt Microsoft Azure. Dabei erhält die App deinen
+            Benutzernamen bzw. deine E-Mail-Adresse und eine Kennung deines Kontos, um zu prüfen, ob du eingeladen
+            bist. Die Einladung und diese Angaben bleiben gespeichert, bis ich die Einladung lösche, spätestens
+            wenn die Demo-Phase endet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO: Du hast die Einladung
+            angenommen, um die Demo zu nutzen.
+          </p>
+        </Section>
+      )}
+
       <Section title="3. Bahnhofs- und Verbindungssuche">
         <p>
           Was du in die Bahnhofssuche tippst, geht an den Server von AnschlussRadar, damit er passende Bahnhöfe vorschlagen kann. Bei
@@ -157,18 +170,13 @@ function PrivacyDe() {
         <ClearButton />
       </Section>
 
-      <Section title="5. Kontaktformular">
+      <Section title="5. Kontakt per E-Mail">
         <p>
-          Wenn du das Kontaktformular nutzt, verarbeite ich deinen Namen, deine E-Mail-Adresse, das Thema und deine
-          Nachricht, um dir zu antworten. Die Nachricht wird über Microsoft Azure Communication Services als E-Mail an
-          mich geschickt und nicht in einer Datenbank gespeichert. Ich lösche sie, wenn dein Anliegen erledigt ist,
-          spätestens nach sechs Monaten, es sei denn, eine gesetzliche Pflicht verlangt eine längere Aufbewahrung.
-        </p>
-        <p>
-          Gegen Spam begrenzt der Server die Zahl der Nachrichten pro Absender. Dafür hält er einen nicht
-          umkehrbaren Hashwert der IP-Adresse höchstens eine Stunde im Arbeitsspeicher. Rechtsgrundlage ist Art. 6
-          Abs. 1 lit. f DSGVO, mein berechtigtes Interesse ist die Beantwortung deiner Anfrage und der Schutz vor
-          Missbrauch.
+          Wenn du mir eine E-Mail schreibst, verarbeite ich deine E-Mail-Adresse, deinen Namen, falls du ihn nennst,
+          und den Inhalt deiner Nachricht, um dir zu antworten. Ich lösche die E-Mails, wenn dein Anliegen erledigt
+          ist, spätestens nach sechs Monaten, es sei denn, eine gesetzliche Pflicht verlangt eine längere
+          Aufbewahrung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, mein berechtigtes Interesse ist die
+          Beantwortung deiner Anfrage.
         </p>
       </Section>
 
@@ -225,6 +233,18 @@ function PrivacyEn() {
         <p>The legal basis is Art. 6(1)(f) GDPR. My legitimate interest is a secure, working service.</p>
       </Section>
 
+      {DEMO && (
+        <Section title="Signing in during the demo phase">
+          <p>
+            Right now only invited people can open AnschlussRadar. You sign in with your GitHub or Microsoft account.
+            Microsoft Azure handles the sign-in. The app receives your user name or email address and an ID of your
+            account to check that you were invited. The invitation and these details are kept until I delete the
+            invitation, at the latest when the demo phase ends. The legal basis is Art. 6(1)(b) GDPR: you accepted
+            the invitation to use the demo.
+          </p>
+        </Section>
+      )}
+
       <Section title="3. Station and journey search">
         <p>
           What you type into the station search goes to the AnschlussRadar server so it can suggest stations. For a journey search
@@ -251,17 +271,12 @@ function PrivacyEn() {
         <ClearButton />
       </Section>
 
-      <Section title="5. Contact form">
+      <Section title="5. Contact by email">
         <p>
-          When you use the contact form I process your name, email address, topic and message to reply to you. The
-          message is sent to me as an email through Microsoft Azure Communication Services and is not stored in a
-          database. I delete it once your request is dealt with, at the latest after six months, unless a legal duty
-          requires keeping it longer.
-        </p>
-        <p>
-          To stop spam the server limits the number of messages per sender. For this it keeps a one-way hash of the IP
-          address in memory for at most one hour. The legal basis is Art. 6(1)(f) GDPR; my legitimate interest is
-          answering your request and preventing abuse.
+          When you send me an email I process your email address, your name if you give it, and the content of your
+          message to reply to you. I delete the emails once your request is dealt with, at the latest after six
+          months, unless a legal duty requires keeping them longer. The legal basis is Art. 6(1)(f) GDPR; my
+          legitimate interest is answering your request.
         </p>
       </Section>
 

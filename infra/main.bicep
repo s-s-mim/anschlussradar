@@ -22,8 +22,14 @@ param functionLocation string = location
 @description('Static Web Apps is offered in a few regions only')
 param staticWebAppLocation string = 'westeurope'
 
-@description('Create the Static Web App (phase 4). Off until the web app exists; West Europe was not accepting new customers in Nov 2026.')
+@description('Create the Static Web App. If the region refuses new customers, try again later or pick another of: westeurope, centralus, eastus2, westus2, eastasia')
 param deployWebApp bool = false
+
+@description('Create the API Function App that serves the web app (phase 4)')
+param deployApi bool = false
+
+@description('Extra web addresses allowed to call the API, e.g. https://anschlussradar.de once the domain exists')
+param extraWebOrigins array = []
 
 @description('Object ID of the Entra user or group that administers SQL and Key Vault')
 param adminObjectId string
@@ -406,7 +412,8 @@ resource sqlDb 'Microsoft.Sql/servers/databases@2023-08-01-preview' = {
 }
 
 // ---------------------------------------------------------------------------
-// Static Web App (free plan) for the PWA and its managed API
+// Static Web App (free plan): only the web pages. The API is its own Function App,
+// because Static Web Apps managed functions have no managed identity.
 // ---------------------------------------------------------------------------
 
 resource web 'Microsoft.Web/staticSites@2023-12-01' = if (deployWebApp) {
@@ -415,6 +422,112 @@ resource web 'Microsoft.Web/staticSites@2023-12-01' = if (deployWebApp) {
   tags: tags
   sku: { name: 'Free', tier: 'Free' }
   properties: {}
+}
+
+// ---------------------------------------------------------------------------
+// API Function App, Flex Consumption (one app per Flex plan)
+// ---------------------------------------------------------------------------
+
+var webOrigins = concat(deployWebApp ? ['https://${web!.properties.defaultHostname}'] : [], extraWebOrigins)
+
+resource apiDeployContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = if (deployApi) {
+  parent: funcBlob
+  name: 'deployments-api'
+}
+
+resource apiPlan 'Microsoft.Web/serverfarms@2024-04-01' = if (deployApi) {
+  name: 'asp-${prefix}-api-${env}'
+  location: functionLocation
+  tags: tags
+  kind: 'functionapp'
+  sku: { tier: 'FlexConsumption', name: 'FC1' }
+  properties: { reserved: true }
+}
+
+resource apiApp 'Microsoft.Web/sites@2024-04-01' = if (deployApi) {
+  name: 'func-${prefix}-api-${env}-${take(suffix, 6)}'
+  location: functionLocation
+  tags: tags
+  kind: 'functionapp,linux'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    serverFarmId: apiPlan.id
+    httpsOnly: true
+    keyVaultReferenceIdentity: 'SystemAssigned'
+    functionAppConfig: {
+      deployment: {
+        storage: {
+          type: 'blobContainer'
+          value: '${funcStorage.properties.primaryEndpoints.blob}deployments-api'
+          authentication: { type: 'SystemAssignedIdentity' }
+        }
+      }
+      // A cap on instances is also a cap on cost if someone floods the API.
+      scaleAndConcurrency: {
+        maximumInstanceCount: 10
+        instanceMemoryMB: 2048
+      }
+      runtime: { name: 'python', version: '3.11' }
+    }
+    siteConfig: {
+      minTlsVersion: '1.2'
+      cors: { allowedOrigins: webOrigins }
+      appSettings: [
+        { name: 'AzureWebJobsStorage__accountName', value: funcStorage.name }
+        { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: insights.properties.ConnectionString }
+        { name: 'MODELS_BASE_URL', value: '${modelStorage.properties.primaryEndpoints.blob}models' }
+        { name: 'STATIONS_PATH', value: 'stations/stations.json' }
+        { name: 'HUBS_FILE', value: 'config/hubs.csv' }
+        { name: 'TRANSITOUS_CONTACT', value: 'https://github.com/s-s-mim/anschlussradar' }
+        { name: 'KUSTO_QUERY_URI', value: kustoQueryUri }
+        { name: 'KUSTO_DATABASE', value: 'anschlussradar' }
+        { name: 'KUSTO_APP_ID', value: kustoAppId }
+        { name: 'KUSTO_TENANT_ID', value: kustoTenantId }
+        { name: 'KUSTO_APP_SECRET', value: '@Microsoft.KeyVault(${kvRef}kusto-app-secret)' }
+      ]
+    }
+  }
+  dependsOn: [apiDeployContainer]
+}
+
+resource apiStorageOwner 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (deployApi) {
+  scope: funcStorage
+  name: guid(funcStorage.id, 'api', roles.blobDataOwner)
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.blobDataOwner)
+    principalId: apiApp!.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+resource apiStorageQueue 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (deployApi) {
+  scope: funcStorage
+  name: guid(funcStorage.id, 'api', roles.queueDataContributor)
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.queueDataContributor)
+    principalId: apiApp!.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+resource apiStorageTable 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (deployApi) {
+  scope: funcStorage
+  name: guid(funcStorage.id, 'api', roles.tableDataContributor)
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.tableDataContributor)
+    principalId: apiApp!.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+resource apiSecretsReader 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (deployApi) {
+  scope: vault
+  name: guid(vault.id, 'api', roles.kvSecretsUser)
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roles.kvSecretsUser)
+    principalId: apiApp!.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -461,5 +574,7 @@ output sqlServerFqdn string = sqlServer.properties.fullyQualifiedDomainName
 output sqlDatabase string = sqlDb.name
 output staticWebAppName string = deployWebApp ? web.name : ''
 output staticWebAppHost string = deployWebApp ? web!.properties.defaultHostname : ''
+output apiAppName string = deployApi ? apiApp!.name : ''
+output apiBaseUrl string = deployApi ? 'https://${apiApp!.properties.defaultHostName}/api/v1' : ''
 output modelsAccountUrl string = modelStorage.properties.primaryEndpoints.blob
 output modelsBaseUrl string = '${modelStorage.properties.primaryEndpoints.blob}models'

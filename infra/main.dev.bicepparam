@@ -15,3 +15,8 @@ param budgetStartDate = '2026-11-01'
 param kustoQueryUri = 'https://<cluster>.<region>.kusto.windows.net'
 param kustoIngestUri = 'https://ingest-<cluster>.<region>.kusto.windows.net'
 param kustoAppId = '<app registration client id>'
+
+// Phase 4: the web app and its API. Set both to true for part 3.
+param deployApi = true
+param deployWebApp = true
+param staticWebAppLocation = 'westeurope'
