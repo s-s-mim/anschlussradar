@@ -128,6 +128,11 @@ export const am: Translation = {
     title: "ይህ ገጽ የለም።",
     back: "ወደ ፍለጋ ተመለስ",
   },
+  tips: {
+    earlier: "ምክር፡ በ{time} ባቡር ({min} ደቂቃ ቀደም ብሎ) ከ{old} % ይልቅ በ{pct} % ይሳካል።",
+    transfer: "ምክር፡ በ{station} ቢቀይሩ ከ{old} % ይልቅ በ{pct} % ይሳካል፣ መድረሻ {arrival}።",
+    show: "አሳይ",
+  },
   watch: {
     button: "በየቀኑ ፈትሽ",
     lead: "ከመነሻው አንድ ሰዓት ገደማ በፊት AnschlussRadar ይህን ጉዞ ይፈትሻል፣ የሚያሳውቀውም የባቡር መቀየሩ አደጋ ላይ ሲሆን ብቻ ነው።",

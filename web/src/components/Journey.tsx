@@ -7,7 +7,7 @@ import { Link } from "../lib/router";
 import type { T } from "../i18n";
 import { duration, hhmm } from "../lib/time";
 import { pct, probabilityTone, transferTone } from "../lib/tone";
-import type { Journey, Leg, Station, Transfer } from "../lib/types";
+import type { Journey, Leg, Station, Tip, Transfer } from "../lib/types";
 import { WatchPanel } from "./Watch";
 
 function lineName(leg: Leg): string {
@@ -183,7 +183,46 @@ function LegRow({ leg }: { leg: Leg }) {
   );
 }
 
-export function JourneyCard({ journey, from, to }: { journey: Journey; from?: Station; to?: Station }) {
+/** "Take the earlier train" / "change elsewhere": shown on the card itself, not hidden in details. */
+function Tips({ tips, onShow }: { tips: Tip[]; onShow: (tip: Tip) => void }) {
+  const { t } = useI18n();
+  if (!tips?.length) return null;
+  return (
+    <div className="tips">
+      {tips.map((tip) => (
+        <p key={tip.kind} className="tip">
+          <span>
+            {t(`tips.${tip.kind}`, {
+              time: tip.departure ?? "",
+              min: tip.minutes ?? 0,
+              station: tip.station ?? "",
+              arrival: tip.arrival ?? "",
+              pct: pct(tip.reliability),
+              old: pct(tip.previous),
+            })}
+          </span>
+          {tip.departureIso && (
+            <button type="button" className="link-button" onClick={() => onShow(tip)}>
+              {t("tips.show")}
+            </button>
+          )}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+export function JourneyCard({
+  journey,
+  from,
+  to,
+  onTip,
+}: {
+  journey: Journey;
+  from?: Station;
+  to?: Station;
+  onTip?: (tip: Tip) => void;
+}) {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const first = journey.legs[0];
@@ -236,6 +275,7 @@ export function JourneyCard({ journey, from, to }: { journey: Journey; from?: St
           ) : null}
         </span>
       </button>
+      <Tips tips={journey.tips} onShow={(tip) => onTip?.(tip)} />
       {open && (
         <ol className="itinerary">
           {journey.legs.flatMap((leg, i) => {

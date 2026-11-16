@@ -1387,3 +1387,28 @@ a.stop-name {
 .watched small {
   display: block;
 }
+
+.tips {
+  padding: 0 16px 12px;
+}
+
+.tip {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  background: var(--banner-bg);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+}
+
+.tip + .tip {
+  margin-top: 6px;
+}
+
+.tip .link-button {
+  padding: 0;
+  font-weight: 600;
+}

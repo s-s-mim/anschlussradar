@@ -136,7 +136,17 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
       {!loading && !error && journeys.length > 0 && (
         <div className="journeys">
           {journeys.map((j, i) => (
-            <JourneyCard key={`${j.departure}-${j.arrival}-${i}`} journey={j} from={s.from} to={s.to} />
+            <JourneyCard
+              key={`${j.departure}-${j.arrival}-${i}`}
+              journey={j}
+              from={s.from}
+              to={s.to}
+              onTip={(tip) => {
+                // Search again from the suggested departure, one minute before it.
+                const at = addMinutes(tip.departureIso!, -1);
+                navigate(`/connections?${toParams({ ...s, date: at.date, time: at.time, arriveBy: false })}`);
+              }}
+            />
           ))}
         </div>
       )}

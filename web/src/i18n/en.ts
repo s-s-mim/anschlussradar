@@ -127,6 +127,11 @@ export const en: Translation = {
     title: "This page doesn't exist.",
     back: "Go to search",
   },
+  tips: {
+    earlier: "Tip: the train at {time} ({min} min earlier) works {pct}% of the time instead of {old}%.",
+    transfer: "Tip: changing at {station} works {pct}% of the time instead of {old}%, arriving {arrival}.",
+    show: "Show",
+  },
   watch: {
     button: "Check every day",
     lead: "About an hour before departure AnschlussRadar checks this connection and only alerts you if a change is at risk.",

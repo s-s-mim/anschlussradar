@@ -93,6 +93,17 @@ export interface Transfer {
   note: "cancelled" | "not_rail" | null;
 }
 
+export interface Tip {
+  kind: "earlier" | "transfer";
+  departure: string | null;
+  departureIso: string | null;
+  arrival: string | null;
+  reliability: number;
+  previous: number;
+  minutes?: number;
+  station?: string | null;
+}
+
 export interface Journey {
   departure: string | null;
   arrival: string | null;
@@ -101,6 +112,7 @@ export interface Journey {
   reliability: number | null;
   legs: Leg[];
   transfers: Transfer[];
+  tips: Tip[];
 }
 
 export interface JourneysResponse {

@@ -128,6 +128,11 @@ export const tr: Translation = {
     title: "Bu sayfa mevcut değil.",
     back: "Aramaya dön",
   },
+  tips: {
+    earlier: "İpucu: {time} treniyle ({min} dk önce) başarı %{pct}, şu an %{old}.",
+    transfer: "İpucu: {station} aktarmasıyla başarı %{pct}, şu an %{old}; varış {arrival}.",
+    show: "Göster",
+  },
   watch: {
     button: "Her gün kontrol et",
     lead: "AnschlussRadar kalkıştan yaklaşık bir saat önce bu bağlantıyı kontrol eder ve yalnızca bir aktarma risk altındaysa haber verir.",

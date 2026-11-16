@@ -127,6 +127,11 @@ export const de = {
     title: "Diese Seite gibt es nicht.",
     back: "Zur Suche",
   },
+  tips: {
+    earlier: "Tipp: Mit dem Zug um {time} ({min} Min. früher) klappt es in {pct} % statt {old} % der Fälle.",
+    transfer: "Tipp: Mit Umstieg in {station} klappt es in {pct} % statt {old} % der Fälle, Ankunft {arrival}.",
+    show: "Anzeigen",
+  },
   watch: {
     button: "Jeden Tag prüfen",
     lead: "Etwa eine Stunde vor Abfahrt prüft AnschlussRadar diese Verbindung und meldet sich nur, wenn ein Umstieg gefährdet ist.",

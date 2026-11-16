@@ -132,6 +132,11 @@ export const pl: Translation = {
     title: "Ta strona nie istnieje.",
     back: "Do wyszukiwania",
   },
+  tips: {
+    earlier: "Wskazówka: pociągiem o {time} ({min} min wcześniej) udaje się w {pct} % przypadków zamiast {old} %.",
+    transfer: "Wskazówka: z przesiadką w {station} udaje się w {pct} % przypadków zamiast {old} %, przyjazd {arrival}.",
+    show: "Pokaż",
+  },
   watch: {
     button: "Sprawdzaj codziennie",
     lead: "Około godziny przed odjazdem AnschlussRadar sprawdza to połączenie i odzywa się tylko wtedy, gdy przesiadka jest zagrożona.",

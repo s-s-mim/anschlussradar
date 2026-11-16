@@ -130,6 +130,11 @@ export const ro: Translation = {
     title: "Această pagină nu există.",
     back: "Înapoi la căutare",
   },
+  tips: {
+    earlier: "Sfat: cu trenul de la {time} (cu {min} min mai devreme) reușește în {pct} % din cazuri în loc de {old} %.",
+    transfer: "Sfat: cu transfer în {station} reușește în {pct} % din cazuri în loc de {old} %, sosire {arrival}.",
+    show: "Arată",
+  },
   watch: {
     button: "Verifică zilnic",
     lead: "Cu aproximativ o oră înainte de plecare, AnschlussRadar verifică această legătură și te anunță doar dacă un transfer e în pericol.",

@@ -23,16 +23,17 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
-from ..ml.serving import ModelHolder, model_status
+from ..ml.serving import LoadedModel, ModelHolder, model_status
 from .board import StationBoards
 from .contact import ContactError, EmailSender, RateLimiter, validate
 from .feedback import MAX_PER_HOUR as FEEDBACK_PER_HOUR
 from .feedback import FeedbackError, FeedbackStore, TransferFeedback
 from .feedback import validate as validate_feedback
-from .journeys import HistoryProvider, build_journeys, sort_journeys
+from .journeys import HistoryProvider, Journey, build_journeys, sort_journeys
 from .messages import MessageProvider, NoMessages
 from .push import Pusher
 from .stations import HubMatcher, StationIndex
+from .tips import EARLIER_WINDOW, earlier_tip, needs_earlier, transfer_tips
 from .transitous import TransitousClient, TransitousError
 from .watch import (
     MAX_WATCHES_PER_DEVICE,
@@ -127,12 +128,38 @@ class ApiService:
 
         model = self.models.get()
         journeys = build_journeys(plan, model, self.hubs, self.history, now, self.messages)
+        if model.stage.value != "live_only":
+            self._add_tips(journeys, from_place, to_place, when, arrive_by, rail_only, model, now)
         return 200, {
             "stage": model.stage.value,
             "showBanner": model.stage.value != "full",
             "journeys": [j.to_dict() for j in sort_journeys(journeys, sort)],
             "attribution": "Journey planning: Transitous (transitous.org/sources)",
         }
+
+    def _add_tips(
+        self,
+        journeys: list[Journey],
+        from_place: str,
+        to_place: str,
+        when: datetime,
+        arrive_by: bool,
+        rail_only: bool,
+        model: LoadedModel,
+        now: datetime,
+    ) -> None:
+        transfer_tips(journeys)
+        target = None if arrive_by else needs_earlier(journeys)
+        if target is None:
+            return
+        try:
+            earlier_plan = self.transitous.plan(
+                from_place, to_place, when - EARLIER_WINDOW, False, rail_only
+            )
+        except TransitousError:
+            return  # a tip is a bonus; never fail the search for it
+        candidates = build_journeys(earlier_plan, model, self.hubs, self.history, now)
+        earlier_tip(target, candidates)
 
     # status, health, contact --------------------------------------------------
 

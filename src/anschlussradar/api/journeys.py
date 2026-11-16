@@ -216,6 +216,7 @@ class Journey:
     duration_min: int
     legs: list[Leg]
     transfers: list[Transfer] = field(default_factory=list)
+    tips: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def reliability(self) -> float | None:
@@ -238,6 +239,7 @@ class Journey:
             "reliability": self.reliability,
             "legs": [leg.to_dict() for leg in self.legs if leg.transit],
             "transfers": [t.to_dict() for t in self.transfers],
+            "tips": self.tips,
         }
 
 
