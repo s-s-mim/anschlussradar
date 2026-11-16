@@ -73,6 +73,11 @@ def station_board(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_station_board(req.route_params.get("eva")), 60)
 
 
+@app.route(route="network", methods=["GET"])
+def network(req: func.HttpRequest) -> func.HttpResponse:
+    return respond(service().get_network(), 600)
+
+
 @app.route(route="push/key", methods=["GET"])
 def push_key(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_push_key(), 3600)

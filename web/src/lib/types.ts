@@ -51,6 +51,23 @@ export interface Hub {
   state: string;
 }
 
+export interface NetworkWindow {
+  departures: number;
+  /** Share of departures less than 6 minutes late; null with too few departures. */
+  onTime: number | null;
+  cancelled: number;
+}
+
+export interface NetworkStation {
+  eva: number;
+  name: string;
+  lat: number;
+  lon: number;
+  national: boolean;
+  now: NetworkWindow;
+  week: NetworkWindow;
+}
+
 export interface BoardDeparture {
   category: string | null;
   number: string | null;

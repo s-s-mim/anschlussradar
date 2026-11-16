@@ -1436,3 +1436,96 @@ a.stop-name {
   height: 20px;
   accent-color: var(--petrol);
 }
+
+/* Network map */
+.network .segmented {
+  margin: 4px 0 16px;
+}
+
+.map {
+  margin: 0 0 24px;
+}
+
+.map svg {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.map .states path {
+  fill: var(--petrol-soft);
+  stroke: var(--surface, #fff);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.map .hit {
+  fill: transparent;
+}
+
+.map .stop {
+  stroke: var(--surface, #fff);
+  stroke-width: 2;
+}
+
+.map a:focus-visible .stop,
+.map a:hover .stop {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+/* Green, yellow, orange, red: easier to tell apart on the map than the text tones. */
+:root {
+  --map-good: #1d7a46;
+  --map-fair: #d4a514;
+  --map-risk: #e0661b;
+  --map-bad: #b0122d;
+}
+.band-good { fill: var(--map-good); background: var(--map-good); }
+.band-fair { fill: var(--map-fair); background: var(--map-fair); }
+.band-risk { fill: var(--map-risk); background: var(--map-risk); }
+.band-bad { fill: var(--map-bad); background: var(--map-bad); }
+.band-none { fill: var(--muted); background: var(--muted); }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.worst {
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.worst .figure {
+  font-size: 1.1rem;
+}
+
+.worst li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line, #d9e3e6);
+}

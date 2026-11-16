@@ -9,6 +9,7 @@ export function Footer() {
       <div className="wrap">
         <nav className="footer-links" aria-label="Footer">
           <Link href="/stations">{t("nav.stations")}</Link>
+          <Link href="/map">{t("nav.map")}</Link>
           <Link href="/help">{t("nav.help")}</Link>
           <Link href="/about">{t("nav.about")}</Link>
           <Link href="/contact">{t("nav.contact")}</Link>

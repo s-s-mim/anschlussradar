@@ -19,6 +19,9 @@ export function Stations() {
     <div className="page wrap narrow">
       <h1>{t("board.hubsTitle")}</h1>
       <p className="lead">{t("board.hubsLead")}</p>
+      <p>
+        <Link href="/map">{t("network.open")}</Link>
+      </p>
       {failed && <p className="notice error">{t("errors.generic")}</p>}
       {!hubs && !failed && (
         <div className="loading" role="status">

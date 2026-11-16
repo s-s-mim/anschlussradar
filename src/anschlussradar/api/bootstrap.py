@@ -15,6 +15,7 @@ from .forecast import ForecastProvider, KustoForecast, NoForecast
 from .history import KustoHistory, kusto_query, kusto_runner
 from .journeys import HistoryProvider, NoHistory
 from .messages import KustoMessages, MessageProvider, NoMessages
+from .network import NetworkStatus
 from .push import Pusher, WebPusher
 from .service import ApiService
 from .settings import ApiSettings
@@ -88,9 +89,14 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         except Exception:
             log.exception("could not set up watched connections")
 
+    hubs = HubMatcher(load_hubs(Path(settings.hubs_file)))
+    network = (
+        NetworkStatus(kusto_runner(*kusto), hubs, stations) if settings.kusto_query_uri else None
+    )
+
     return ApiService(
         stations=stations,
-        hubs=HubMatcher(load_hubs(Path(settings.hubs_file))),
+        hubs=hubs,
         transitous=TransitousClient(
             settings.transitous_base_url, settings.user_agent, settings.plan_cache_seconds
         ),
@@ -100,6 +106,7 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         feedback=feedback,
         messages=messages,
         boards=boards,
+        network=network,
         forecasts=forecasts,
         watches=watches,
         pusher=pusher,

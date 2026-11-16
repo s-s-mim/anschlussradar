@@ -10,6 +10,7 @@ import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
 import { Help } from "./pages/Help";
 import { Home } from "./pages/Home";
+import { NetworkMap } from "./pages/NetworkMap";
 import { Impressum, Privacy } from "./pages/Legal";
 import { NotFound } from "./pages/NotFound";
 import { Results } from "./pages/Results";
@@ -18,6 +19,7 @@ import { Stations } from "./pages/Stations";
 
 const TITLES: Record<string, string> = {
   "/stations": "nav.stations",
+  "/map": "nav.map",
   "/help": "nav.help",
   "/about": "nav.about",
   "/contact": "nav.contact",
@@ -56,6 +58,9 @@ export function App() {
       break;
     case "/stations":
       page = <Stations />;
+      break;
+    case "/map":
+      page = <NetworkMap />;
       break;
     case "/station":
       page = <Station search={search} />;

@@ -5,6 +5,7 @@ GET  /api/v1/journeys?from=<id or lat,lon>&to=...&time=<ISO>&arriveBy=false&sort
 GET  /api/v1/model/status
 GET  /api/v1/hubs                      recorded stations
 GET  /api/v1/hubs/{eva}/board          next departures and punctuality by hour
+GET  /api/v1/network                   punctuality of every recorded station (network map)
 GET  /api/v1/push/key                  public VAPID key for the browser
 POST /api/v1/watches                   watch a connection (device ID + push address)
 GET  /api/v1/watches/{device}          the device's watched connections
@@ -32,6 +33,7 @@ from .feedback import validate as validate_feedback
 from .forecast import ForecastProvider, NoForecast
 from .journeys import HistoryProvider, Journey, build_journeys, sort_journeys
 from .messages import MessageProvider, NoMessages
+from .network import NetworkStatus
 from .push import Pusher
 from .stations import HubMatcher, StationIndex
 from .tips import EARLIER_WINDOW, earlier_tip, needs_earlier, transfer_tips
@@ -66,6 +68,7 @@ class ApiService:
     feedback: FeedbackStore | None = None
     messages: MessageProvider = field(default_factory=NoMessages)
     boards: StationBoards | None = None
+    network: NetworkStatus | None = None
     forecasts: ForecastProvider = field(default_factory=NoForecast)
     watches: WatchStore | None = None
     pusher: Pusher | None = None
@@ -206,6 +209,16 @@ class ApiService:
             log.exception("station board failed for %s", group_eva)
             return error(502, "board_unavailable", "Departures are not available right now.")
         return 200, {**body, "available": True}
+
+    def get_network(self) -> Response:
+        if self.network is None:
+            return 200, {"available": False, "stations": []}
+        try:
+            stations = self.network.stations_status()
+        except Exception:
+            log.exception("network status failed")
+            return error(502, "network_unavailable", "The network map is not available right now.")
+        return 200, {"available": True, "stations": stations}
 
     # watched connections ---------------------------------------------------------
 

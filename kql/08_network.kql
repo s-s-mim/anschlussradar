@@ -1,0 +1,17 @@
+// The network map: punctuality of every recorded station, last 2 hours and last 7 days.
+// Punctual = less than 6 minutes late, the usual definition in Germany.
+
+.create-or-alter function with (folder = "api", docstring = "Departures and punctuality per station, 2 hours and 7 days")
+NetworkStatus() {
+    StopFacts
+    | where not(incomplete) and isnotnull(dep_pt) and dep_pt between (ago(7d) .. now())
+    | extend recent = dep_pt > ago(2h), punctual = not(dep_cancelled) and dep_delay_min < 6
+    | summarize
+        week_departures = count(),
+        week_on_time = countif(punctual),
+        week_cancelled = countif(dep_cancelled),
+        now_departures = countif(recent),
+        now_on_time = countif(recent and punctual),
+        now_cancelled = countif(recent and dep_cancelled)
+      by eva
+}
