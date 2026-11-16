@@ -74,7 +74,7 @@ class TrainableModel(Protocol):
 
 
 class LogisticModel:
-    """Scaled logistic regression: robust with few weeks of data, exported to ONNX."""
+    """Scaled logistic regression: stable with few weeks of data, exported to ONNX."""
 
     kind = "logistic_regression"
 

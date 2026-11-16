@@ -8,6 +8,8 @@ const KEYS = {
   lang: "ar.lang",
   saved: "ar.savedRoutes",
   recent: "ar.recentRoutes",
+  searched: "ar.searched",
+  answered: "ar.answered",
 } as const;
 
 export interface Route {
@@ -50,7 +52,17 @@ export const store = {
   recent: () => read<Route[]>(KEYS.recent, []),
   addRecent(r: Route): void {
     write(KEYS.recent, [r, ...store.recent().filter((s) => !same(s, r))].slice(0, 5));
+    write(KEYS.searched, true);
   },
+
+  /** Transfers already answered with "Hat's geklappt?", so the question is not asked twice. */
+  isAnswered: (key: string) => read<string[]>(KEYS.answered, []).includes(key),
+  markAnswered(key: string): void {
+    write(KEYS.answered, [key, ...read<string[]>(KEYS.answered, [])].slice(0, 50));
+  },
+
+  /** After the first search the start page shows a short link instead of the intro. */
+  hasSearched: () => read<boolean>(KEYS.searched, false),
 
   clearAll(): void {
     try {

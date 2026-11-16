@@ -48,9 +48,13 @@ class Settings(BaseSettings):
     # Recording list
     hubs_file: Path = Field(default=Path("config/hubs.csv"), alias="HUBS_FILE")
 
+    # Weather (Bright Sky, open DWD data). Hub coordinates come from the station list.
+    weather_base_url: str = Field(default="https://api.brightsky.dev", alias="WEATHER_BASE_URL")
+    models_base_url: str = Field(default="", alias="MODELS_BASE_URL")
+
     # Identifies this app to external services. Generic on purpose.
     user_agent: str = Field(
-        default="AnschlussRadar/0.1 (+https://github.com/your-user/anschlussradar)",
+        default="AnschlussRadar/0.1 (+https://github.com/s-s-mim/anschlussradar)",
         alias="USER_AGENT",
     )
 

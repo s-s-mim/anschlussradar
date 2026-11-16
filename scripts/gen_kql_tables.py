@@ -48,6 +48,19 @@ TABLES: dict[str, list[tuple[str, str]]] = {
         ("messages", "dynamic"),
         ("time_flag", "string"),
     ],
+    "WeatherHourly": [
+        ("eva", "long"),
+        ("observed_hour", "datetime"),
+        ("temperature", "real"),
+        ("precipitation", "real"),
+        ("wind_speed", "real"),
+        ("wind_gust_speed", "real"),
+        ("visibility", "real"),
+        ("cloud_cover", "real"),
+        ("condition", "string"),
+        ("source_id", "long"),
+        ("fetched_at", "datetime"),
+    ],
     "IngestionLog": [
         ("run_id", "string"),
         ("endpoint", "string"),
@@ -81,6 +94,7 @@ def render() -> str:
         ".alter-merge table StopChangeEvents policy retention softdelete = 400d",
         ".alter-merge table PlannedStops policy retention softdelete = 400d",
         ".alter-merge table IngestionLog policy retention softdelete = 90d",
+        ".alter-merge table WeatherHourly policy retention softdelete = 400d",
         "",
     ]
     return "\n".join(out)

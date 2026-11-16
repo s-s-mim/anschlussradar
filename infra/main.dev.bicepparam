@@ -19,4 +19,4 @@ param kustoAppId = '<app registration client id>'
 // Phase 4: the web app and its API. Set both to true for part 3.
 param deployApi = true
 param deployWebApp = true
-param staticWebAppLocation = 'westeurope'
+param staticWebAppLocation = 'centralus'

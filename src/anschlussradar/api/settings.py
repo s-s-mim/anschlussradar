@@ -36,6 +36,10 @@ class ApiSettings(BaseSettings):
     kusto_app_secret: str = Field(default="", alias="KUSTO_APP_SECRET")
     kusto_tenant_id: str = Field(default="", alias="KUSTO_TENANT_ID")
 
+    # 'Hat's geklappt?' answers: a container in the Functions storage account.
+    feedback_account_url: str = Field(default="", alias="FEEDBACK_ACCOUNT_URL")
+    feedback_container: str = Field(default="feedback", alias="FEEDBACK_CONTAINER")
+
     # Contact form: Azure Communication Services Email.
     acs_endpoint: str = Field(default="", alias="ACS_ENDPOINT")
     acs_connection_string: str = Field(default="", alias="ACS_CONNECTION_STRING")

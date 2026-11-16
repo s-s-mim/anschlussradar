@@ -3,7 +3,8 @@
 GET  /api/v1/stations?q=frankfurt
 GET  /api/v1/journeys?from=<id or lat,lon>&to=...&time=<ISO>&arriveBy=false&sort=fastest|reliable&rail=true
 GET  /api/v1/model/status
-POST /api/v1/contact
+POST /api/v1/feedback   'Hat's geklappt?' after a transfer
+POST /api/v1/contact    (unused by the web app for now)
 GET  /api/v1/health
 """
 
@@ -18,6 +19,9 @@ from typing import Any
 
 from ..ml.serving import ModelHolder, model_status
 from .contact import ContactError, EmailSender, RateLimiter, validate
+from .feedback import MAX_PER_HOUR as FEEDBACK_PER_HOUR
+from .feedback import FeedbackError, FeedbackStore, TransferFeedback
+from .feedback import validate as validate_feedback
 from .journeys import HistoryProvider, build_journeys, sort_journeys
 from .stations import HubMatcher, StationIndex
 from .transitous import TransitousClient, TransitousError
@@ -39,7 +43,9 @@ class ApiService:
     models: ModelHolder
     history: HistoryProvider
     email: EmailSender | None = None
+    feedback: FeedbackStore | None = None
     contact_limiter: RateLimiter = field(default_factory=RateLimiter)
+    feedback_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(FEEDBACK_PER_HOUR))
     started_at: float = field(default_factory=time.time)
 
     # stations -------------------------------------------------------------
@@ -120,6 +126,27 @@ class ApiService:
             "transitousCacheHitsToday": usage.cache_hits,
             "uptimeSeconds": round(time.time() - self.started_at),
         }
+
+    def post_feedback(self, body: Any, client: str, now: datetime | None = None) -> Response:
+        if self.feedback is None:
+            return error(503, "feedback_unavailable", "Feedback is not configured yet.")
+        now = now or datetime.now(UTC)
+        try:
+            fields = validate_feedback(body, now)
+        except FeedbackError as exc:
+            return error(400, "invalid_field", str(exc), field=exc.field)
+        if not self.feedback_limiter.allow(client):
+            return error(429, "too_many_answers", "Too many answers. Please try again later.")
+        hub = self.hubs.match(fields["station"])
+        record = TransferFeedback(
+            **fields, hub_eva=hub.group_eva if hub else None, received_at=now.isoformat()
+        )
+        try:
+            self.feedback.save(record)
+        except Exception:
+            log.exception("could not store feedback")
+            return error(502, "store_failed", "The answer could not be saved. Please try again.")
+        return 202, {"status": "received"}
 
     def post_contact(self, body: Any, client: str, now: float | None = None) -> Response:
         if self.email is None:

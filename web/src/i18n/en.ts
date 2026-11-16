@@ -28,6 +28,15 @@ export const en: Dict = {
     saved: "Saved routes",
     recent: "Recent searches",
     remove: "Remove",
+    whyTitle: "What AnschlussRadar does differently",
+    whyLink: "What does AnschlussRadar do differently?",
+    growing:
+      "You can already find connections all over Germany. Reliability scores cover more and more stations, and more kinds of transport are coming, partly based on your feedback.",
+    why: [
+      ["Real history, not just the timetable", "For every transfer you see how often it actually worked in recent weeks."],
+      ["Most reliable first", "Sort by your chance of getting there, not only by arrival time."],
+      ["Live check on the day", "If today's trains are late, you see straight away whether your transfer still works."],
+    ],
   },
   station: {
     placeholder: "Station or stop",
@@ -73,6 +82,13 @@ export const en: Dict = {
       missed: "Live: probably won't work",
       cancelled: "Live: train cancelled",
     },
+  },
+  feedback: {
+    question: "Did this transfer work?",
+    yes: "Yes, made it",
+    no: "No, missed it",
+    thanks: "Thanks! This helps check the scores.",
+    failed: "That didn't work. Please try again later.",
   },
   score: {
     earlyEstimate: "early estimate",

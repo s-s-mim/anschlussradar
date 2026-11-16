@@ -11,6 +11,11 @@
 .create-or-alter table StopChangeEvents ingestion json mapping "StopChangeEvents_json"
 '[{"column":"event_id","Properties":{"Path":"$.event_id"}},{"column":"stop_id","Properties":{"Path":"$.stop_id"}},{"column":"eva","Properties":{"Path":"$.eva"}},{"column":"endpoint","Properties":{"Path":"$.endpoint"}},{"column":"observed_at","Properties":{"Path":"$.observed_at"}},{"column":"arr_ct","Properties":{"Path":"$.arr_ct"}},{"column":"arr_cp","Properties":{"Path":"$.arr_cp"}},{"column":"arr_cs","Properties":{"Path":"$.arr_cs"}},{"column":"arr_clt","Properties":{"Path":"$.arr_clt"}},{"column":"dep_ct","Properties":{"Path":"$.dep_ct"}},{"column":"dep_cp","Properties":{"Path":"$.dep_cp"}},{"column":"dep_cs","Properties":{"Path":"$.dep_cs"}},{"column":"dep_clt","Properties":{"Path":"$.dep_clt"}},{"column":"category","Properties":{"Path":"$.category"}},{"column":"number","Properties":{"Path":"$.number"}},{"column":"messages","Properties":{"Path":"$.messages"}},{"column":"time_flag","Properties":{"Path":"$.time_flag"}}]'
 
+.create-merge table WeatherHourly (eva:long, observed_hour:datetime, temperature:real, precipitation:real, wind_speed:real, wind_gust_speed:real, visibility:real, cloud_cover:real, condition:string, source_id:long, fetched_at:datetime)
+
+.create-or-alter table WeatherHourly ingestion json mapping "WeatherHourly_json"
+'[{"column":"eva","Properties":{"Path":"$.eva"}},{"column":"observed_hour","Properties":{"Path":"$.observed_hour"}},{"column":"temperature","Properties":{"Path":"$.temperature"}},{"column":"precipitation","Properties":{"Path":"$.precipitation"}},{"column":"wind_speed","Properties":{"Path":"$.wind_speed"}},{"column":"wind_gust_speed","Properties":{"Path":"$.wind_gust_speed"}},{"column":"visibility","Properties":{"Path":"$.visibility"}},{"column":"cloud_cover","Properties":{"Path":"$.cloud_cover"}},{"column":"condition","Properties":{"Path":"$.condition"}},{"column":"source_id","Properties":{"Path":"$.source_id"}},{"column":"fetched_at","Properties":{"Path":"$.fetched_at"}}]'
+
 .create-merge table IngestionLog (run_id:string, endpoint:string, eva:long, status_code:int, latency_ms:int, response_bytes:long, events_written:int, error_text:string, fetched_at:datetime)
 
 .create-or-alter table IngestionLog ingestion json mapping "IngestionLog_json"
@@ -20,3 +25,4 @@
 .alter-merge table StopChangeEvents policy retention softdelete = 400d
 .alter-merge table PlannedStops policy retention softdelete = 400d
 .alter-merge table IngestionLog policy retention softdelete = 90d
+.alter-merge table WeatherHourly policy retention softdelete = 400d

@@ -5,6 +5,7 @@ Timer triggers only; this app has no public HTTP endpoints.
   poll_db_api        every minute     plans, resyncs and recent changes for the hubs
   build_facts        every 10 minutes StopFacts and TransferFacts in Data Explorer
   run_quality_checks every 15 minutes QualityResults in Data Explorer
+  collect_weather    every hour       weather at every hub (Bright Sky, DWD data)
 
 The shared package (src/anschlussradar) and config/hubs.csv are copied next to
 this file by the deploy workflow, so imports work the same locally and in Azure.
@@ -76,3 +77,24 @@ def build_facts(timer: func.TimerRequest) -> None:
 def run_quality_checks(timer: func.TimerRequest) -> None:
     _run_kusto([QUALITY_COMMAND])
     logging.info("quality checks done")
+
+
+@app.timer_trigger(schedule="0 7 * * * *", arg_name="timer", run_on_startup=False)
+def collect_weather(timer: func.TimerRequest) -> None:
+    import httpx
+
+    from anschlussradar.ingest.weather import collect, hub_places, load_station_list
+
+    settings = get_settings()
+    if not settings.models_base_url:
+        logging.warning("MODELS_BASE_URL is not set; no weather collected")
+        return
+    headers = {"User-Agent": settings.user_agent}
+    with httpx.Client(headers=headers) as http:
+        places = hub_places(
+            load_hubs(settings.hubs_file), load_station_list(http, settings.models_base_url)
+        )
+        rows = collect(
+            places, make_sink(settings), http, settings.weather_base_url, datetime.now(UTC)
+        )
+    logging.info("weather rows written: %s of %s hubs", rows, len(places))

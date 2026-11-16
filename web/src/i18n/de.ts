@@ -27,6 +27,15 @@ export const de = {
     saved: "Gespeicherte Strecken",
     recent: "Zuletzt gesucht",
     remove: "Entfernen",
+    whyTitle: "Was AnschlussRadar anders macht",
+    whyLink: "Was macht AnschlussRadar anders?",
+    growing:
+      "Verbindungen findest du schon für ganz Deutschland. Zuverlässigkeitswerte gibt es an immer mehr Bahnhöfen, und weitere Verkehrsmittel kommen dazu, auch nach euren Rückmeldungen.",
+    why: [
+      ["Echte Erfahrung statt nur Fahrplan", "Für jeden Umstieg siehst du, wie oft er in den letzten Wochen wirklich geklappt hat."],
+      ["Zuverlässigste Verbindung zuerst", "Sortiere nach der Chance, anzukommen, nicht nur nach der Ankunftszeit."],
+      ["Live-Check am Reisetag", "Sind die Züge heute verspätet, siehst du sofort, ob dein Umstieg noch klappt."],
+    ],
   },
   station: {
     placeholder: "Bahnhof oder Haltestelle",
@@ -72,6 +81,13 @@ export const de = {
       missed: "Live: wird wohl nicht klappen",
       cancelled: "Live: Zug fällt aus",
     },
+  },
+  feedback: {
+    question: "Hat dieser Umstieg geklappt?",
+    yes: "Ja, geklappt",
+    no: "Nein, verpasst",
+    thanks: "Danke! Das hilft, die Werte zu prüfen.",
+    failed: "Das hat nicht geklappt. Versuche es später noch einmal.",
   },
   score: {
     earlyEstimate: "erste Schätzung",

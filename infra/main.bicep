@@ -284,6 +284,8 @@ resource ingestApp 'Microsoft.Web/sites@2024-04-01' = {
         { name: 'KUSTO_APP_ID', value: kustoAppId }
         { name: 'KUSTO_TENANT_ID', value: kustoTenantId }
         { name: 'KUSTO_APP_SECRET', value: '@Microsoft.KeyVault(${kvRef}kusto-app-secret)' }
+        // Weather: hub coordinates come from the public station list
+        { name: 'MODELS_BASE_URL', value: '${modelStorage.properties.primaryEndpoints.blob}models' }
       ]
     }
   }
@@ -430,6 +432,12 @@ resource web 'Microsoft.Web/staticSites@2023-12-01' = if (deployWebApp) {
 
 var webOrigins = concat(deployWebApp ? ['https://${web!.properties.defaultHostname}'] : [], extraWebOrigins)
 
+// 'Hat's geklappt?' answers from the web app: one small JSON file each, no personal data.
+resource feedbackContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = if (deployApi) {
+  parent: funcBlob
+  name: 'feedback'
+}
+
 resource apiDeployContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = if (deployApi) {
   parent: funcBlob
   name: 'deployments-api'
@@ -477,6 +485,8 @@ resource apiApp 'Microsoft.Web/sites@2024-04-01' = if (deployApi) {
         { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: insights.properties.ConnectionString }
         { name: 'MODELS_BASE_URL', value: '${modelStorage.properties.primaryEndpoints.blob}models' }
         { name: 'STATIONS_PATH', value: 'stations/stations.json' }
+        { name: 'FEEDBACK_ACCOUNT_URL', value: funcStorage.properties.primaryEndpoints.blob }
+        { name: 'FEEDBACK_CONTAINER', value: 'feedback' }
         { name: 'HUBS_FILE', value: 'config/hubs.csv' }
         { name: 'TRANSITOUS_CONTACT', value: 'https://github.com/s-s-mim/anschlussradar' }
         { name: 'KUSTO_QUERY_URI', value: kustoQueryUri }

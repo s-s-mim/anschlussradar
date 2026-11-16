@@ -63,14 +63,30 @@ def health(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_health())
 
 
+def _client(req: func.HttpRequest) -> str:
+    # Used only for the in-memory rate limit, hashed there, never stored.
+    return (req.headers.get("x-forwarded-for") or "unknown").split(",")[0].strip()
+
+
+@app.route(route="feedback", methods=["POST"])
+def feedback(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        body = req.get_json()
+    except ValueError:
+        body = None
+    result = service().post_feedback(body, _client(req))
+    if result[0] >= 500:
+        logging.warning("feedback failed with %s", result[0])
+    return respond(result)
+
+
 @app.route(route="contact", methods=["POST"])
 def contact(req: func.HttpRequest) -> func.HttpResponse:
     try:
         body = req.get_json()
     except ValueError:
         body = None
-    client = (req.headers.get("x-forwarded-for") or "unknown").split(",")[0].strip()
-    result = service().post_contact(body, client)
+    result = service().post_contact(body, _client(req))
     if result[0] >= 500:
         logging.warning("contact failed with %s", result[0])
     return respond(result)

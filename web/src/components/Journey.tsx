@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { sendFeedback } from "../lib/api";
+import { store } from "../lib/storage";
 import { useI18n } from "../i18n";
 import type { T } from "../i18n";
 import { duration, hhmm } from "../lib/time";
@@ -36,7 +38,54 @@ function confidenceText(t: T, tr: Transfer): string {
   return parts.join(", ");
 }
 
-function TransferNode({ tr }: { tr: Transfer }) {
+/** Asked once the connecting train has left (up to a day later), never before. */
+function DidItWork({ tr, legIn, legOut }: { tr: Transfer; legIn: Leg; legOut: Leg }) {
+  const { t } = useI18n();
+  const dep = legOut.departurePlanned;
+  const arr = legIn.arrivalPlanned;
+  const key = `${tr.station}|${arr}|${dep}`;
+  const [state, setState] = useState<"ask" | "sending" | "done" | "failed">(
+    store.isAnswered(key) ? "done" : "ask",
+  );
+  if (!dep || !arr || !tr.station) return null;
+  const since = Date.now() - Date.parse(dep);
+  if (since < 0 || since > 24 * 3600 * 1000) return null;
+  if (state === "done") return <p className="small muted">{t("feedback.thanks")}</p>;
+
+  const answer = (made: boolean) => {
+    setState("sending");
+    sendFeedback({
+      station: tr.station!,
+      inTrain: lineName(legIn),
+      outTrain: lineName(legOut),
+      plannedArrival: arr,
+      plannedDeparture: dep,
+      made,
+    })
+      .then(() => {
+        store.markAnswered(key);
+        setState("done");
+      })
+      .catch(() => setState("failed"));
+  };
+
+  return (
+    <div className="did-it-work">
+      <p>{t("feedback.question")}</p>
+      <div>
+        <button type="button" className="ghost" disabled={state === "sending"} onClick={() => answer(true)}>
+          {t("feedback.yes")}
+        </button>
+        <button type="button" className="ghost" disabled={state === "sending"} onClick={() => answer(false)}>
+          {t("feedback.no")}
+        </button>
+      </div>
+      {state === "failed" && <p className="error-text">{t("feedback.failed")}</p>}
+    </div>
+  );
+}
+
+function TransferNode({ tr, legIn, legOut }: { tr: Transfer; legIn: Leg; legOut: Leg }) {
   const { t } = useI18n();
   const tone = transferTone(tr);
   let reason: string | null = null;
@@ -68,6 +117,7 @@ function TransferNode({ tr }: { tr: Transfer }) {
           </p>
         )}
         {reason && <p className="muted small">{reason}</p>}
+        <DidItWork tr={tr} legIn={legIn} legOut={legOut} />
       </div>
     </li>
   );
@@ -156,7 +206,8 @@ export function JourneyCard({ journey }: { journey: Journey }) {
           {journey.legs.flatMap((leg, i) => {
             const tr = journey.transfers[i];
             const rows = [<LegRow key={`l${i}`} leg={leg} />];
-            if (tr) rows.push(<TransferNode key={`t${i}`} tr={tr} />);
+            const next = journey.legs[i + 1];
+            if (tr && next) rows.push(<TransferNode key={`t${i}`} tr={tr} legIn={leg} legOut={next} />);
             return rows;
           })}
         </ol>

@@ -9,6 +9,7 @@ from ..ingest.hubs import load_hubs
 from ..ml.registry import HttpReadStore, LocalStore, ModelRegistry
 from ..ml.serving import ModelHolder
 from .contact import AcsEmailSender, EmailSender
+from .feedback import BlobFeedbackStore, FeedbackStore
 from .history import KustoHistory, kusto_query
 from .journeys import HistoryProvider, NoHistory
 from .service import ApiService
@@ -61,6 +62,13 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
             settings.acs_connection_string,
         )
 
+    feedback: FeedbackStore | None = None
+    if settings.feedback_account_url:
+        try:
+            feedback = BlobFeedbackStore(settings.feedback_account_url, settings.feedback_container)
+        except Exception:
+            log.exception("could not set up the feedback store")
+
     return ApiService(
         stations=stations,
         hubs=HubMatcher(load_hubs(Path(settings.hubs_file))),
@@ -70,4 +78,5 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         models=ModelHolder(ModelRegistry(store)),
         history=history,
         email=email,
+        feedback=feedback,
     )

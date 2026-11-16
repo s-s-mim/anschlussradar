@@ -175,7 +175,7 @@ The web app starts as a private demo: only people you invite can open it.
    ```
    param deployApi = true
    param deployWebApp = true
-   param staticWebAppLocation = 'westeurope'
+   param staticWebAppLocation = 'centralus'
    ```
 
    Then run the same `az deployment group create` command as in step 4. If West Europe still refuses new Static Web Apps, try `centralus` or `eastus2` and change "in der EU" in the privacy policy (`web/src/pages/Legal.tsx`).

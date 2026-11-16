@@ -179,7 +179,18 @@ function PrivacyDe() {
         </p>
       </Section>
 
-      <Section title="6. Deine Rechte">
+      <Section title="6. Rückmeldung „Hat dieser Umstieg geklappt?“">
+        <p>
+          Nach einem Umstieg kannst du angeben, ob er geklappt hat. Gespeichert werden nur der Bahnhof, die beiden
+          Züge, die geplanten Zeiten, deine Antwort und der Zeitpunkt der Antwort. Deine IP-Adresse, eine
+          Gerätekennung oder andere Angaben über dich werden dabei nicht gespeichert. Gegen massenhafte Antworten hält
+          der Server höchstens eine Stunde lang einen nicht umkehrbaren Hashwert der IP-Adresse im Arbeitsspeicher.
+          Die Antworten dienen dazu, die Zuverlässigkeitswerte zu prüfen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f
+          DSGVO.
+        </p>
+      </Section>
+
+      <Section title="7. Deine Rechte">
         <p>
           Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung
           der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage
@@ -278,7 +289,16 @@ function PrivacyEn() {
         </p>
       </Section>
 
-      <Section title="6. Your rights">
+      <Section title="6. Feedback “Did this transfer work?”">
+        <p>
+          After a transfer you can say whether it worked. Only the station, the two trains, the planned times, your
+          answer and the time of the answer are stored. Your IP address, a device ID or other details about you are
+          not stored. To stop floods of answers, the server keeps a one-way hash of the IP address in memory for at
+          most one hour. The answers are used to check the reliability scores. The legal basis is Art. 6(1)(f) GDPR.
+        </p>
+      </Section>
+
+      <Section title="7. Your rights">
         <p>
           You have the right of access (Art. 15 GDPR), rectification (Art. 16), erasure (Art. 17), restriction of
           processing (Art. 18), data portability (Art. 20) and to object to processing based on Art. 6(1)(f) (Art.

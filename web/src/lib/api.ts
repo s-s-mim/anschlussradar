@@ -53,3 +53,21 @@ export function findJourneys(q: JourneyQuery, signal?: AbortSignal): Promise<Jou
 export function getModelStatus(): Promise<ModelStatus> {
   return request<ModelStatus>("/model/status");
 }
+
+export interface FeedbackBody {
+  station: string;
+  inTrain: string;
+  outTrain: string;
+  plannedArrival: string;
+  plannedDeparture: string;
+  made: boolean;
+}
+
+/** "Hat's geklappt?": the answer and the transfer it belongs to, nothing else. */
+export function sendFeedback(body: FeedbackBody): Promise<{ status: string }> {
+  return request("/feedback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}

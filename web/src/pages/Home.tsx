@@ -2,9 +2,10 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { LearningBanner } from "../components/LearningBanner";
 import { StationInput } from "../components/StationInput";
+import { WhyList } from "../components/Why";
 import { useI18n } from "../i18n";
 import { fromParams, toParams } from "../lib/query";
-import { navigate } from "../lib/router";
+import { Link, navigate } from "../lib/router";
 import { store } from "../lib/storage";
 import type { Route } from "../lib/storage";
 import { berlinNow } from "../lib/time";
@@ -12,6 +13,7 @@ import type { Stage, Station } from "../lib/types";
 
 export function Home({ search, stage }: { search: URLSearchParams; stage: Stage | null }) {
   const { t } = useI18n();
+  const newVisitor = !store.hasSearched();
   const initial = fromParams(search);
   const now = berlinNow();
   const [from, setFrom] = useState<Station | null>(initial.from ?? null);
@@ -102,6 +104,17 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
             {t("home.search")}
           </button>
         </form>
+
+        {newVisitor ? (
+          <section className="why" aria-labelledby="why-title">
+            <h2 id="why-title">{t("home.whyTitle")}</h2>
+            <WhyList />
+          </section>
+        ) : (
+          <p className="why-link small">
+            <Link href="/about#anders">{t("home.whyLink")}</Link>
+          </p>
+        )}
 
         {saved.length > 0 && (
           <section className="routes">

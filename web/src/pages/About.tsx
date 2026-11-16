@@ -1,8 +1,14 @@
+import { useEffect } from "react";
+import { WhyList } from "../components/Why";
 import { useI18n } from "../i18n";
 import { Link } from "../lib/router";
+import { de } from "../i18n/de";
+import { en } from "../i18n/en";
 import { SITE } from "../site";
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
+const GROWING_DE = de.home.growing;
+const GROWING_EN = en.home.growing;
 
 function De() {
   return (
@@ -12,6 +18,16 @@ function De() {
         Fahrplanauskünfte zeigen, ob ein Umstieg laut Fahrplan möglich ist. AnschlussRadar zeigt zusätzlich, wie oft
         er in der Praxis klappt.
       </p>
+      <h2 id="anders">Was AnschlussRadar anders macht</h2>
+      <p>
+        Andere Auskünfte zeigen, ob ein Umstieg laut Fahrplan möglich ist, und warnen am Reisetag vor Verspätungen.
+        AnschlussRadar beantwortet die Frage davor: Wie oft hat genau dieser Umstieg in den letzten Wochen wirklich
+        geklappt?
+      </p>
+      <div className="about-why">
+        <WhyList />
+      </div>
+      <p>{GROWING_DE}</p>
       <h2>So funktioniert es</h2>
       <p>
         Rund um die Uhr fragt ein kleines Programm alle paar Minuten die Fahrplan- und Verspätungsdaten der großen
@@ -51,6 +67,7 @@ function De() {
           </a>{" "}
           (CC BY 4.0).
         </li>
+        <li>Wetterdaten: Deutscher Wetterdienst (DWD), über Bright Sky.</li>
       </ul>
       <p>Alle Daten werden unter den Lizenzbedingungen der jeweiligen Anbieter genutzt.</p>
       <h2>Keine Verbindung zur Deutschen Bahn</h2>
@@ -73,6 +90,15 @@ function En() {
         Journey planners show whether a transfer is possible on paper. AnschlussRadar also shows how often it works in
         practice.
       </p>
+      <h2 id="anders">What AnschlussRadar does differently</h2>
+      <p>
+        Other planners show whether a transfer is possible on paper and warn about delays on the day. AnschlussRadar
+        answers the question before that: how often did exactly this transfer actually work in recent weeks?
+      </p>
+      <div className="about-why">
+        <WhyList />
+      </div>
+      <p>{GROWING_EN}</p>
       <h2>How it works</h2>
       <p>
         Around the clock, a small program fetches the timetable and delay data of the large transfer stations every
@@ -110,6 +136,7 @@ function En() {
           </a>{" "}
           (CC BY 4.0).
         </li>
+        <li>Weather data: Deutscher Wetterdienst (DWD), via Bright Sky.</li>
       </ul>
       <p>All data is used under the licence terms of its providers.</p>
       <h2>Not connected to Deutsche Bahn</h2>
@@ -126,5 +153,9 @@ function En() {
 
 export function About() {
   const { lang } = useI18n();
+  useEffect(() => {
+    // "/about#anders" from the start page: jump to that section.
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  }, []);
   return <div className="page prose wrap narrow">{lang === "de" ? <De /> : <En />}</div>;
 }
