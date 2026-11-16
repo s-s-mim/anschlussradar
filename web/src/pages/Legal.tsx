@@ -114,9 +114,8 @@ function PrivacyDe() {
       <Section title="2. Aufruf der App und Hosting">
         <p>
           AnschlussRadar läuft bei Microsoft Azure (Microsoft Ireland Operations Limited, One Microsoft Place, South
-          County Business Park, Leopardstown, Dublin 18, Irland) in Rechenzentren in der EU. Mit Microsoft besteht ein
-          Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO. Microsoft ist nach dem EU-US Data Privacy Framework
-          zertifiziert, falls im Einzelfall Daten in die USA gelangen.
+          County Business Park, Leopardstown, Dublin 18, Irland). Der Server, der Suchanfragen beantwortet, steht in Frankfurt am Main. Die Dateien der Web-Seite liefert Azure Static Web Apps über das weltweite Netz von Microsoft aus; sie sind dort in einem Rechenzentrum in den USA hinterlegt. Mit Microsoft besteht ein
+          Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO. Für Daten, die dabei in die USA gelangen, ist Microsoft nach dem EU-US Data Privacy Framework zertifiziert.
         </p>
         <p>
           Wenn du die App aufrufst, verarbeitet der Server technisch notwendige Daten: deine IP-Adresse, Datum und
@@ -220,9 +219,8 @@ function PrivacyEn() {
       <Section title="2. Opening the app and hosting">
         <p>
           AnschlussRadar runs on Microsoft Azure (Microsoft Ireland Operations Limited, One Microsoft Place, South
-          County Business Park, Leopardstown, Dublin 18, Ireland) in data centres in the EU. There is a data processing
-          agreement with Microsoft under Art. 28 GDPR. Microsoft is certified under the EU-US Data Privacy Framework in
-          case data reaches the US in individual cases.
+          County Business Park, Leopardstown, Dublin 18, Ireland). The server that answers searches is in Frankfurt am Main. The files of the web page are delivered by Azure Static Web Apps through Microsoft's worldwide network; they are stored in a data centre in the US. There is a data processing
+          agreement with Microsoft under Art. 28 GDPR. For data that reaches the US this way, Microsoft is certified under the EU-US Data Privacy Framework.
         </p>
         <p>
           When you open the app, the server processes technically necessary data: your IP address, date and time, the
