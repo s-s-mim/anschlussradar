@@ -38,6 +38,7 @@ export interface JourneyQuery {
   to: string;
   time: string; // ISO with offset
   arriveBy: boolean;
+  local: boolean;
 }
 
 export function findJourneys(q: JourneyQuery, signal?: AbortSignal): Promise<JourneysResponse> {
@@ -47,6 +48,7 @@ export function findJourneys(q: JourneyQuery, signal?: AbortSignal): Promise<Jou
     time: q.time,
     arriveBy: String(q.arriveBy),
   });
+  if (q.local) params.set("rail", "false");
   return request<JourneysResponse>(`/journeys?${params}`, { signal });
 }
 

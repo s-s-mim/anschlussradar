@@ -43,6 +43,9 @@ MODE_CATEGORY = {
     "RAIL": "RB",
     "SUBURBAN": "S",
 }
+# Minimum transfer time when a bus, tram or underground line is involved. The
+# planner already counts the walk between stops in the planned buffer.
+LOCAL_MIN_TRANSFER = 2
 _KNOWN = {c for cats in CATEGORY_GROUPS.values() for c in cats}
 
 
@@ -222,10 +225,23 @@ class Journey:
     tips: list[dict[str, Any]] = field(default_factory=list)
 
     @property
+    def scored_transfers(self) -> list[Transfer]:
+        """Transfers that can get a score: train to train."""
+        return [t for t in self.transfers if t.note != "not_rail"]
+
+    @property
+    def partial(self) -> bool:
+        """True when some transfers involve a bus, tram or underground line."""
+        return len(self.scored_transfers) < len(self.transfers)
+
+    @property
     def reliability(self) -> float | None:
         if not self.transfers:
             return 1.0  # direct train: nothing to miss
-        probs = [t.probability for t in self.transfers]
+        scored = self.scored_transfers
+        if not scored:
+            return None  # only local transport transfers: live check only
+        probs = [t.probability for t in scored]
         if any(p is None for p in probs):
             return None
         result = 1.0
@@ -240,6 +256,7 @@ class Journey:
             "durationMinutes": self.duration_min,
             "transfersCount": len(self.transfers),
             "reliability": self.reliability,
+            "reliabilityTrainsOnly": self.partial,
             "legs": [leg.to_dict() for leg in self.legs if leg.transit],
             "transfers": [t.to_dict() for t in self.transfers],
             "tips": self.tips,
@@ -323,7 +340,24 @@ def _score(
         t.probability = 0.0
         return t
     if not (arriving.is_rail and departing.is_rail):
-        t.note = "not_rail"  # no score for buses, trams or underground lines yet
+        # No score for buses, trams or underground lines: we have no history for
+        # them. The live check still works when both have real-time data.
+        t.note = "not_rail"
+        if (
+            arriving.arr_planned is not None
+            and departing.dep_planned is not None
+            and t.planned_buffer is not None
+            and arriving.arr_planned.astimezone(BERLIN).date() == today.astimezone(BERLIN).date()
+            and arriving.real_time
+            and departing.real_time
+        ):
+            live = live_check(
+                t.planned_buffer,
+                arriving.arr_delay or 0,
+                departing.dep_delay or 0,
+                LOCAL_MIN_TRANSFER,
+            )
+            t.live_status, t.live_slack = live.status, live.remaining_slack_min
         return t
     if arriving.arr_planned is None or departing.dep_planned is None:
         return t

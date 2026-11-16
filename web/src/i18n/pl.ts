@@ -24,6 +24,7 @@ export const pl: Translation = {
     departure: "Odjazd",
     arrival: "Przyjazd",
     now: "Teraz",
+    local: "Także autobus, tramwaj i metro",
     search: "Szukaj połączeń",
     searching: "Szukam …",
     pickStation: "Wybierz stację z listy.",
@@ -63,6 +64,8 @@ export const pl: Translation = {
     unsave: "Zapisano",
     reliability: "Niezawodność",
     noScoreYet: "brak oceny",
+    trainsOnly: "tylko przesiadki kolejowe",
+    liveOnly: "tylko sprawdzenie na żywo",
     details: "Szczegóły",
     hideDetails: "Ukryj szczegóły",
     track: "Tor {track}",
@@ -77,7 +80,7 @@ export const pl: Translation = {
     buffer: "{min} min na przesiadkę",
     chance: "takich przesiadek się udaje",
     notRecorded: "Dla tej stacji jeszcze nie zbieramy danych.",
-    notRail: "Dla autobusów, tramwajów i metra nie ma jeszcze ocen.",
+    notRail: "Autobusy, tramwaje i metro nie mają wartości procentowej. W dniu podróży sprawdzenie na żywo pokaże, czy zdążysz.",
     cancelled: "Jeden z pociągów tej przesiadki jest odwołany.",
     learning: "Ocena pojawi się, gdy model zbierze wystarczająco dużo danych.",
     live: {
@@ -204,7 +207,7 @@ export const pl: Translation = {
         list: [
           "Model wciąż się uczy. W pierwszych tygodniach jest tylko kontrola na żywo.",
           "Przesiadka jest na stacji, dla której jeszcze nie zbieramy danych. Obecnie są to duże stacje przesiadkowe, a lista rośnie.",
-          "Część podróży to autobus, tramwaj lub metro. Dla nich nie ma jeszcze ocen.",
+          "Część podróży to autobus, tramwaj lub metro. Dla nich nie zbieramy danych. W dniu podróży jest jednak sprawdzenie na żywo, a procent podróży dotyczy wtedy tylko przesiadek między pociągami.",
         ],
       },
       {

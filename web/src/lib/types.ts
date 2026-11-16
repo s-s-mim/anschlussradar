@@ -112,6 +112,8 @@ export interface Journey {
   durationMinutes: number;
   transfersCount: number;
   reliability: number | null;
+  /** True when the reliability covers only the train-to-train transfers. */
+  reliabilityTrainsOnly: boolean;
   legs: Leg[];
   transfers: Transfer[];
   tips: Tip[];

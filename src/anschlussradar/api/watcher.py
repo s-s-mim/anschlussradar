@@ -73,6 +73,8 @@ def message(watch: Watch, kind: str, station: str | None) -> dict[str, str]:
         "to": watch.to_place, "toName": watch.to_name,
         "date": datetime.now(BERLIN).date().isoformat(), "time": watch.departure,
     })  # fmt: skip
+    if watch.local == "1":
+        url += "&local=1"
     return {
         "title": f"{watch.departure} {watch.from_name} → {watch.to_name}",
         "body": text.format(station=station or ""),
@@ -111,7 +113,11 @@ def check_watches(svc: ApiService, now: datetime | None = None) -> CheckResult:
         svc.watches.save_watch(watch)
         try:
             plan = svc.transitous.plan(
-                watch.from_place, watch.to_place, dep - timedelta(minutes=1), num_itineraries=3
+                watch.from_place,
+                watch.to_place,
+                dep - timedelta(minutes=1),
+                rail_only=watch.local != "1",
+                num_itineraries=3,
             )
         except TransitousError:
             result.errors += 1

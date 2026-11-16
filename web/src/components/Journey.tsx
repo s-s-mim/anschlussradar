@@ -17,6 +17,11 @@ function lineName(leg: Leg): string {
   return leg.line ?? leg.category ?? leg.mode;
 }
 
+const RAIL_MODES = new Set([
+  "HIGHSPEED_RAIL", "LONG_DISTANCE", "NIGHT_RAIL", "REGIONAL_FAST_RAIL", "REGIONAL_RAIL", "SUBURBAN", "RAIL",
+]);
+const isRail = (leg: Leg) => RAIL_MODES.has(leg.mode);
+
 function Delay({ min }: { min: number | null }) {
   if (min === null || min === 0) return null;
   return <span className={min > 0 ? "delay late" : "delay early"}>{min > 0 ? `+${min}` : min}</span>;
@@ -177,7 +182,7 @@ function LegRow({ leg }: { leg: Leg }) {
         <Track actual={leg.departureTrack} planned={leg.departureTrackPlanned} />
       </div>
       <div className="leg-ride">
-        <span className="line-badge">{lineName(leg)}</span>
+        <span className={`line-badge${isRail(leg) ? "" : " local"}`}>{lineName(leg)}</span>
         {leg.headsign && <span className="muted small">{t("results.towards", { headsign: leg.headsign })}</span>}
         {leg.cancelled && <span className="cancel-flag">{t("results.cancelled")}</span>}
       </div>
@@ -226,11 +231,13 @@ export function JourneyCard({
   journey,
   from,
   to,
+  local = false,
   onTip,
 }: {
   journey: Journey;
   from?: Station;
   to?: Station;
+  local?: boolean;
   onTip?: (tip: Tip) => void;
 }) {
   const { t } = useI18n();
@@ -268,7 +275,7 @@ export function JourneyCard({
           </span>
           <span className="lines">
             {journey.legs.map((l, i) => (
-              <span key={i} className="line-badge small">
+              <span key={i} className={`line-badge small${isRail(l) ? "" : " local"}`}>
                 {lineName(l)}
               </span>
             ))}
@@ -279,7 +286,10 @@ export function JourneyCard({
             <>
               <strong className={`figure tone-${probabilityTone(r)}`}>{pct(r)} %</strong>
               <small>{t("results.reliability")}</small>
+              {journey.reliabilityTrainsOnly && <small className="muted">{t("results.trainsOnly")}</small>}
             </>
+          ) : journey.transfersCount > 0 && journey.transfers.every((x) => x.note === "not_rail") ? (
+            <small className="muted">{t("results.liveOnly")}</small>
           ) : journey.transfersCount > 0 ? (
             <small className="muted">{t("results.noScoreYet")}</small>
           ) : null}
@@ -297,7 +307,7 @@ export function JourneyCard({
           })}
           {from && to && first?.departurePlanned && (
             <li className="watch-row">
-              <WatchPanel from={from} to={to} departure={hhmm(first.departurePlanned)} />
+              <WatchPanel from={from} to={to} departure={hhmm(first.departurePlanned)} local={local} />
             </li>
           )}
         </ol>

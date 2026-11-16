@@ -47,6 +47,7 @@ class Watch:
     lang: str
     created: str
     last_checked: str = ""  # date of the last check, "2026-11-17"
+    local: str = ""  # "1": the search included buses, trams and underground lines
 
     def to_public(self) -> dict[str, Any]:
         return {
@@ -55,6 +56,7 @@ class Watch:
             "to": {"name": self.to_name, "place": self.to_place},
             "departure": self.departure,
             "weekdays": self.weekdays,
+            "local": self.local == "1",
         }
 
 
@@ -101,6 +103,7 @@ def validate(body: Any) -> dict[str, Any]:
         raise WatchError("weekdays", "Pick at least one weekday.")
     lang = str(body.get("lang") or "de")
     out.update(departure=departure, weekdays=weekdays, lang=lang if lang in LANGS else "en")
+    out["local"] = "1" if body.get("local") is True else ""
     return out
 
 
@@ -127,6 +130,7 @@ def new_watch(fields: dict[str, Any], now: datetime) -> Watch:
         weekdays=fields["weekdays"],
         lang=fields["lang"],
         created=now.isoformat(),
+        local=fields.get("local", ""),
     )
 
 

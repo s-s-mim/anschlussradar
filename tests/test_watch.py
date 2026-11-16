@@ -89,3 +89,18 @@ def test_weekend_and_gone_subscription_and_cleanup(tmp_path: Path) -> None:
     svc3 = ready(tmp_path)
     svc3.post_watch(body(), "x", now=CHECK_AT - timedelta(days=91))
     assert cleanup(svc3, CHECK_AT) == 1 and svc3.watches.watches() == []
+
+
+def test_watch_remembers_local_transport(tmp_path: Path) -> None:
+    seen: list[httpx.URL] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request.url)
+        return httpx.Response(200, json=PLAN)
+
+    svc = ready(tmp_path)
+    svc.transitous._http = httpx.Client(transport=httpx.MockTransport(handler))
+    status, created = svc.post_watch(body(local=True), "1.2.3.4", now=CHECK_AT)
+    assert status == 201 and created["watch"]["local"] is True
+    check_watches(svc, now=CHECK_AT)
+    assert seen and "transitModes" not in seen[0].params  # buses and trams included

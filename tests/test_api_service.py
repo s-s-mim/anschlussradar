@@ -311,3 +311,46 @@ def test_kusto_history_rows_and_failure() -> None:
 
     broken = KustoHistory(boom)
     assert broken.counts(8000105, "1", "2", "sbahn", "long", "07-09").exact_n == 0  # no crash
+
+
+# Kriftel -> Köln Messe/Deutz: S1 + ICE 579 as above, then a tram from Köln Hbf.
+LOCAL_PLAN = {
+    "itineraries": [
+        {
+            **PLAN["itineraries"][0],
+            "endTime": "2026-11-16T08:30:00Z",
+            "legs": [
+                *PLAN["itineraries"][0]["legs"],
+                leg(
+                    "TRAM",
+                    "Köln Hbf",
+                    "Köln Messe/Deutz",
+                    "2026-11-16T08:18:00Z",
+                    "2026-11-16T08:24:00Z",
+                    "2026-11-16T08:18:00Z",
+                    "2026-11-16T08:24:00Z",
+                    displayName="Tram 1",
+                ),
+            ],
+        }
+    ]
+}
+
+
+def test_local_transport_gets_live_check_but_no_score(tmp_path: Path) -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert "transitModes" not in request.url.params  # all modes when rail=false
+        return httpx.Response(200, json=LOCAL_PLAN)
+
+    svc = make_service(tmp_path, stage="early", handler=handler)
+    status, body = svc.get_journeys({"from": "s7", "to": "s5", "rail": "false"}, now=NOW)
+    assert status == 200
+    j = body["journeys"][0]
+    rail, tram = j["transfers"]
+    assert rail["note"] is None and rail["probability"] == pytest.approx(0.8)
+    assert tram["note"] == "not_rail" and tram["probability"] is None
+    # Planned 08:12 to 08:18 is 6 minutes. ICE +1 and the 2-minute minimum leave 3.
+    assert tram["liveStatus"] == "tight" and tram["liveSlackMinutes"] == 3
+    # The score covers the train transfer only, and says so.
+    assert j["reliability"] == pytest.approx(0.8)
+    assert j["reliabilityTrainsOnly"] is True

@@ -10,6 +10,7 @@ const KEYS = {
   recent: "ar.recentRoutes",
   searched: "ar.searched",
   answered: "ar.answered",
+  local: "ar.local",
 } as const;
 
 export interface Route {
@@ -60,6 +61,10 @@ export const store = {
   markAnswered(key: string): void {
     write(KEYS.answered, [key, ...read<string[]>(KEYS.answered, [])].slice(0, 50));
   },
+
+  /** The last choice for "also buses, trams and underground", used as the default. */
+  local: () => read<boolean>(KEYS.local, false),
+  setLocal: (on: boolean) => write(KEYS.local, on),
 
   /** After the first search the start page shows a short link instead of the intro. */
   hasSearched: () => read<boolean>(KEYS.searched, false),

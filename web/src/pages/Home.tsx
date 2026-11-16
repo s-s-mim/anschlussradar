@@ -22,12 +22,13 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
   const [date, setDate] = useState(initial.date ?? now.date);
   const [time, setTime] = useState(initial.time ?? now.time);
   const [arriveBy, setArriveBy] = useState(initial.arriveBy ?? false);
+  const [local, setLocal] = useState(initial.local ?? store.local());
   const [tried, setTried] = useState(false);
   const [saved, setSaved] = useState<Route[]>(store.saved);
   const recent = store.recent().filter((r) => !saved.some((s) => s.from.id === r.from.id && s.to.id === r.to.id));
 
   const go = (f: Station, t2: Station, d = date, h = time, a = arriveBy) =>
-    navigate(`/connections?${toParams({ from: f, to: t2, date: d, time: h, arriveBy: a })}`);
+    navigate(`/connections?${toParams({ from: f, to: t2, date: d, time: h, arriveBy: a, local })}`);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -100,6 +101,18 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
               {t("home.now")}
             </button>
           </div>
+
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={local}
+              onChange={(e) => {
+                setLocal(e.target.checked);
+                store.setLocal(e.target.checked);
+              }}
+            />
+            <span>{t("home.local")}</span>
+          </label>
 
           <button type="submit" className="primary">
             {t("home.search")}

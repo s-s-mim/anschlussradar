@@ -24,6 +24,7 @@ export const tr: Translation = {
     departure: "Kalkış",
     arrival: "Varış",
     now: "Şimdi",
+    local: "Otobüs, tramvay ve metro dahil",
     search: "Bağlantı ara",
     searching: "Aranıyor …",
     pickStation: "Lütfen listeden bir istasyon seçin.",
@@ -61,6 +62,8 @@ export const tr: Translation = {
     unsave: "Kaydedildi",
     reliability: "Güvenilirlik",
     noScoreYet: "henüz değer yok",
+    trainsOnly: "yalnızca tren aktarmaları",
+    liveOnly: "yalnızca canlı kontrol",
     details: "Ayrıntılar",
     hideDetails: "Ayrıntıları gizle",
     track: "Peron {track}",
@@ -75,7 +78,7 @@ export const tr: Translation = {
     buffer: "aktarma için {min} dk",
     chance: "bu tür aktarmalarda başarı",
     notRecorded: "Bu istasyon için henüz veri toplamıyoruz.",
-    notRail: "Otobüs, tramvay ve metro için henüz değer yok.",
+    notRail: "Otobüs, tramvay ve metro için yüzde yok. Yolculuk günü canlı kontrol aktarmanın yetişip yetişmeyeceğini gösterir.",
     cancelled: "Bu aktarmadaki bir tren iptal edildi.",
     learning: "Model yeterli veri topladığında değer görünecek.",
     live: {
@@ -200,7 +203,7 @@ export const tr: Translation = {
         list: [
           "Model hâlâ öğreniyor. İlk haftalarda yalnızca canlı kontrol var.",
           "Aktarma, henüz veri toplamadığımız bir istasyonda. Şu anda bunlar büyük aktarma istasyonlarıdır ve liste büyüyor.",
-          "Yolculuğun bir kısmı otobüs, tramvay veya metro. Bunlar için henüz değer yok.",
+          "Yolculuğun bir kısmı otobüs, tramvay veya metro. Bunlar için veri toplamıyoruz. Yolculuk günü yine de canlı kontrol var; yolculuğun yüzdesi o zaman yalnızca tren aktarmalarını kapsar.",
         ],
       },
       {

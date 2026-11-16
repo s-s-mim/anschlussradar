@@ -11,7 +11,7 @@ export function weekdayNames(lang: string): string[] {
   return Array.from({ length: 7 }, (_, i) => fmt.format(new Date(monday.getTime() + i * 86400000)));
 }
 
-export function WatchPanel({ from, to, departure }: { from: Station; to: Station; departure: string }) {
+export function WatchPanel({ from, to, departure, local }: { from: Station; to: Station; departure: string; local: boolean }) {
   const { t, lang } = useI18n();
   const [open, setOpen] = useState(false);
   const [days, setDays] = useState("12345");
@@ -35,7 +35,7 @@ export function WatchPanel({ from, to, departure }: { from: Station; to: Station
   const save = async () => {
     setState("saving");
     try {
-      await addWatch(from, to, departure, days, lang);
+      await addWatch(from, to, departure, days, lang, local);
       setState("saved");
     } catch (e) {
       setState(e instanceof PushError ? e.reason : "unavailable");

@@ -8,6 +8,8 @@ export interface Search {
   date: string; // yyyy-mm-dd, German time
   time: string; // HH:MM
   arriveBy: boolean;
+  /** Also buses, trams and underground lines, not only trains. */
+  local: boolean;
 }
 
 export const place = (s: Station) => `${s.lat.toFixed(5)},${s.lon.toFixed(5)}`;
@@ -29,6 +31,7 @@ export function toParams(s: Search): string {
     time: s.time,
   });
   if (s.arriveBy) p.set("arrive", "1");
+  if (s.local) p.set("local", "1");
   return p.toString();
 }
 
@@ -43,5 +46,6 @@ export function fromParams(p: URLSearchParams): Partial<Search> {
     date: date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined,
     time: time && /^\d{2}:\d{2}$/.test(time) ? time : undefined,
     arriveBy: p.get("arrive") === "1",
+    local: p.has("local") ? p.get("local") === "1" : undefined,
   };
 }

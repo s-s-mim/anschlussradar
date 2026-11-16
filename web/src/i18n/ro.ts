@@ -24,6 +24,7 @@ export const ro: Translation = {
     departure: "Plecare",
     arrival: "Sosire",
     now: "Acum",
+    local: "Și autobuz, tramvai și metrou",
     search: "Caută legături",
     searching: "Se caută …",
     pickStation: "Alege o gară din listă.",
@@ -62,6 +63,8 @@ export const ro: Translation = {
     unsave: "Salvat",
     reliability: "Fiabilitate",
     noScoreYet: "încă fără scor",
+    trainsOnly: "doar schimbări între trenuri",
+    liveOnly: "doar verificare live",
     details: "Detalii",
     hideDetails: "Ascunde detaliile",
     track: "Linia {track}",
@@ -76,7 +79,7 @@ export const ro: Translation = {
     buffer: "{min} min pentru transfer",
     chance: "dintre aceste transferuri reușesc",
     notRecorded: "Pentru această gară încă nu colectăm date.",
-    notRail: "Pentru autobuz, tramvai și metrou nu există încă scoruri.",
+    notRail: "Pentru autobuze, tramvaie și metrou nu există procent. În ziua călătoriei, verificarea live arată dacă reușești.",
     cancelled: "Un tren din acest transfer este anulat.",
     learning: "Scorul apare când modelul are destule date.",
     live: {
@@ -202,7 +205,7 @@ export const ro: Translation = {
         list: [
           "Modelul încă învață. În primele săptămâni există doar verificarea live.",
           "Transferul are loc într-o gară pentru care încă nu colectăm date. Acum acestea sunt marile gări de transfer, iar lista crește.",
-          "O parte a călătoriei este cu autobuzul, tramvaiul sau metroul. Pentru acestea nu există încă scoruri.",
+          "O parte a călătoriei este cu autobuzul, tramvaiul sau metroul. Pentru acestea nu colectăm date. În ziua călătoriei există totuși verificarea live, iar procentul călătoriei se referă atunci doar la schimbările între trenuri.",
         ],
       },
       {

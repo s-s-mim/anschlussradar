@@ -33,7 +33,7 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
   const [saved, setSaved] = useState(route ? store.isSaved(route) : false);
   const now = berlinNow();
   const s: Search | null = route
-    ? { ...route, date: parsed.date ?? now.date, time: parsed.time ?? now.time, arriveBy: !!parsed.arriveBy }
+    ? { ...route, date: parsed.date ?? now.date, time: parsed.time ?? now.time, arriveBy: !!parsed.arriveBy, local: parsed.local ?? store.local() }
     : null;
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
     setLoading(true);
     setError(null);
     findJourneys(
-      { from: place(s.from), to: place(s.to), time: berlinIso(s.date, s.time), arriveBy: s.arriveBy },
+      { from: place(s.from), to: place(s.to), time: berlinIso(s.date, s.time), arriveBy: s.arriveBy, local: s.local },
       ctrl.signal,
     )
       .then((res) => {
@@ -141,6 +141,7 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
               journey={j}
               from={s.from}
               to={s.to}
+              local={s.local}
               onTip={(tip) => {
                 // Search again from the suggested departure, one minute before it.
                 const at = addMinutes(tip.departureIso!, -1);

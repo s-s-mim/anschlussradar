@@ -23,6 +23,7 @@ export const de = {
     departure: "Abfahrt",
     arrival: "Ankunft",
     now: "Jetzt",
+    local: "Auch Bus, Tram und U-Bahn",
     search: "Verbindungen suchen",
     searching: "Suche läuft …",
     pickStation: "Bitte einen Bahnhof aus der Liste wählen.",
@@ -60,6 +61,8 @@ export const de = {
     unsave: "Gespeichert",
     reliability: "Zuverlässigkeit",
     noScoreYet: "noch kein Wert",
+    trainsOnly: "nur Zugumstiege",
+    liveOnly: "nur Live-Check",
     details: "Details",
     hideDetails: "Details ausblenden",
     track: "Gl. {track}",
@@ -74,7 +77,7 @@ export const de = {
     buffer: "{min} Min. Zeit",
     chance: "dieser Umstiege klappen",
     notRecorded: "Für diesen Bahnhof sammeln wir noch keine Daten.",
-    notRail: "Für Busse, Straßen- und U-Bahnen gibt es noch keinen Wert.",
+    notRail: "Für Busse, Straßen- und U-Bahnen gibt es keinen Prozentwert. Am Reisetag zeigt der Live-Check, ob es passt.",
     cancelled: "Ein Zug dieses Umstiegs fällt aus.",
     learning: "Wert folgt, sobald das Modell genug Daten hat.",
     live: {
@@ -199,7 +202,7 @@ export const de = {
         list: [
           "Das Modell lernt noch. In den ersten Wochen gibt es nur den Live-Check.",
           "Der Umstieg ist an einem Bahnhof, für den wir noch keine Daten sammeln. Im Moment sind das die großen Umsteigebahnhöfe, die Liste wächst.",
-          "Ein Teil der Fahrt ist ein Bus, eine Straßenbahn oder eine U-Bahn. Dafür gibt es noch keine Werte.",
+          "Ein Teil der Fahrt ist ein Bus, eine Straßenbahn oder eine U-Bahn. Dafür sammeln wir keine Daten. Am Reisetag gibt es aber den Live-Check, und der Prozentwert der Fahrt gilt dann nur für die Zugumstiege.",
         ],
       },
       {

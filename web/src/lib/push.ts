@@ -11,6 +11,7 @@ export interface WatchView {
   to: { name: string; place: string };
   departure: string;
   weekdays: string;
+  local: boolean;
 }
 
 export function existingDevice(): string | null {
@@ -83,6 +84,7 @@ export async function addWatch(
   departure: string,
   weekdays: string,
   lang: string,
+  local: boolean,
 ): Promise<WatchView> {
   const sub = await subscription();
   const place = (s: Station) => `${s.lat.toFixed(5)},${s.lon.toFixed(5)}`;
@@ -98,6 +100,7 @@ export async function addWatch(
         departure,
         weekdays,
         lang,
+        local,
       }),
     });
     return res.watch;

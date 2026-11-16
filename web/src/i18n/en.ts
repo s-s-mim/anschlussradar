@@ -23,6 +23,7 @@ export const en: Translation = {
     departure: "Depart",
     arrival: "Arrive",
     now: "Now",
+    local: "Include buses, trams and underground",
     search: "Find connections",
     searching: "Searching …",
     pickStation: "Please pick a station from the list.",
@@ -60,6 +61,8 @@ export const en: Translation = {
     unsave: "Saved",
     reliability: "Reliability",
     noScoreYet: "no score yet",
+    trainsOnly: "train transfers only",
+    liveOnly: "live check only",
     details: "Details",
     hideDetails: "Hide details",
     track: "Pl. {track}",
@@ -74,7 +77,7 @@ export const en: Translation = {
     buffer: "{min} min to change",
     chance: "of these transfers work",
     notRecorded: "We don't collect data for this station yet.",
-    notRail: "No score for buses, trams or underground lines yet.",
+    notRail: "Buses, trams and underground lines get no percentage. On the day of travel the live check shows whether it works out.",
     cancelled: "A train on this transfer is cancelled.",
     learning: "A score appears once the model has enough data.",
     live: {
@@ -199,7 +202,7 @@ export const en: Translation = {
         list: [
           "The model is still learning. During the first weeks there is only the live check.",
           "The transfer is at a station we don't collect data for yet. Right now these are the large transfer stations, and the list is growing.",
-          "Part of the trip is a bus, tram or underground line. There are no scores for those yet.",
+          "Part of the trip is a bus, tram or underground line. We don't collect data for those. On the day of travel you still get the live check, and the trip's percentage then covers the train transfers only.",
         ],
       },
       {
