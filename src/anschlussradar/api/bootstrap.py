@@ -12,6 +12,7 @@ from .contact import AcsEmailSender, EmailSender
 from .feedback import BlobFeedbackStore, FeedbackStore
 from .history import KustoHistory, kusto_query
 from .journeys import HistoryProvider, NoHistory
+from .messages import KustoMessages, MessageProvider, NoMessages
 from .service import ApiService
 from .settings import ApiSettings
 from .stations import HubMatcher, StationIndex
@@ -38,16 +39,17 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         log.exception("could not load the station list")
 
     history: HistoryProvider = NoHistory()
+    messages: MessageProvider = NoMessages()
     if settings.kusto_query_uri:
-        history = KustoHistory(
-            kusto_query(
-                settings.kusto_query_uri,
-                settings.kusto_database,
-                settings.kusto_app_id,
-                settings.kusto_app_secret,
-                settings.kusto_tenant_id,
-            )
+        kusto = (
+            settings.kusto_query_uri,
+            settings.kusto_database,
+            settings.kusto_app_id,
+            settings.kusto_app_secret,
+            settings.kusto_tenant_id,
         )
+        history = KustoHistory(kusto_query(*kusto))
+        messages = KustoMessages(kusto_query(*kusto, query="RecentTrainMessages(12h)"))
 
     email: EmailSender | None = None
     if (
@@ -79,4 +81,5 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         history=history,
         email=email,
         feedback=feedback,
+        messages=messages,
     )

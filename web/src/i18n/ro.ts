@@ -67,6 +67,7 @@ export const ro: Translation = {
     trackChanged: "Schimbare de linie: acum linia {track}",
     cancelled: "anulat",
     towards: "Direcția {headsign}",
+    reason: "Motiv: {text}",
     attribution: "Date despre legături: Transitous",
   },
   transfer: {

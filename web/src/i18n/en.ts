@@ -65,6 +65,7 @@ export const en: Translation = {
     trackChanged: "Platform change: now pl. {track}",
     cancelled: "cancelled",
     towards: "to {headsign}",
+    reason: "Reason: {text}",
     attribution: "Journey data: Transitous",
   },
   transfer: {

@@ -1,0 +1,21 @@
+// Delay reasons and quality notes per train and station, for the web app.
+// The API loads the result every 2 minutes (one query for all hubs) and keeps it in
+// memory; searches never query Data Explorer directly.
+//
+// type d = delay reason, q/f = quality note (missing coach, no Wi-Fi, ...).
+// The codes are DB's fixed reason codes; the texts live in the app, in every language.
+
+.create-or-alter function with (folder = "api", docstring = "Current reason codes per train and stop")
+RecentTrainMessages(lookback: timespan) {
+    let planned = PlannedLatest
+        | where coalesce(dep_pt, arr_pt) > ago(lookback)
+        | project stop_id, train_number = number, arr_pt, dep_pt;
+    StopLatest
+    | where observed_at > ago(lookback) and array_length(messages) > 0
+    | project stop_id, eva, messages
+    | join kind=inner planned on stop_id
+    | mv-expand m = messages
+    | extend msg_type = tostring(m.type), code = toint(m.code), sent_at = todatetime(m.timestamp)
+    | where msg_type in ("d", "q", "f") and isnotnull(code)
+    | summarize sent_at = max(sent_at) by eva, train_number, msg_type, code
+}

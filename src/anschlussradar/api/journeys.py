@@ -26,6 +26,7 @@ from ..ml.features import (
 )
 from ..ml.serving import LoadedModel, live_check, score_transfer
 from ..ml.stages import Stage
+from .messages import MessageProvider, TrainMessage
 from .stations import HubMatcher
 
 NON_TRANSIT_MODES = {
@@ -92,6 +93,7 @@ class Leg:
     arr_track_planned: str | None
     real_time: bool
     cancelled: bool
+    messages: list[TrainMessage] = field(default_factory=list)
 
     @classmethod
     def from_motis(cls, leg: dict[str, Any]) -> Leg:
@@ -155,6 +157,7 @@ class Leg:
             "arrivalTrackPlanned": self.arr_track_planned,
             "realTime": self.real_time,
             "cancelled": self.cancelled,
+            "messages": [m.to_dict() for m in self.messages],
         }
 
 
@@ -240,6 +243,7 @@ def build_journeys(
     hubs: HubMatcher,
     history: HistoryProvider,
     today: datetime,
+    messages: MessageProvider | None = None,
 ) -> list[Journey]:
     out: list[Journey] = []
     for it in [*plan.get("direct", []), *plan.get("itineraries", [])]:
@@ -255,8 +259,26 @@ def build_journeys(
         )
         for arriving, departing in zip(transit, transit[1:], strict=False):
             journey.transfers.append(_score(arriving, departing, model, hubs, history, today))
+        if messages is not None:
+            for leg in transit:
+                leg.messages = _leg_messages(leg, hubs, messages)
         out.append(journey)
     return out
+
+
+def _leg_messages(leg: Leg, hubs: HubMatcher, messages: MessageProvider) -> list[TrainMessage]:
+    """Reasons and notes for this train at the recorded hubs where it starts or ends."""
+    if not leg.number:
+        return []
+    found: dict[tuple[int, str], TrainMessage] = {}
+    for name in (leg.from_name, leg.to_name):
+        hub = hubs.match(name)
+        if hub is None:
+            continue
+        for m in messages.for_stop(hub.eva, leg.number):
+            found.setdefault((m.code, m.kind), m)
+    # Delay reason first, then quality notes.
+    return sorted(found.values(), key=lambda m: m.kind != "delay")
 
 
 def _score(

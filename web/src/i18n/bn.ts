@@ -66,6 +66,7 @@ export const bn: Translation = {
     trackChanged: "প্ল্যাটফর্ম বদল: এখন প্ল্যাটফর্ম {track}",
     cancelled: "বাতিল",
     towards: "{headsign} অভিমুখে",
+    reason: "কারণ: {text}",
     attribution: "সংযোগের তথ্য: Transitous",
   },
   transfer: {

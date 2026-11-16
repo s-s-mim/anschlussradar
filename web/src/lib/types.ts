@@ -31,6 +31,8 @@ export interface Leg {
   arrivalTrackPlanned: string | null;
   realTime: boolean;
   cancelled: boolean;
+  /** DB reason codes at recorded hubs: why the train is late, what is missing on board. */
+  messages: { code: number; kind: "delay" | "quality" }[];
 }
 
 export interface Transfer {

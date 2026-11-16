@@ -71,6 +71,7 @@ export const ar: Translation = {
     trackChanged: "تغيير الرصيف: الآن رصيف {track}",
     cancelled: "ملغى",
     towards: "باتجاه {headsign}",
+    reason: "السبب: {text}",
     attribution: "بيانات الرحلات: Transitous",
   },
   transfer: {

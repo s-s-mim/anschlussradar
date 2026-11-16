@@ -68,6 +68,7 @@ export const pl: Translation = {
     trackChanged: "Zmiana toru: teraz tor {track}",
     cancelled: "odwołany",
     towards: "Kierunek: {headsign}",
+    reason: "Powód: {text}",
     attribution: "Dane połączeń: Transitous",
   },
   transfer: {

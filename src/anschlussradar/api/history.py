@@ -22,9 +22,14 @@ Rows = list[dict[str, Any]]
 
 
 def kusto_query(
-    query_uri: str, database: str, app_id: str, app_secret: str, tenant_id: str
+    query_uri: str,
+    database: str,
+    app_id: str,
+    app_secret: str,
+    tenant_id: str,
+    query: str = "TransferHistory(now())",
 ) -> Callable[[], Rows]:
-    """Return a function that runs TransferHistory(now()) and gives the rows as dicts."""
+    """Return a function that runs one fixed query and gives the rows as dicts."""
 
     def run() -> Rows:
         from azure.kusto.data import KustoClient, KustoConnectionStringBuilder
@@ -35,9 +40,7 @@ def kusto_query(
             )
         else:
             kcsb = KustoConnectionStringBuilder.with_az_cli_authentication(query_uri)
-        table = (
-            KustoClient(kcsb).execute_query(database, "TransferHistory(now())").primary_results[0]
-        )
+        table = KustoClient(kcsb).execute_query(database, query).primary_results[0]
         cols = [c.column_name for c in table.columns]
         return [dict(zip(cols, row, strict=True)) for row in table]
 

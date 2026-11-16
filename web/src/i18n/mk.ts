@@ -66,6 +66,7 @@ export const mk: Translation = {
     trackChanged: "Промена на колосек: сега колосек {track}",
     cancelled: "откажан",
     towards: "Правец {headsign}",
+    reason: "Причина: {text}",
     attribution: "Податоци за врските: Transitous",
   },
   transfer: {

@@ -1181,3 +1181,31 @@ mark {
   direction: ltr;
   unicode-bidi: isolate;
 }
+
+/* Why a train is late, and what is missing on board (DB reason codes). */
+.leg-notes {
+  margin: -4px 0 8px;
+  font-size: 0.875rem;
+}
+
+.leg-notes .reason {
+  margin: 0 0 4px;
+  color: var(--risk);
+  font-weight: 600;
+}
+
+.leg-notes .quality {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.leg-notes .quality li {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 2px 6px;
+  color: var(--muted);
+}

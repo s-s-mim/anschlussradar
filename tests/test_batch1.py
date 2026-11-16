@@ -173,3 +173,107 @@ def test_add_hubs_search_terms_and_levels() -> None:
     assert mod.search_terms("Köln/Bonn Flughafen") == ["Köln/Bonn Flughafen", "Köln"]
     assert mod.search_terms("Gießen") == ["Gießen"]
     assert mod.rail_levels((113181, 8098013, 781966)) == (8098013,)
+
+
+# train messages -------------------------------------------------------------------
+
+
+def test_messages_keep_newest_delay_and_apply_clearing_codes() -> None:
+    from anschlussradar.api.messages import summarize
+
+    rows = [
+        {
+            "eva": 8000105,
+            "train_number": "579",
+            "msg_type": "d",
+            "code": 43,
+            "sent_at": "2026-11-16T07:00:00Z",
+        },
+        {
+            "eva": 8000105,
+            "train_number": "579",
+            "msg_type": "d",
+            "code": 31,
+            "sent_at": "2026-11-16T07:10:00Z",
+        },
+        {
+            "eva": 8000105,
+            "train_number": "579",
+            "msg_type": "q",
+            "code": 85,
+            "sent_at": "2026-11-16T06:00:00Z",
+        },
+        {
+            "eva": 8000105,
+            "train_number": "579",
+            "msg_type": "q",
+            "code": 80,
+            "sent_at": "2026-11-16T06:05:00Z",
+        },
+        {
+            "eva": 8000105,
+            "train_number": "579",
+            "msg_type": "q",
+            "code": 84,
+            "sent_at": "2026-11-16T06:30:00Z",
+        },
+        {
+            "eva": 8000105,
+            "train_number": "1027",
+            "msg_type": "q",
+            "code": 70,
+            "sent_at": "2026-11-16T05:00:00Z",
+        },
+        {
+            "eva": 8000105,
+            "train_number": "1027",
+            "msg_type": "q",
+            "code": 88,
+            "sent_at": "2026-11-16T05:30:00Z",
+        },
+        {
+            "eva": 8000105,
+            "train_number": "9",
+            "msg_type": "d",
+            "code": 900,
+            "sent_at": "2026-11-16T05:30:00Z",
+        },
+    ]
+    out = summarize(rows)
+    assert [(m.code, m.kind) for m in out[(8000105, "579")]] == [(31, "delay"), (85, "quality")]
+    assert (8000105, "1027") not in out  # 88 cleared the Wi-Fi note
+    assert (8000105, "9") not in out  # unknown code
+
+
+def test_journey_legs_carry_messages(tmp_path: Path) -> None:
+    from anschlussradar.api.messages import TrainMessage
+
+    class Fixed:
+        def for_stop(self, eva: int, number: str) -> list[TrainMessage]:
+            return [TrainMessage(31, "delay")] if (eva, number) == (8000105, "579") else []
+
+    svc = make_service(tmp_path)
+    svc.messages = Fixed()
+    _, body = svc.get_journeys(
+        {"from": "s7", "to": "s5"}, now=datetime(2026, 11, 16, 6, 30, tzinfo=UTC)
+    )
+    legs = [leg for j in body["journeys"] for leg in j["legs"] if leg["number"] == "579"]
+    assert legs and legs[0]["messages"] == [{"code": 31, "kind": "delay"}]
+
+
+def test_message_texts_cover_every_code_and_translation_check() -> None:
+    import pytest
+
+    texts = ROOT / "web" / "src" / "i18n" / "messages"
+    de = json.loads((texts / "de.json").read_text(encoding="utf-8"))
+    en = json.loads((texts / "en.json").read_text(encoding="utf-8"))
+    assert sorted(map(int, de)) == sorted(map(int, en)) == list(range(1, 100))
+    assert de["31"] == "Bauarbeiten" and en["31"] == "Engineering work"
+
+    spec = importlib.util.spec_from_file_location("tm", ROOT / "scripts" / "translate_messages.py")
+    assert spec and spec.loader
+    tm = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tm)
+    assert tm.check({"2": " b ", "1": "a"}, {"1": "x", "2": "y"}) == {"1": "a", "2": "b"}
+    with pytest.raises(ValueError):
+        tm.check({"1": "a", "2": ""}, {"1": "x", "2": "y"})

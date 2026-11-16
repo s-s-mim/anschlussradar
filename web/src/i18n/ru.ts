@@ -68,6 +68,7 @@ export const ru: Translation = {
     trackChanged: "Смена пути: теперь путь {track}",
     cancelled: "отменён",
     towards: "Направление: {headsign}",
+    reason: "Причина: {text}",
     attribution: "Данные о маршрутах: Transitous",
   },
   transfer: {

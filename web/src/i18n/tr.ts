@@ -66,6 +66,7 @@ export const tr: Translation = {
     trackChanged: "Peron değişti: şimdi peron {track}",
     cancelled: "iptal",
     towards: "Yön: {headsign}",
+    reason: "Neden: {text}",
     attribution: "Bağlantı verileri: Transitous",
   },
   transfer: {

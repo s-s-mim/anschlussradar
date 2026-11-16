@@ -65,6 +65,7 @@ export const de = {
     trackChanged: "Gleiswechsel: jetzt Gl. {track}",
     cancelled: "fällt aus",
     towards: "Richtung {headsign}",
+    reason: "Grund: {text}",
     attribution: "Verbindungsdaten: Transitous",
   },
   transfer: {

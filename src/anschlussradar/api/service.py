@@ -23,6 +23,7 @@ from .feedback import MAX_PER_HOUR as FEEDBACK_PER_HOUR
 from .feedback import FeedbackError, FeedbackStore, TransferFeedback
 from .feedback import validate as validate_feedback
 from .journeys import HistoryProvider, build_journeys, sort_journeys
+from .messages import MessageProvider, NoMessages
 from .stations import HubMatcher, StationIndex
 from .transitous import TransitousClient, TransitousError
 
@@ -44,6 +45,7 @@ class ApiService:
     history: HistoryProvider
     email: EmailSender | None = None
     feedback: FeedbackStore | None = None
+    messages: MessageProvider = field(default_factory=NoMessages)
     contact_limiter: RateLimiter = field(default_factory=RateLimiter)
     feedback_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(FEEDBACK_PER_HOUR))
     started_at: float = field(default_factory=time.time)
@@ -102,7 +104,7 @@ class ApiService:
             )
 
         model = self.models.get()
-        journeys = build_journeys(plan, model, self.hubs, self.history, now)
+        journeys = build_journeys(plan, model, self.hubs, self.history, now, self.messages)
         return 200, {
             "stage": model.stage.value,
             "showBanner": model.stage.value != "full",

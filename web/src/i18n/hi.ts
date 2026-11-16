@@ -66,6 +66,7 @@ export const hi: Translation = {
     trackChanged: "प्लेटफ़ॉर्म बदला: अब प्लेटफ़ॉर्म {track}",
     cancelled: "रद्द",
     towards: "{headsign} की ओर",
+    reason: "कारण: {text}",
     attribution: "कनेक्शन डेटा: Transitous",
   },
   transfer: {

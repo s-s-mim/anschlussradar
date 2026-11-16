@@ -2,6 +2,7 @@ import { useState } from "react";
 import { sendFeedback } from "../lib/api";
 import { store } from "../lib/storage";
 import { useI18n } from "../i18n";
+import { messageText } from "../i18n/messages";
 import type { T } from "../i18n";
 import { duration, hhmm } from "../lib/time";
 import { pct, probabilityTone, transferTone } from "../lib/tone";
@@ -123,6 +124,28 @@ function TransferNode({ tr, legIn, legOut }: { tr: Transfer; legIn: Leg; legOut:
   );
 }
 
+function LegNotes({ leg }: { leg: Leg }) {
+  const { t, lang } = useI18n();
+  const notes = (leg.messages ?? [])
+    .map((m) => ({ ...m, text: messageText(lang, m.code) }))
+    .filter((m): m is typeof m & { text: string } => m.text !== null);
+  if (!notes.length) return null;
+  const delay = notes.find((m) => m.kind === "delay");
+  const quality = notes.filter((m) => m.kind === "quality");
+  return (
+    <div className="leg-notes">
+      {delay && <p className="reason">{t("results.reason", { text: delay.text })}</p>}
+      {quality.length > 0 && (
+        <ul className="quality">
+          {quality.map((m) => (
+            <li key={m.code}>{m.text}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function LegRow({ leg }: { leg: Leg }) {
   const { t } = useI18n();
   return (
@@ -138,6 +161,7 @@ function LegRow({ leg }: { leg: Leg }) {
         {leg.headsign && <span className="muted small">{t("results.towards", { headsign: leg.headsign })}</span>}
         {leg.cancelled && <span className="cancel-flag">{t("results.cancelled")}</span>}
       </div>
+      <LegNotes leg={leg} />
       <div className="leg-stop">
         <time>{hhmm(leg.arrivalPlanned)}</time>
         <Delay min={leg.arrivalDelay} />

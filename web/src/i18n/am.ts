@@ -66,6 +66,7 @@ export const am: Translation = {
     trackChanged: "መድረክ ተቀይሯል፡ አሁን መድረክ {track}",
     cancelled: "ተሰርዟል",
     towards: "ወደ {headsign}",
+    reason: "ምክንያት፡ {text}",
     attribution: "የጉዞ መረጃ፡ Transitous",
   },
   transfer: {

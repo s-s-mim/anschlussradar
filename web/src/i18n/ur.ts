@@ -66,6 +66,7 @@ export const ur: Translation = {
     trackChanged: "پلیٹ فارم بدل گیا: اب پلیٹ فارم {track}",
     cancelled: "منسوخ",
     towards: "بطرف {headsign}",
+    reason: "وجہ: {text}",
     attribution: "کنکشن کا ڈیٹا: Transitous",
   },
   transfer: {

@@ -68,6 +68,7 @@ export const uk: Translation = {
     trackChanged: "Зміна колії: тепер колія {track}",
     cancelled: "скасовано",
     towards: "Напрямок: {headsign}",
+    reason: "Причина: {text}",
     attribution: "Дані про сполучення: Transitous",
   },
   transfer: {
