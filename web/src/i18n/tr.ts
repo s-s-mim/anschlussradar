@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const tr: Translation = {
   nav: {
     search: "Arama",
+    stations: "İstasyonlar",
     help: "Yardım",
     about: "Hakkında",
     contact: "İletişim",
@@ -126,6 +127,19 @@ export const tr: Translation = {
   notFound: {
     title: "Bu sayfa mevcut değil.",
     back: "Aramaya dön",
+  },
+  board: {
+    title: "Kalkışlar",
+    window: "Önümüzdeki 90 dakika",
+    none: "Önümüzdeki 90 dakikada buradan tren kalkmıyor.",
+    hourly: "Saate göre dakiklik",
+    hourlyLead: "6 dakikadan az gecikmeli kalkışların oranı, kayıt başladığından beri.",
+    hubsTitle: "Kaydedilen istasyonlar",
+    hubsLead: "AnschlussRadar bu istasyonlardaki her kalkışı kaydeder. Kalkışları ve dakikliği görmek için bir istasyona dokunun.",
+    unknown: "Bu istasyon için kalkış tablosu yok.",
+    unavailable: "Kalkışlar şu anda kullanılamıyor.",
+    bar: "{hour}:00: {count} kalkışın %{pct}'i zamanında",
+    noData: "yeterli veri yok",
   },
   about: {
     notTitle: "AnschlussRadar'ın yapmadıkları",

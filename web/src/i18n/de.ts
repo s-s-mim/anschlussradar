@@ -3,6 +3,7 @@
 export const de = {
   nav: {
     search: "Suche",
+    stations: "Bahnhöfe",
     help: "Hilfe",
     about: "Über",
     contact: "Kontakt",
@@ -125,6 +126,19 @@ export const de = {
   notFound: {
     title: "Diese Seite gibt es nicht.",
     back: "Zur Suche",
+  },
+  board: {
+    title: "Abfahrten",
+    window: "Die nächsten 90 Minuten",
+    none: "In den nächsten 90 Minuten fährt hier kein Zug ab.",
+    hourly: "Pünktlichkeit nach Uhrzeit",
+    hourlyLead: "Anteil der Abfahrten mit weniger als 6 Minuten Verspätung, seit Beginn der Aufzeichnung.",
+    hubsTitle: "Bahnhöfe mit Aufzeichnung",
+    hubsLead: "An diesen Bahnhöfen zeichnet AnschlussRadar jede Abfahrt auf. Tippe auf einen Bahnhof für seine Abfahrten und Pünktlichkeit.",
+    unknown: "Für diesen Bahnhof gibt es keine Abfahrtstafel.",
+    unavailable: "Die Abfahrten sind gerade nicht verfügbar.",
+    bar: "{hour} Uhr: {pct} % pünktlich aus {count} Abfahrten",
+    noData: "zu wenig Daten",
   },
   about: {
     notTitle: "Was AnschlussRadar nicht tut",

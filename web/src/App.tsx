@@ -13,8 +13,11 @@ import { Home } from "./pages/Home";
 import { Impressum, Privacy } from "./pages/Legal";
 import { NotFound } from "./pages/NotFound";
 import { Results } from "./pages/Results";
+import { Station } from "./pages/Station";
+import { Stations } from "./pages/Stations";
 
 const TITLES: Record<string, string> = {
+  "/stations": "nav.stations",
   "/help": "nav.help",
   "/about": "nav.about",
   "/contact": "nav.contact",
@@ -50,6 +53,12 @@ export function App() {
       break;
     case "/connections":
       page = <Results search={search} onStage={setStage} />;
+      break;
+    case "/stations":
+      page = <Stations />;
+      break;
+    case "/station":
+      page = <Station search={search} />;
       break;
     case "/help":
       page = <Help />;

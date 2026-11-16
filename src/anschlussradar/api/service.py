@@ -3,6 +3,8 @@
 GET  /api/v1/stations?q=frankfurt
 GET  /api/v1/journeys?from=<id or lat,lon>&to=...&time=<ISO>&arriveBy=false&sort=fastest|reliable&rail=true
 GET  /api/v1/model/status
+GET  /api/v1/hubs                      recorded stations
+GET  /api/v1/hubs/{eva}/board          next departures and punctuality by hour
 POST /api/v1/feedback   'Hat's geklappt?' after a transfer
 POST /api/v1/contact    (unused by the web app for now)
 GET  /api/v1/health
@@ -18,6 +20,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 from ..ml.serving import ModelHolder, model_status
+from .board import StationBoards
 from .contact import ContactError, EmailSender, RateLimiter, validate
 from .feedback import MAX_PER_HOUR as FEEDBACK_PER_HOUR
 from .feedback import FeedbackError, FeedbackStore, TransferFeedback
@@ -46,6 +49,7 @@ class ApiService:
     email: EmailSender | None = None
     feedback: FeedbackStore | None = None
     messages: MessageProvider = field(default_factory=NoMessages)
+    boards: StationBoards | None = None
     contact_limiter: RateLimiter = field(default_factory=RateLimiter)
     feedback_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(FEEDBACK_PER_HOUR))
     started_at: float = field(default_factory=time.time)
@@ -128,6 +132,31 @@ class ApiService:
             "transitousCacheHitsToday": usage.cache_hits,
             "uptimeSeconds": round(time.time() - self.started_at),
         }
+
+    def get_hubs(self) -> Response:
+        groups = sorted(self.hubs.groups().items(), key=lambda g: g[1][0].name)
+        items = [{"eva": g, "name": main.name, "state": main.state} for g, (main, _) in groups]
+        return 200, {"stations": items}
+
+    def get_station_board(self, eva: Any, now: datetime | None = None) -> Response:
+        try:
+            group_eva = int(str(eva))
+        except ValueError:
+            return error(400, "bad_station", "The station must be a number.")
+        group = self.hubs.groups().get(group_eva)
+        if group is None:
+            return error(404, "not_recorded", "AnschlussRadar does not record this station.")
+        main, evas = group
+        body: dict[str, Any] = {"eva": group_eva, "name": main.name, "departures": [], "hourly": []}
+        if self.boards is None:
+            return 200, {**body, "available": False}
+        try:
+            body["departures"] = self.boards.board(group_eva, evas, now or datetime.now(UTC))
+            body["hourly"] = self.boards.hourly(group_eva, evas)
+        except Exception:
+            log.exception("station board failed for %s", group_eva)
+            return error(502, "board_unavailable", "Departures are not available right now.")
+        return 200, {**body, "available": True}
 
     def post_feedback(self, body: Any, client: str, now: datetime | None = None) -> Response:
         if self.feedback is None:

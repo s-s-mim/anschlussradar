@@ -142,6 +142,16 @@ class HubMatcher:
         self.hubs = [(normalize(h.name), h) for h in hubs]
         self.exact = {norm: h for norm, h in self.hubs}
 
+    def groups(self) -> dict[int, tuple[Hub, list[int]]]:
+        """Station groups: group EVA -> (the main hub, every EVA of the group)."""
+        out: dict[int, tuple[Hub, list[int]]] = {}
+        for _, h in self.hubs:
+            main, evas = out.get(h.group_eva, (h, []))
+            if h.eva == h.group_eva:
+                main = h
+            out[h.group_eva] = (main, [*evas, h.eva])
+        return out
+
     def match(self, stop_name: str | None) -> HubMatch | None:
         if not stop_name:
             return None

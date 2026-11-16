@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const am: Translation = {
   nav: {
     search: "ፈልግ",
+    stations: "ጣቢያዎች",
     help: "እገዛ",
     about: "ስለ መተግበሪያው",
     contact: "አግኙን",
@@ -126,6 +127,19 @@ export const am: Translation = {
   notFound: {
     title: "ይህ ገጽ የለም።",
     back: "ወደ ፍለጋ ተመለስ",
+  },
+  board: {
+    title: "መነሻዎች",
+    window: "የሚቀጥሉት 90 ደቂቃዎች",
+    none: "በሚቀጥሉት 90 ደቂቃዎች ከዚህ የሚነሳ ባቡር የለም።",
+    hourly: "በሰዓት ሰዓት አክባሪነት",
+    hourlyLead: "ቀረጻው ከተጀመረ ጀምሮ ከ6 ደቂቃ ባነሰ የዘገዩ መነሻዎች ድርሻ።",
+    hubsTitle: "የሚመዘገቡ ጣቢያዎች",
+    hubsLead: "በእነዚህ ጣቢያዎች AnschlussRadar እያንዳንዱን መነሻ ይመዘግባል። መነሻዎችንና ሰዓት አክባሪነትን ለማየት ጣቢያ ይንኩ።",
+    unknown: "ለዚህ ጣቢያ የመነሻ ሰሌዳ የለም።",
+    unavailable: "መነሻዎቹ አሁን አይገኙም።",
+    bar: "{hour}:00፡ ከ{count} መነሻዎች {pct} % በሰዓቱ",
+    noData: "በቂ መረጃ የለም",
   },
   about: {
     notTitle: "AnschlussRadar የማያደርገው",

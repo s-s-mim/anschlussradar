@@ -3,6 +3,7 @@ import { sendFeedback } from "../lib/api";
 import { store } from "../lib/storage";
 import { useI18n } from "../i18n";
 import { messageText } from "../i18n/messages";
+import { Link } from "../lib/router";
 import type { T } from "../i18n";
 import { duration, hhmm } from "../lib/time";
 import { pct, probabilityTone, transferTone } from "../lib/tone";
@@ -124,6 +125,15 @@ function TransferNode({ tr, legIn, legOut }: { tr: Transfer; legIn: Leg; legOut:
   );
 }
 
+function StopName({ name, hub }: { name: string | null; hub: number | null }) {
+  if (!hub) return <span className="stop-name">{name}</span>;
+  return (
+    <Link className="stop-name" href={`/station?eva=${hub}`}>
+      {name}
+    </Link>
+  );
+}
+
 function LegNotes({ leg }: { leg: Leg }) {
   const { t, lang } = useI18n();
   const notes = (leg.messages ?? [])
@@ -153,7 +163,7 @@ function LegRow({ leg }: { leg: Leg }) {
       <div className="leg-stop">
         <time>{hhmm(leg.departurePlanned)}</time>
         <Delay min={leg.departureDelay} />
-        <span className="stop-name">{leg.from}</span>
+        <StopName name={leg.from} hub={leg.fromHub} />
         <Track actual={leg.departureTrack} planned={leg.departureTrackPlanned} />
       </div>
       <div className="leg-ride">
@@ -165,7 +175,7 @@ function LegRow({ leg }: { leg: Leg }) {
       <div className="leg-stop">
         <time>{hhmm(leg.arrivalPlanned)}</time>
         <Delay min={leg.arrivalDelay} />
-        <span className="stop-name">{leg.to}</span>
+        <StopName name={leg.to} hub={leg.toHub} />
         <Track actual={leg.arrivalTrack} planned={leg.arrivalTrackPlanned} />
       </div>
     </li>

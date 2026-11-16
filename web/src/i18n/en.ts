@@ -3,6 +3,7 @@ import type { Translation } from "./de";
 export const en: Translation = {
   nav: {
     search: "Search",
+    stations: "Stations",
     help: "Help",
     about: "About",
     contact: "Contact",
@@ -125,6 +126,19 @@ export const en: Translation = {
   notFound: {
     title: "This page doesn't exist.",
     back: "Go to search",
+  },
+  board: {
+    title: "Departures",
+    window: "Next 90 minutes",
+    none: "No trains leave here in the next 90 minutes.",
+    hourly: "Punctuality by time of day",
+    hourlyLead: "Share of departures less than 6 minutes late, since recording began.",
+    hubsTitle: "Recorded stations",
+    hubsLead: "AnschlussRadar records every departure at these stations. Tap a station to see its departures and punctuality.",
+    unknown: "There is no departure board for this station.",
+    unavailable: "Departures are not available right now.",
+    bar: "{hour}:00: {pct}% on time out of {count} departures",
+    noData: "not enough data",
   },
   about: {
     notTitle: "What AnschlussRadar doesn't do",

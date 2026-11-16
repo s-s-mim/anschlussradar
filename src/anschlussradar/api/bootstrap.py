@@ -8,9 +8,10 @@ from pathlib import Path
 from ..ingest.hubs import load_hubs
 from ..ml.registry import HttpReadStore, LocalStore, ModelRegistry
 from ..ml.serving import ModelHolder
+from .board import StationBoards
 from .contact import AcsEmailSender, EmailSender
 from .feedback import BlobFeedbackStore, FeedbackStore
-from .history import KustoHistory, kusto_query
+from .history import KustoHistory, kusto_query, kusto_runner
 from .journeys import HistoryProvider, NoHistory
 from .messages import KustoMessages, MessageProvider, NoMessages
 from .service import ApiService
@@ -40,6 +41,7 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
 
     history: HistoryProvider = NoHistory()
     messages: MessageProvider = NoMessages()
+    boards: StationBoards | None = None
     if settings.kusto_query_uri:
         kusto = (
             settings.kusto_query_uri,
@@ -50,6 +52,7 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         )
         history = KustoHistory(kusto_query(*kusto))
         messages = KustoMessages(kusto_query(*kusto, query="RecentTrainMessages(12h)"))
+        boards = StationBoards(kusto_runner(*kusto))
 
     email: EmailSender | None = None
     if (
@@ -82,4 +85,5 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         email=email,
         feedback=feedback,
         messages=messages,
+        boards=boards,
     )

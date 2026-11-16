@@ -1209,3 +1209,109 @@ mark {
   padding: 2px 6px;
   color: var(--muted);
 }
+
+/* stations list and station page */
+.hub-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  columns: 2 14rem;
+  column-gap: 24px;
+}
+
+.hub-list li {
+  break-inside: avoid;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+a.stop-name {
+  color: var(--ink);
+  text-decoration-color: var(--petrol);
+}
+
+.departures {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.dep {
+  display: grid;
+  grid-template-columns: 4.2rem 1fr auto;
+  gap: 4px 10px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.dep.cancelled .dep-main,
+.dep.cancelled time {
+  text-decoration: line-through;
+  text-decoration-color: var(--bad);
+}
+
+.dep-time {
+  display: flex;
+  gap: 4px;
+  align-items: baseline;
+  font: 600 1rem/1.3 var(--display);
+}
+
+.dep-main {
+  min-width: 0;
+}
+
+.dep-dest {
+  font-weight: 600;
+}
+
+.dep-reason {
+  display: block;
+  color: var(--risk);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.hourly {
+  margin: 12px 0 0;
+}
+
+.bars {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 20px;
+  height: 160px;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 3px;
+  align-items: end;
+  border-bottom: 1px solid var(--line);
+}
+
+.bars li {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: var(--tone);
+}
+
+.bar.empty {
+  background: var(--line);
+}
+
+.tick {
+  position: absolute;
+  bottom: -20px;
+  inset-inline-start: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}

@@ -5,6 +5,7 @@ import type { Translation } from "./de";
 export const ar: Translation = {
   nav: {
     search: "البحث",
+    stations: "المحطات",
     help: "مساعدة",
     about: "حول التطبيق",
     contact: "تواصل",
@@ -134,6 +135,19 @@ export const ar: Translation = {
   notFound: {
     title: "هذه الصفحة غير موجودة.",
     back: "إلى البحث",
+  },
+  board: {
+    title: "المغادرات",
+    window: "الدقائق التسعون القادمة",
+    none: "لا يغادر أي قطار من هنا خلال الدقائق التسعين القادمة.",
+    hourly: "الالتزام بالمواعيد حسب الساعة",
+    hourlyLead: "نسبة المغادرات بتأخير أقل من 6 دقائق منذ بدء التسجيل.",
+    hubsTitle: "المحطات المسجّلة",
+    hubsLead: "في هذه المحطات يسجّل AnschlussRadar كل مغادرة. اضغط على محطة لرؤية مغادراتها والتزامها بالمواعيد.",
+    unknown: "لا توجد لوحة مغادرة لهذه المحطة.",
+    unavailable: "المغادرات غير متاحة حاليًا.",
+    bar: "الساعة {hour}:00: {pct} % في الموعد من {count} مغادرة",
+    noData: "بيانات غير كافية",
   },
   about: {
     notTitle: "ما لا يفعله AnschlussRadar",

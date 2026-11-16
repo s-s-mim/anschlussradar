@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const ur: Translation = {
   nav: {
     search: "تلاش",
+    stations: "اسٹیشن",
     help: "مدد",
     about: "تعارف",
     contact: "رابطہ",
@@ -126,6 +127,19 @@ export const ur: Translation = {
   notFound: {
     title: "یہ صفحہ موجود نہیں۔",
     back: "تلاش پر واپس جائیں",
+  },
+  board: {
+    title: "روانگیاں",
+    window: "اگلے 90 منٹ",
+    none: "اگلے 90 منٹ میں یہاں سے کوئی ٹرین روانہ نہیں ہوتی۔",
+    hourly: "وقت کے لحاظ سے پابندیٔ وقت",
+    hourlyLead: "ریکارڈنگ شروع ہونے سے اب تک 6 منٹ سے کم تاخیر والی روانگیوں کا تناسب۔",
+    hubsTitle: "ریکارڈ شدہ اسٹیشن",
+    hubsLead: "ان اسٹیشنوں پر AnschlussRadar ہر روانگی ریکارڈ کرتا ہے۔ روانگیاں اور پابندیٔ وقت دیکھنے کے لیے کسی اسٹیشن پر ٹیپ کریں۔",
+    unknown: "اس اسٹیشن کے لیے روانگی بورڈ نہیں ہے۔",
+    unavailable: "روانگیاں ابھی دستیاب نہیں۔",
+    bar: "{hour}:00: {count} روانگیوں میں سے {pct} % وقت پر",
+    noData: "کافی ڈیٹا نہیں",
   },
   about: {
     notTitle: "AnschlussRadar کیا نہیں کرتا",

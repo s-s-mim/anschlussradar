@@ -94,6 +94,8 @@ class Leg:
     real_time: bool
     cancelled: bool
     messages: list[TrainMessage] = field(default_factory=list)
+    from_hub: int | None = None  # station group EVA when the stop is a recorded hub
+    to_hub: int | None = None
 
     @classmethod
     def from_motis(cls, leg: dict[str, Any]) -> Leg:
@@ -158,6 +160,8 @@ class Leg:
             "realTime": self.real_time,
             "cancelled": self.cancelled,
             "messages": [m.to_dict() for m in self.messages],
+            "fromHub": self.from_hub,
+            "toHub": self.to_hub,
         }
 
 
@@ -259,8 +263,11 @@ def build_journeys(
         )
         for arriving, departing in zip(transit, transit[1:], strict=False):
             journey.transfers.append(_score(arriving, departing, model, hubs, history, today))
-        if messages is not None:
-            for leg in transit:
+        for leg in transit:
+            from_hub, to_hub = hubs.match(leg.from_name), hubs.match(leg.to_name)
+            leg.from_hub = from_hub.group_eva if from_hub else None
+            leg.to_hub = to_hub.group_eva if to_hub else None
+            if messages is not None:
                 leg.messages = _leg_messages(leg, hubs, messages)
         out.append(journey)
     return out

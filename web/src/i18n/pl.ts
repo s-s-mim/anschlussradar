@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const pl: Translation = {
   nav: {
     search: "Szukaj",
+    stations: "Stacje",
     help: "Pomoc",
     about: "O aplikacji",
     contact: "Kontakt",
@@ -130,6 +131,19 @@ export const pl: Translation = {
   notFound: {
     title: "Ta strona nie istnieje.",
     back: "Do wyszukiwania",
+  },
+  board: {
+    title: "Odjazdy",
+    window: "Najbliższe 90 minut",
+    none: "W ciągu najbliższych 90 minut nie odjeżdża stąd żaden pociąg.",
+    hourly: "Punktualność według godziny",
+    hourlyLead: "Odsetek odjazdów z opóźnieniem poniżej 6 minut od początku rejestracji.",
+    hubsTitle: "Rejestrowane stacje",
+    hubsLead: "Na tych stacjach AnschlussRadar rejestruje każdy odjazd. Stuknij stację, aby zobaczyć odjazdy i punktualność.",
+    unknown: "Dla tej stacji nie ma tablicy odjazdów.",
+    unavailable: "Odjazdy są teraz niedostępne.",
+    bar: "{hour}:00: {pct} % punktualnie z {count} odjazdów",
+    noData: "za mało danych",
   },
   about: {
     notTitle: "Czego AnschlussRadar nie robi",

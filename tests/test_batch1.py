@@ -277,3 +277,50 @@ def test_message_texts_cover_every_code_and_translation_check() -> None:
     assert tm.check({"2": " b ", "1": "a"}, {"1": "x", "2": "y"}) == {"1": "a", "2": "b"}
     with pytest.raises(ValueError):
         tm.check({"1": "a", "2": ""}, {"1": "x", "2": "y"})
+
+
+# station page -------------------------------------------------------------------
+
+
+def test_station_board_and_hubs(tmp_path: Path) -> None:
+    from anschlussradar.api.board import StationBoards
+
+    queries: list[str] = []
+
+    def run(q: str) -> list[dict]:
+        queries.append(q)
+        if q.startswith("StationBoard"):
+            return [
+                {
+                    "eva": 8098105,
+                    "category": "S",
+                    "number": "35128",
+                    "line": "1",
+                    "destination": "Frankfurt(M)Ostbahnhof",
+                    "dep_pt": "2026-11-16T16:40:00Z",
+                    "dep_ct": "2026-11-16T16:44:00Z",
+                    "dep_pp": "102",
+                    "dep_cp": "103",
+                    "cancelled": False,
+                    "messages": [{"type": "d", "code": 31, "timestamp": "2026-11-16T16:30:00Z"}],
+                }
+            ]
+        return [{"hour": 17, "departures": 40, "on_time": 30, "cancelled": 2}]
+
+    svc = make_service(tmp_path)
+    svc.boards = StationBoards(run)
+    status, body = svc.get_station_board("8000105", now=NOW)
+    assert status == 200 and body["name"].startswith("Frankfurt")
+    d = body["departures"][0]
+    assert (d["delay"], d["platform"], d["messages"]) == (4, "103", [{"code": 31, "kind": "delay"}])
+    assert d["departure"].startswith("2026-11-16T17:44")  # German time
+    assert body["hourly"][17] == {"hour": 17, "departures": 40, "onTime": 0.75, "cancelled": 2}
+    assert body["hourly"][3]["onTime"] is None
+    assert "8098105" in queries[0] and "8000105" in queries[0]  # all levels of the station
+    svc.get_station_board("8000105", now=NOW)
+    assert len(queries) == 2  # cached
+
+    assert svc.get_station_board("1234", now=NOW)[0] == 404
+    assert svc.get_station_board("abc", now=NOW)[0] == 400
+    hubs = svc.get_hubs()[1]["stations"]
+    assert len(hubs) == len({h["eva"] for h in hubs}) and any(h["eva"] == 8000105 for h in hubs)

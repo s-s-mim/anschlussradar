@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const hi: Translation = {
   nav: {
     search: "खोजें",
+    stations: "स्टेशन",
     help: "मदद",
     about: "परिचय",
     contact: "संपर्क",
@@ -126,6 +127,19 @@ export const hi: Translation = {
   notFound: {
     title: "यह पेज मौजूद नहीं है।",
     back: "खोज पर लौटें",
+  },
+  board: {
+    title: "प्रस्थान",
+    window: "अगले 90 मिनट",
+    none: "अगले 90 मिनट में यहाँ से कोई ट्रेन नहीं छूटती।",
+    hourly: "समय के हिसाब से समयपालन",
+    hourlyLead: "रिकॉर्डिंग शुरू होने से अब तक 6 मिनट से कम देरी वाले प्रस्थानों का हिस्सा।",
+    hubsTitle: "रिकॉर्ड किए जाने वाले स्टेशन",
+    hubsLead: "इन स्टेशनों पर AnschlussRadar हर प्रस्थान रिकॉर्ड करता है। प्रस्थान और समयपालन देखने के लिए किसी स्टेशन पर टैप करें।",
+    unknown: "इस स्टेशन के लिए प्रस्थान बोर्ड नहीं है।",
+    unavailable: "प्रस्थान अभी उपलब्ध नहीं हैं।",
+    bar: "{hour}:00: {count} प्रस्थानों में से {pct} % समय पर",
+    noData: "पर्याप्त डेटा नहीं",
   },
   about: {
     notTitle: "AnschlussRadar क्या नहीं करता",

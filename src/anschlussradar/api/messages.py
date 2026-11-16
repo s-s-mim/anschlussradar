@@ -79,6 +79,17 @@ def summarize(rows: list[dict[str, Any]]) -> dict[tuple[int, str], list[TrainMes
     return out
 
 
+def current(messages: list[dict[str, Any]] | None) -> list[TrainMessage]:
+    """The messages column of one stop -> what to show now (same rules as summarize)."""
+    rows = [
+        {"eva": 0, "train_number": "", "msg_type": m.get("type"), "code": m.get("code"),
+         "sent_at": m.get("timestamp")}
+        for m in messages or []
+        if m.get("type") in ("d", "q", "f") and m.get("code") is not None
+    ]  # fmt: skip
+    return summarize(rows).get((0, ""), [])
+
+
 def _ts(value: Any) -> float:
     if isinstance(value, datetime):
         return value.timestamp()

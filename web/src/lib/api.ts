@@ -1,4 +1,4 @@
-import type { ApiErrorBody, JourneysResponse, ModelStatus, Station } from "./types";
+import type { ApiErrorBody, Board, Hub, JourneysResponse, ModelStatus, Station } from "./types";
 
 const BASE = (import.meta.env.VITE_API_BASE || "/api/v1").replace(/\/$/, "");
 
@@ -70,4 +70,12 @@ export function sendFeedback(body: FeedbackBody): Promise<{ status: string }> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
+}
+
+export function getHubs(): Promise<Hub[]> {
+  return request<{ stations: Hub[] }>("/hubs").then((b) => b.stations);
+}
+
+export function getBoard(eva: number, signal?: AbortSignal): Promise<Board> {
+  return request<Board>(`/hubs/${eva}/board`, { signal });
 }

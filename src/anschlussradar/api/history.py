@@ -47,6 +47,18 @@ def kusto_query(
     return run
 
 
+def kusto_runner(
+    query_uri: str, database: str, app_id: str, app_secret: str, tenant_id: str
+) -> Callable[[str], Rows]:
+    """Return a function that runs any query text. Callers build the text only from
+    numbers and dates they formatted themselves, never from user input."""
+
+    def run(query: str) -> Rows:
+        return kusto_query(query_uri, database, app_id, app_secret, tenant_id, query=query)()
+
+    return run
+
+
 class KustoHistory:
     def __init__(self, query: Callable[[], Rows], refresh_s: float = 3600.0) -> None:
         self.query = query

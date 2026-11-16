@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const mk: Translation = {
   nav: {
     search: "Пребарување",
+    stations: "Станици",
     help: "Помош",
     about: "За апликацијата",
     contact: "Контакт",
@@ -126,6 +127,19 @@ export const mk: Translation = {
   notFound: {
     title: "Оваа страница не постои.",
     back: "Назад кон пребарувањето",
+  },
+  board: {
+    title: "Поаѓања",
+    window: "Следните 90 минути",
+    none: "Во следните 90 минути од тука не поаѓа ниеден воз.",
+    hourly: "Точност по часови",
+    hourlyLead: "Удел на поаѓања со доцнење помало од 6 минути, од почетокот на снимањето.",
+    hubsTitle: "Станици со снимање",
+    hubsLead: "На овие станици AnschlussRadar го бележи секое поаѓање. Допрете станица за поаѓања и точност.",
+    unknown: "За оваа станица нема табла со поаѓања.",
+    unavailable: "Поаѓањата моментално не се достапни.",
+    bar: "{hour}:00: {pct} % навреме од {count} поаѓања",
+    noData: "премалку податоци",
   },
   about: {
     notTitle: "Што AnschlussRadar не прави",

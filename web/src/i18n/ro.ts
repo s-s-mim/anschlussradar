@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const ro: Translation = {
   nav: {
     search: "Căutare",
+    stations: "Gări",
     help: "Ajutor",
     about: "Despre",
     contact: "Contact",
@@ -128,6 +129,19 @@ export const ro: Translation = {
   notFound: {
     title: "Această pagină nu există.",
     back: "Înapoi la căutare",
+  },
+  board: {
+    title: "Plecări",
+    window: "Următoarele 90 de minute",
+    none: "În următoarele 90 de minute nu pleacă niciun tren de aici.",
+    hourly: "Punctualitate pe ore",
+    hourlyLead: "Ponderea plecărilor cu mai puțin de 6 minute întârziere, de la începutul înregistrării.",
+    hubsTitle: "Gări înregistrate",
+    hubsLead: "În aceste gări AnschlussRadar înregistrează fiecare plecare. Atinge o gară pentru plecări și punctualitate.",
+    unknown: "Pentru această gară nu există tabelă de plecări.",
+    unavailable: "Plecările nu sunt disponibile acum.",
+    bar: "{hour}:00: {pct} % la timp din {count} plecări",
+    noData: "prea puține date",
   },
   about: {
     notTitle: "Ce nu face AnschlussRadar",

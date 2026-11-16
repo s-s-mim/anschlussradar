@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const bn: Translation = {
   nav: {
     search: "খুঁজুন",
+    stations: "স্টেশন",
     help: "সাহায্য",
     about: "পরিচিতি",
     contact: "যোগাযোগ",
@@ -126,6 +127,19 @@ export const bn: Translation = {
   notFound: {
     title: "এই পাতাটি নেই।",
     back: "খোঁজে ফিরে যান",
+  },
+  board: {
+    title: "ছাড়ার সময়",
+    window: "পরের 90 মিনিট",
+    none: "পরের 90 মিনিটে এখান থেকে কোনো ট্রেন ছাড়বে না।",
+    hourly: "সময় অনুযায়ী সময়ানুবর্তিতা",
+    hourlyLead: "রেকর্ড শুরু হওয়ার পর থেকে 6 মিনিটের কম দেরিতে ছাড়া ট্রেনের অনুপাত।",
+    hubsTitle: "রেকর্ড করা স্টেশন",
+    hubsLead: "এই স্টেশনগুলোতে AnschlussRadar প্রতিটি ট্রেন ছাড়ার তথ্য রেকর্ড করে। ছাড়ার সময় ও সময়ানুবর্তিতা দেখতে একটি স্টেশনে ট্যাপ করুন।",
+    unknown: "এই স্টেশনের জন্য কোনো সময়সূচি বোর্ড নেই।",
+    unavailable: "ছাড়ার তথ্য এখন পাওয়া যাচ্ছে না।",
+    bar: "{hour}:00: {count}টি ট্রেনের মধ্যে {pct} % সময়মতো",
+    noData: "যথেষ্ট তথ্য নেই",
   },
   about: {
     notTitle: "AnschlussRadar যা করে না",

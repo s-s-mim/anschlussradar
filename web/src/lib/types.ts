@@ -32,7 +32,50 @@ export interface Leg {
   realTime: boolean;
   cancelled: boolean;
   /** DB reason codes at recorded hubs: why the train is late, what is missing on board. */
-  messages: { code: number; kind: "delay" | "quality" }[];
+  messages: TrainNote[];
+  /** Station group number when the stop is a recorded hub (it then has a station page). */
+  fromHub: number | null;
+  toHub: number | null;
+}
+
+export interface TrainNote {
+  code: number;
+  kind: "delay" | "quality";
+}
+
+export interface Hub {
+  eva: number;
+  name: string;
+  state: string;
+}
+
+export interface BoardDeparture {
+  category: string | null;
+  number: string | null;
+  line: string | null;
+  destination: string | null;
+  departurePlanned: string | null;
+  departure: string | null;
+  delay: number | null;
+  platform: string | null;
+  platformPlanned: string | null;
+  cancelled: boolean;
+  messages: TrainNote[];
+}
+
+export interface HourStat {
+  hour: number;
+  departures: number;
+  onTime: number | null;
+  cancelled: number;
+}
+
+export interface Board {
+  eva: number;
+  name: string;
+  available: boolean;
+  departures: BoardDeparture[];
+  hourly: HourStat[];
 }
 
 export interface Transfer {

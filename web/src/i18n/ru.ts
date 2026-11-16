@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const ru: Translation = {
   nav: {
     search: "Поиск",
+    stations: "Станции",
     help: "Справка",
     about: "О приложении",
     contact: "Контакт",
@@ -130,6 +131,19 @@ export const ru: Translation = {
   notFound: {
     title: "Такой страницы нет.",
     back: "К поиску",
+  },
+  board: {
+    title: "Отправления",
+    window: "Ближайшие 90 минут",
+    none: "В ближайшие 90 минут отсюда не отправляется ни один поезд.",
+    hourly: "Пунктуальность по часам",
+    hourlyLead: "Доля отправлений с опозданием менее 6 минут с начала записи.",
+    hubsTitle: "Станции с записью",
+    hubsLead: "На этих станциях AnschlussRadar записывает каждое отправление. Нажмите на станцию, чтобы увидеть отправления и пунктуальность.",
+    unknown: "Для этой станции нет табло отправлений.",
+    unavailable: "Отправления сейчас недоступны.",
+    bar: "{hour}:00: {pct} % вовремя из {count} отправлений",
+    noData: "мало данных",
   },
   about: {
     notTitle: "Чего AnschlussRadar не делает",

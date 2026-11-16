@@ -1,0 +1,26 @@
+// The station page: next departures and punctuality by hour, for one station group
+// (all levels of a station, e.g. Frankfurt Hbf and Frankfurt Hbf tief).
+
+.create-or-alter function with (folder = "api", docstring = "Departures of a station group in a time window")
+StationBoard(evas: dynamic, from_t: datetime, to_t: datetime) {
+    PlannedLatest
+    | where eva in (evas) and isnotnull(dep_pt) and dep_pt between (from_t .. to_t)
+    | join kind=leftouter (
+        StopLatest
+        | where eva in (evas)
+        | project stop_id, dep_ct, dep_cp, dep_cs, messages
+      ) on stop_id
+    | project eva, category, number, line, destination, dep_pt, dep_ct, dep_pp, dep_cp,
+              cancelled = dep_cs == "c", messages
+    | order by dep_pt asc
+    | take 60
+}
+
+// Punctual = less than 6 minutes late, the usual definition in Germany.
+.create-or-alter function with (folder = "api", docstring = "Departures and punctuality by local hour")
+StationHourly(evas: dynamic) {
+    ReliabilityHourly
+    | where eva in (evas)
+    | summarize departures = sum(departures), on_time = sum(on_time), cancelled = sum(cancelled) by hour
+    | order by hour asc
+}

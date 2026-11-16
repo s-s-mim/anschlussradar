@@ -63,6 +63,16 @@ def health(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_health())
 
 
+@app.route(route="hubs", methods=["GET"])
+def hubs(req: func.HttpRequest) -> func.HttpResponse:
+    return respond(service().get_hubs(), 3600)
+
+
+@app.route(route="hubs/{eva}/board", methods=["GET"])
+def station_board(req: func.HttpRequest) -> func.HttpResponse:
+    return respond(service().get_station_board(req.route_params.get("eva")), 60)
+
+
 def _client(req: func.HttpRequest) -> str:
     # Used only for the in-memory rate limit, hashed there, never stored.
     return (req.headers.get("x-forwarded-for") or "unknown").split(",")[0].strip()
