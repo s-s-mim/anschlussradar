@@ -1,8 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" fill="#0d5c63"/>
-  <g transform="translate(9.6 9.6) scale(0.7)">
-    <path d="M22 54V10" stroke="#fff" stroke-width="5.5" stroke-linecap="round" fill="none"/>
-    <path d="M44 54V44C44 30 36 22 22 22" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    <circle cx="22" cy="22" r="7.5" fill="#ffc83d" stroke="#0d5c63" stroke-width="3"/>
+  <!-- Centred and inside the maskable safe zone (circle of radius 25.6), strokes a bit bolder
+       so it reads at launcher size next to other app icons. -->
+  <g transform="translate(8.7 7.0) scale(0.78)">
+    <path d="M22 54V10" stroke="#fff" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+    <path d="M44 54V44C44 30 36 22 22 22" stroke="#fff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="22" cy="22" r="8" fill="#ffc83d" stroke="#0d5c63" stroke-width="3"/>
   </g>
 </svg>

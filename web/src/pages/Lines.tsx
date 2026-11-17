@@ -3,21 +3,9 @@ import { useEffect, useState } from "react";
 import { useI18n } from "../i18n";
 import { getLines } from "../lib/api";
 import { Link } from "../lib/router";
+import { normalizeText } from "../lib/text";
 import { pct, probabilityTone } from "../lib/tone";
 import type { LineSummary } from "../lib/types";
-
-/** Lower case without accents and spaces, so "re30" finds "RE 30" and "muenchen" finds "München". */
-function normalizeText(s: string): string {
-  return s
-    .toLowerCase()
-    .replace(/ä/g, "ae")
-    .replace(/ö/g, "oe")
-    .replace(/ü/g, "ue")
-    .replace(/ß/g, "ss")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]/g, "");
-}
 
 export function Lines() {
   const { t } = useI18n();

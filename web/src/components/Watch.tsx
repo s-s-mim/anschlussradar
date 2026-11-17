@@ -1,7 +1,7 @@
 // "Jeden Tag prüfen": watch one connection and get a push only when a change is at risk.
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useI18n } from "../i18n";
-import { addWatch, PushError } from "../lib/push";
+import { addWatch, PushError, pushReady } from "../lib/push";
 import type { Station } from "../lib/types";
 
 /** Weekday names in the current language, Monday first (ISO 1..7). */
@@ -16,7 +16,13 @@ export function WatchPanel({ from, to, departure, local }: { from: Station; to: 
   const [open, setOpen] = useState(false);
   const [days, setDays] = useState("12345");
   const [state, setState] = useState<"idle" | "saving" | "saved" | PushError["reason"]>("idle");
+  const [ready, setReady] = useState<boolean | null>(null);
   const names = weekdayNames(lang);
+
+  useEffect(() => {
+    // Ask once the panel opens: without the server's push key there is nothing to switch on.
+    if (open && ready === null) pushReady().then(setReady);
+  }, [open, ready]);
 
   if (!open) {
     return (
@@ -42,6 +48,14 @@ export function WatchPanel({ from, to, departure, local }: { from: Station; to: 
     }
   };
 
+  if (ready === false) {
+    return (
+      <div className="watch-panel">
+        <p className="small">{t("watch.soon")}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="watch-panel">
       <p className="small">{t("watch.lead")}</p>
@@ -64,7 +78,7 @@ export function WatchPanel({ from, to, departure, local }: { from: Station; to: 
           {t("watch.saved")}
         </p>
       ) : (
-        <button type="button" className="primary" disabled={!days || state === "saving"} onClick={save}>
+        <button type="button" className="primary compact" disabled={!days || state === "saving" || ready === null} onClick={save}>
           {state === "saving" ? t("watch.saving") : `${t("watch.on")} (${departure})`}
         </button>
       )}

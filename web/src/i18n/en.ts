@@ -133,6 +133,7 @@ export const en: Translation = {
     cleared: "Deleted. Nothing from AnschlussRadar is stored on this device any more.",
   },
   footer: {
+    dbData: "Real-time data: DB InfraGO AG (CC BY 4.0)",
     planner: "Journey planning by Transitous",
     notDb: "Not a Deutsche Bahn service.",
   },
@@ -151,6 +152,7 @@ export const en: Translation = {
     show: "Show",
   },
   watch: {
+    soon: "Notifications are being set up and will be available soon.",
     button: "Check every day",
     lead: "About an hour before departure AnschlussRadar checks this connection and only alerts you if a change is at risk.",
     days: "On these days",
@@ -166,6 +168,13 @@ export const en: Translation = {
     offAll: "Turn off all alerts",
   },
   board: {
+    filter: "Find a station",
+    filterHint: "e.g. Cologne, Altona or Munich",
+    noMatch: "No recorded station matches. You can still find connections for any station in the search.",
+    platformChanged: "platform change",
+    notEnough: "Too few departures recorded so far. The bars appear once at least 10 departures per hour have been recorded here.",
+    tapBar: "Tap a bar for the exact value. The higher the bar, the more punctual.",
+    fewDepartures: "too few departures",
     title: "Departures",
     window: "Next 90 minutes",
     none: "No trains leave here in the next 90 minutes.",

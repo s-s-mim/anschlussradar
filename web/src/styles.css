@@ -58,10 +58,11 @@
   box-sizing: border-box;
 }
 
-/* 15px base: everything in rem scales with it. */
+/* 14px base: everything in rem scales with it. Phones with a larger system font
+   scale this up on their own, so the app stays readable there. */
 html {
   -webkit-text-size-adjust: 100%;
-  font-size: 93.75%;
+  font-size: 87.5%;
 }
 
 body {
@@ -106,7 +107,7 @@ h3 {
 }
 
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
 }
 
 h2 {
@@ -285,7 +286,7 @@ time,
 }
 
 .hero h1 {
-  font-size: clamp(1.9rem, 7.5vw, 2.8rem);
+  font-size: clamp(1.7rem, 6.5vw, 2.5rem);
   line-height: 1.02;
   letter-spacing: -0.01em;
   color: var(--petrol-strong);
@@ -576,35 +577,38 @@ button {
 
 .results-head {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 2px 12px;
-  align-items: start;
+  gap: 4px;
   margin-bottom: 12px;
 }
 
 .results-head h1 {
-  grid-column: 1;
-  font-size: 1.55rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
   margin: 0;
 }
 
 .results-head .arrow {
   color: var(--petrol);
+  margin-inline: 2px;
 }
 
 .results-head p {
-  grid-column: 1;
   margin: 0;
 }
 
+.head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+}
+
 .results-head .change {
-  grid-column: 1;
   font-size: 0.9rem;
 }
 
 .save {
-  grid-column: 2;
-  grid-row: 1 / span 3;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1053,7 +1057,7 @@ mark {
 
 @media (min-width: 640px) {
   h1 {
-    font-size: 1.85rem;
+    font-size: 1.75rem;
   }
   .hero {
     padding-top: 44px;
@@ -1757,7 +1761,7 @@ a.line-badge {
   min-height: 52px;
   color: var(--muted);
   text-decoration: none;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
   line-height: 1.15;
@@ -1812,4 +1816,46 @@ body {
 
 .answered-hint {
   margin: 0 0 12px;
+}
+
+.primary.compact {
+  justify-self: start;
+  width: auto;
+  min-height: 40px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+}
+
+.track-note {
+  margin-inline-start: 4px;
+  font-size: 0.75rem;
+}
+
+.track-note::before {
+  content: "· ";
+}
+
+.hourly .bar-hit {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.hourly .bar-hit .bar {
+  width: 100%;
+}
+
+.hourly .bar-hit.on .bar {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.bar-readout {
+  margin: 8px 0 4px;
+  min-height: 1.4em;
 }

@@ -136,6 +136,7 @@ export const ro: Translation = {
     cleared: "Șters. Pe acest dispozitiv nu mai este salvat nimic de la AnschlussRadar.",
   },
   footer: {
+    dbData: "Date în timp real: DB InfraGO AG (CC BY 4.0)",
     planner: "Căutare de legături: Transitous",
     notDb: "Nu este un serviciu Deutsche Bahn.",
   },
@@ -154,6 +155,7 @@ export const ro: Translation = {
     show: "Arată",
   },
   watch: {
+    soon: "Notificările sunt în curs de configurare și vor fi disponibile în curând.",
     button: "Verifică zilnic",
     lead: "Cu aproximativ o oră înainte de plecare, AnschlussRadar verifică această legătură și te anunță doar dacă un transfer e în pericol.",
     days: "În aceste zile",
@@ -169,6 +171,13 @@ export const ro: Translation = {
     offAll: "Dezactivează toate notificările",
   },
   board: {
+    filter: "Caută o gară",
+    filterHint: "de ex. Köln, Altona sau München",
+    noMatch: "Nicio gară înregistrată nu se potrivește. Găsești totuși legături pentru orice gară în căutare.",
+    platformChanged: "schimbare de linie",
+    notEnough: "Încă prea puține plecări înregistrate. Barele apar când aici sunt înregistrate cel puțin 10 plecări pe oră.",
+    tapBar: "Atinge o bară pentru valoarea exactă. Cu cât bara e mai înaltă, cu atât mai punctual.",
+    fewDepartures: "prea puține plecări",
     title: "Plecări",
     window: "Următoarele 90 de minute",
     none: "În următoarele 90 de minute nu pleacă niciun tren de aici.",

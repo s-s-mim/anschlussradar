@@ -5,12 +5,14 @@ import { messageText } from "../i18n/messages";
 import { ApiError, getBoard } from "../lib/api";
 import { Link } from "../lib/router";
 import { hhmm } from "../lib/time";
-import { pct, probabilityTone } from "../lib/tone";
+import { BANDS, pct, punctualityBand } from "../lib/tone";
 import type { Board, BoardDeparture, HourStat } from "../lib/types";
 
 /** "S1" for S-Bahn and U-Bahn, "RE 30" for regional lines, "ICE 579" otherwise. */
 function trainName(d: BoardDeparture): string {
   const cat = d.category ?? "";
+  // Some feeds already put the category in the line ("RE6"): never "RE RE6".
+  if (d.line && cat && d.line.toUpperCase().startsWith(cat.toUpperCase())) return d.line;
   if (/^[SU]$/.test(cat) && d.line) return `${cat}${d.line}`;
   if (/^(RE|RB|IRE|MEX)$/.test(cat) && d.line) return `${cat} ${d.line}`;
   return [cat, d.number].filter(Boolean).join(" ");
@@ -41,7 +43,10 @@ function DepartureRow({ d }: { d: BoardDeparture }) {
         {reasonText && <span className="dep-reason">{t("results.reason", { text: reasonText })}</span>}
       </span>
       {d.platform && (
-        <span className={changed ? "track changed" : "track"}>{t("results.track", { track: d.platform })}</span>
+        <span className={changed ? "track changed" : "track"}>
+          {t("results.track", { track: d.platform })}
+          {changed && <span className="track-note">{t("board.platformChanged")}</span>}
+        </span>
       )}
     </li>
   );
@@ -50,25 +55,48 @@ function DepartureRow({ d }: { d: BoardDeparture }) {
 /** 24 bars, one per hour; the height is the share of punctual departures. */
 export function HourlyChart({ hours }: { hours: HourStat[] }) {
   const { t } = useI18n();
+  const [picked, setPicked] = useState<number | null>(null);
+  const known = (h: HourStat) => h.onTime !== null && h.departures >= 10;
+  const text = (h: HourStat) =>
+    known(h)
+      ? t("board.bar", { hour: h.hour, pct: pct(h.onTime!), count: h.departures })
+      : `${h.hour}:00: ${t("board.noData")}`;
+  if (!hours.some(known)) return <p className="notice">{t("board.notEnough")}</p>;
+  const current = hours.find((h) => h.hour === picked);
   return (
     <figure className="hourly">
       <ol className="bars">
-        {hours.map((h) => {
-          const known = h.onTime !== null && h.departures >= 10;
-          const label = known
-            ? t("board.bar", { hour: h.hour, pct: pct(h.onTime!), count: h.departures })
-            : `${h.hour}:00: ${t("board.noData")}`;
-          return (
-            <li key={h.hour} title={label} aria-label={label}>
+        {hours.map((h) => (
+          <li key={h.hour}>
+            <button
+              type="button"
+              className={picked === h.hour ? "bar-hit on" : "bar-hit"}
+              aria-label={text(h)}
+              aria-pressed={picked === h.hour}
+              onClick={() => setPicked(picked === h.hour ? null : h.hour)}
+            >
               <span
-                className={known ? `bar tone-${probabilityTone(h.onTime)}` : "bar empty"}
-                style={{ height: known ? `${Math.max(4, h.onTime! * 100)}%` : "4%" }}
+                className={known(h) ? `bar band-${punctualityBand(h.onTime)}` : "bar empty"}
+                style={{ height: known(h) ? `${Math.max(4, h.onTime! * 100)}%` : "4%" }}
               />
-              {h.hour % 3 === 0 && <span className="tick">{h.hour}</span>}
-            </li>
-          );
-        })}
+            </button>
+            {h.hour % 3 === 0 && <span className="tick">{h.hour}</span>}
+          </li>
+        ))}
       </ol>
+      <p className="small bar-readout" aria-live="polite">
+        {current ? text(current) : t("board.tapBar")}
+      </p>
+      <figcaption>
+        <ul className="legend">
+          {BANDS.map((b) => (
+            <li key={b}>
+              <span className={`swatch band-${b}`} aria-hidden="true" />
+              {b === "none" ? t("board.fewDepartures") : t(`network.band.${b}`)}
+            </li>
+          ))}
+        </ul>
+      </figcaption>
     </figure>
   );
 }

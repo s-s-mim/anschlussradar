@@ -134,6 +134,7 @@ export const tr: Translation = {
     cleared: "Silindi. Bu cihazda artık AnschlussRadar'a ait hiçbir şey kayıtlı değil.",
   },
   footer: {
+    dbData: "Gerçek zamanlı veriler: DB InfraGO AG (CC BY 4.0)",
     planner: "Sefer bilgisi: Transitous",
     notDb: "Deutsche Bahn'ın bir hizmeti değildir.",
   },
@@ -152,6 +153,7 @@ export const tr: Translation = {
     show: "Göster",
   },
   watch: {
+    soon: "Bildirimler şu anda kuruluyor ve yakında kullanılabilecek.",
     button: "Her gün kontrol et",
     lead: "AnschlussRadar kalkıştan yaklaşık bir saat önce bu bağlantıyı kontrol eder ve yalnızca bir aktarma risk altındaysa haber verir.",
     days: "Bu günlerde",
@@ -167,6 +169,13 @@ export const tr: Translation = {
     offAll: "Tüm bildirimleri kapat",
   },
   board: {
+    filter: "İstasyon ara",
+    filterHint: "ör. Köln, Altona veya München",
+    noMatch: "Kayıtlı hiçbir istasyon uymuyor. Yine de her istasyon için bağlantıları aramada bulabilirsin.",
+    platformChanged: "peron değişikliği",
+    notEnough: "Henüz yeterince kalkış kaydedilmedi. Burada saat başına en az 10 kalkış kaydedildiğinde çubuklar görünür.",
+    tapBar: "Tam değer için bir çubuğa dokun. Çubuk ne kadar yüksekse o kadar dakik.",
+    fewDepartures: "çok az kalkış",
     title: "Kalkışlar",
     window: "Önümüzdeki 90 dakika",
     none: "Önümüzdeki 90 dakikada buradan tren kalkmıyor.",

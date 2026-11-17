@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { matchesText } from "../lib/text";
 import { useI18n } from "../i18n";
 import { getHubs } from "../lib/api";
 import { Link } from "../lib/router";
@@ -8,6 +9,7 @@ export function Stations() {
   const { t } = useI18n();
   const [hubs, setHubs] = useState<Hub[] | null>(null);
   const [failed, setFailed] = useState(false);
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     getHubs()
@@ -31,8 +33,24 @@ export function Stations() {
         </div>
       )}
       {hubs && (
+        <div className="field">
+          <label htmlFor="hub-filter">{t("board.filter")}</label>
+          <input
+            id="hub-filter"
+            type="search"
+            autoComplete="off"
+            value={filter}
+            placeholder={t("board.filterHint")}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+        </div>
+      )}
+      {hubs && hubs.filter((h) => matchesText(h.name, filter)).length === 0 && (
+        <p className="muted">{t("board.noMatch")}</p>
+      )}
+      {hubs && (
         <ul className="hub-list">
-          {hubs.map((h) => (
+          {hubs.filter((h) => matchesText(h.name, filter)).map((h) => (
             <li key={h.eva}>
               <Link href={`/station?eva=${h.eva}`}>{h.name}</Link>
             </li>

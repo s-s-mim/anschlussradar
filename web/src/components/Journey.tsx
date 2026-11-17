@@ -10,11 +10,24 @@ import { pct, probabilityTone, transferTone } from "../lib/tone";
 import type { Journey, Leg, Station, Tip, Transfer } from "../lib/types";
 import { WatchPanel } from "./Watch";
 
+const LONG_DISTANCE = /^(ICE|IC|EC|ECE|RJ|RJX|NJ|EN|FLX|TGV|EST|WB)$/;
+
+/** "ICE 579" for long-distance trains, the line ("S1", "RE 30", "Bus 253") for the rest.
+ * Regional and S-Bahn trip numbers like "026719" mean nothing to travellers. */
 function lineName(leg: Leg): string {
-  if (leg.category && leg.number && leg.category.length + leg.number.length <= 9) {
-    return /^[SU]$/.test(leg.category) ? `${leg.category}${leg.number}` : `${leg.category} ${leg.number}`;
+  const cat = leg.category ?? "";
+  const line = leg.line?.trim();
+  const number = leg.number?.replace(/^0+(?=\d)/, "");
+  if (LONG_DISTANCE.test(cat) && number) return `${cat} ${number}`;
+  if (line && line.length <= 8 && !/^\d{4,}$/.test(line)) {
+    if (cat && !line.toUpperCase().startsWith(cat.toUpperCase()) && /^\d/.test(line)) {
+      return /^[SU]$/.test(cat) ? `${cat}${line}` : `${cat} ${line}`;
+    }
+    const spaced = line.match(/^(RE|RB|IRE|MEX)\s*(\d+)$/i);
+    return spaced ? `${spaced[1].toUpperCase()} ${spaced[2]}` : line;
   }
-  return leg.line ?? leg.category ?? leg.mode;
+  if (cat && number) return /^[SU]$/.test(cat) ? `${cat}${number}` : `${cat} ${number}`;
+  return line ?? (cat || leg.mode);
 }
 
 const RAIL_MODES = new Set([

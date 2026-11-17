@@ -23,4 +23,16 @@ export function transferTone(t: Transfer): Tone {
   return t.liveStatus ? LIVE[t.liveStatus] : probabilityTone(t.probability);
 }
 
+/** Punctuality bands, the same on the network map and in the charts by hour.
+ * Long-distance trains manage about two thirds, regional trains about nine in ten. */
+export type Band = "good" | "fair" | "risk" | "bad" | "none";
+export const BANDS: Band[] = ["good", "fair", "risk", "bad", "none"];
+export function punctualityBand(onTime: number | null): Band {
+  if (onTime === null) return "none";
+  if (onTime >= 0.9) return "good";
+  if (onTime >= 0.8) return "fair";
+  if (onTime >= 0.65) return "risk";
+  return "bad";
+}
+
 export const pct = (p: number) => Math.round(p * 100);

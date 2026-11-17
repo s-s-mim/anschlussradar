@@ -14,6 +14,17 @@ export interface WatchView {
   local: boolean;
 }
 
+/** True when this browser can get notifications and the server has its push key. */
+export async function pushReady(): Promise<boolean> {
+  if (!pushSupported()) return false;
+  try {
+    await request<{ publicKey: string }>("/push/key");
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function existingDevice(): string | null {
   try {
     return localStorage.getItem(DEVICE_KEY);

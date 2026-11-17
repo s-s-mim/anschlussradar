@@ -54,7 +54,16 @@ function De({ stage }: { stage: Stage | null }) {
       <h2>Daten und Dank</h2>
       <ul>
         <li>
-          Fahrplan- und Echtzeitdaten der Bahnhöfe: DB Timetables API der DB InfraGO AG, über den DB API Marketplace.
+          Fahrplan- und Echtzeitdaten der 80 aufgezeichneten Bahnhöfe: Timetables API der DB InfraGO AG, über den{" "}
+          <a href="https://developers.deutschebahn.com/" {...ext}>
+            DB API Marketplace
+          </a>
+          , Lizenz{" "}
+          <a href="https://creativecommons.org/licenses/by/4.0/deed.de" {...ext}>
+            CC BY 4.0
+          </a>
+          . AnschlussRadar speichert die Daten, wertet sie aus und berechnet daraus eigene Werte (Pünktlichkeit,
+          Umstiege, Prognosen).
         </li>
         <li>
           Verbindungssuche:{" "}
@@ -71,6 +80,14 @@ function De({ stage }: { stage: Stage | null }) {
           (CC BY 4.0).
         </li>
         <li>Wetterdaten: Deutscher Wetterdienst (DWD), über Bright Sky.</li>
+        <li>
+          Texte zu den Verspätungsgründen nach den Codes aus{" "}
+          <a href="https://github.com/derf/Travel-Status-DE-IRIS" {...ext}>
+            Travel-Status-DE-IRIS
+          </a>{" "}
+          von Birte Kristina Friesel.
+        </li>
+        <li>Umriss Deutschlands auf der Netzkarte: Natural Earth (gemeinfrei).</li>
       </ul>
       <p>Alle Daten werden unter den Lizenzbedingungen der jeweiligen Anbieter genutzt.</p>
       <h2>Keine Verbindung zur Deutschen Bahn</h2>
@@ -131,7 +148,18 @@ function En({ withWhy = true, stage }: { withWhy?: boolean; stage: Stage | null 
       </p>
       <h2>Data and thanks</h2>
       <ul>
-        <li>Station timetables and real-time data: DB Timetables API by DB InfraGO AG, via the DB API Marketplace.</li>
+        <li>
+          Timetables and real-time data of the 80 recorded stations: Timetables API by DB InfraGO AG, via the{" "}
+          <a href="https://developers.deutschebahn.com/" {...ext}>
+            DB API Marketplace
+          </a>
+          , licence{" "}
+          <a href="https://creativecommons.org/licenses/by/4.0/" {...ext}>
+            CC BY 4.0
+          </a>
+          . AnschlussRadar stores and analyses the data and computes its own figures from it (punctuality, transfers,
+          forecasts).
+        </li>
         <li>
           Journey planning:{" "}
           <a href="https://transitous.org/sources/" {...ext}>
@@ -147,6 +175,14 @@ function En({ withWhy = true, stage }: { withWhy?: boolean; stage: Stage | null 
           (CC BY 4.0).
         </li>
         <li>Weather data: Deutscher Wetterdienst (DWD), via Bright Sky.</li>
+        <li>
+          Texts for delay reasons based on the codes in{" "}
+          <a href="https://github.com/derf/Travel-Status-DE-IRIS" {...ext}>
+            Travel-Status-DE-IRIS
+          </a>{" "}
+          by Birte Kristina Friesel.
+        </li>
+        <li>Outline of Germany on the network map: Natural Earth (public domain).</li>
       </ul>
       <p>All data is used under the licence terms of its providers.</p>
       <h2>Not connected to Deutsche Bahn</h2>

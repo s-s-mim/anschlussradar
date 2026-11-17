@@ -138,6 +138,7 @@ export const pl: Translation = {
     cleared: "Usunięto. Na tym urządzeniu nie ma już danych AnschlussRadar.",
   },
   footer: {
+    dbData: "Dane w czasie rzeczywistym: DB InfraGO AG (CC BY 4.0)",
     planner: "Wyszukiwanie połączeń: Transitous",
     notDb: "To nie jest usługa Deutsche Bahn.",
   },
@@ -156,6 +157,7 @@ export const pl: Translation = {
     show: "Pokaż",
   },
   watch: {
+    soon: "Powiadomienia są właśnie konfigurowane i wkrótce będą dostępne.",
     button: "Sprawdzaj codziennie",
     lead: "Około godziny przed odjazdem AnschlussRadar sprawdza to połączenie i odzywa się tylko wtedy, gdy przesiadka jest zagrożona.",
     days: "W te dni",
@@ -171,6 +173,13 @@ export const pl: Translation = {
     offAll: "Wyłącz wszystkie powiadomienia",
   },
   board: {
+    filter: "Szukaj stacji",
+    filterHint: "np. Köln, Altona lub München",
+    noMatch: "Żadna rejestrowana stacja nie pasuje. Połączenia dla każdej stacji i tak znajdziesz w wyszukiwarce.",
+    platformChanged: "zmiana toru",
+    notEnough: "Zarejestrowano jeszcze za mało odjazdów. Słupki pojawią się, gdy będzie tu co najmniej 10 odjazdów na godzinę.",
+    tapBar: "Dotknij słupka, aby zobaczyć dokładną wartość. Im wyższy słupek, tym punktualniej.",
+    fewDepartures: "za mało odjazdów",
     title: "Odjazdy",
     window: "Najbliższe 90 minut",
     none: "W ciągu najbliższych 90 minut nie odjeżdża stąd żaden pociąg.",

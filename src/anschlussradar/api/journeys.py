@@ -112,7 +112,9 @@ class Leg:
             transit=mode not in NON_TRANSIT_MODES,
             category=category,
             number=number,
-            line=leg.get("displayName") or leg.get("routeShortName"),
+            # The route's short name is the line people know ("S1", "RE30"); the display
+            # name can be the trip ("RE 026719") for regional trains.
+            line=leg.get("routeShortName") or leg.get("displayName"),
             headsign=leg.get("headsign"),
             from_name=frm.get("name", ""),
             to_name=to.get("name", ""),

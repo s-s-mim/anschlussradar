@@ -133,6 +133,7 @@ export const de = {
     cleared: "Gelöscht. Auf diesem Gerät ist nichts mehr von AnschlussRadar gespeichert.",
   },
   footer: {
+    dbData: "Echtzeitdaten: DB InfraGO AG (CC BY 4.0)",
     planner: "Fahrplanauskunft über Transitous",
     notDb: "Kein Angebot der Deutschen Bahn.",
   },
@@ -151,6 +152,7 @@ export const de = {
     show: "Anzeigen",
   },
   watch: {
+    soon: "Benachrichtigungen werden gerade eingerichtet und sind bald verfügbar.",
     button: "Jeden Tag prüfen",
     lead: "Etwa eine Stunde vor Abfahrt prüft AnschlussRadar diese Verbindung und meldet sich nur, wenn ein Umstieg gefährdet ist.",
     days: "An diesen Tagen",
@@ -166,6 +168,13 @@ export const de = {
     offAll: "Alle Benachrichtigungen ausschalten",
   },
   board: {
+    filter: "Bahnhof suchen",
+    filterHint: "z. B. Köln, Altona oder München",
+    noMatch: "Kein aufgezeichneter Bahnhof passt dazu. Verbindungen findest du trotzdem für jeden Bahnhof über die Suche.",
+    platformChanged: "Gleiswechsel",
+    notEnough: "Noch zu wenige Abfahrten aufgezeichnet. Die Balken erscheinen, sobald hier pro Stunde mindestens 10 Abfahrten erfasst sind.",
+    tapBar: "Tippe auf einen Balken für den genauen Wert. Je höher der Balken, desto pünktlicher.",
+    fewDepartures: "zu wenig Abfahrten",
     title: "Abfahrten",
     window: "Die nächsten 90 Minuten",
     none: "In den nächsten 90 Minuten fährt hier kein Zug ab.",

@@ -3,23 +3,12 @@ import { useI18n } from "../i18n";
 import { getNetwork } from "../lib/api";
 import { MAP_HEIGHT, MAP_WIDTH, STATES, project } from "../lib/germanyMap";
 import { Link, navigate } from "../lib/router";
+import { BANDS, punctualityBand } from "../lib/tone";
 import type { NetworkStation, NetworkWindow } from "../lib/types";
 
+const band = (w: NetworkWindow) => punctualityBand(w.onTime);
+
 type Span = "now" | "week";
-type Band = "good" | "fair" | "risk" | "bad" | "none";
-
-// Share of departures less than 6 minutes late. Long-distance trains in Germany
-// manage about two thirds, regional trains about nine in ten.
-function band(w: NetworkWindow): Band {
-  if (w.onTime === null) return "none";
-  if (w.onTime >= 0.9) return "good";
-  if (w.onTime >= 0.8) return "fair";
-  if (w.onTime >= 0.65) return "risk";
-  return "bad";
-}
-
-const BANDS: Band[] = ["good", "fair", "risk", "bad", "none"];
-
 export function NetworkMap() {
   const { t } = useI18n();
   const [stations, setStations] = useState<NetworkStation[] | null>(null);

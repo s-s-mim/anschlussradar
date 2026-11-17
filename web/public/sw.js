@@ -1,7 +1,7 @@
 // Service worker: makes the app installable and lets it open without a network.
 // Pages and built files come from the cache when offline. API answers are never
 // cached here, because live delays must always be fresh.
-const CACHE = "ar-shell-v2";
+const CACHE = "ar-shell-v3";
 const SHELL = ["/", "/manifest.webmanifest", "/icons/icon.svg", "/icons/icon-192.png"];
 
 self.addEventListener("install", (event) => {

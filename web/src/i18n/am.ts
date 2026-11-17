@@ -134,6 +134,7 @@ export const am: Translation = {
     cleared: "ተሰርዟል። በዚህ መሣሪያ ላይ ከAnschlussRadar ምንም የተቀመጠ ነገር የለም።",
   },
   footer: {
+    dbData: "የቀጥታ መረጃ፦ DB InfraGO AG (CC BY 4.0)",
     planner: "የጉዞ ፍለጋ፡ Transitous",
     notDb: "የDeutsche Bahn አገልግሎት አይደለም።",
   },
@@ -152,6 +153,7 @@ export const am: Translation = {
     show: "አሳይ",
   },
   watch: {
+    soon: "ማሳወቂያዎች አሁን እየተዘጋጁ ናቸው እና በቅርቡ ይገኛሉ።",
     button: "በየቀኑ ፈትሽ",
     lead: "ከመነሻው አንድ ሰዓት ገደማ በፊት AnschlussRadar ይህን ጉዞ ይፈትሻል፣ የሚያሳውቀውም የባቡር መቀየሩ አደጋ ላይ ሲሆን ብቻ ነው።",
     days: "በእነዚህ ቀናት",
@@ -167,6 +169,13 @@ export const am: Translation = {
     offAll: "ሁሉንም ማሳወቂያዎች አጥፋ",
   },
   board: {
+    filter: "ጣቢያ ፈልግ",
+    filterHint: "ለምሳሌ Köln፣ Altona ወይም München",
+    noMatch: "የሚስማማ የተመዘገበ ጣቢያ የለም። ቢሆንም ለማንኛውም ጣቢያ ግንኙነቶችን በፍለጋው ማግኘት ይችላሉ።",
+    platformChanged: "የመድረክ ለውጥ",
+    notEnough: "እስካሁን በቂ መነሻዎች አልተመዘገቡም። እዚህ በሰዓት ቢያንስ 10 መነሻዎች ሲመዘገቡ አምዶቹ ይታያሉ።",
+    tapBar: "ትክክለኛውን እሴት ለማየት አምድ ይንኩ። አምዱ በረዘመ ቁጥር ይበልጥ በሰዓቱ ነው።",
+    fewDepartures: "በጣም ጥቂት መነሻዎች",
     title: "መነሻዎች",
     window: "የሚቀጥሉት 90 ደቂቃዎች",
     none: "በሚቀጥሉት 90 ደቂቃዎች ከዚህ የሚነሳ ባቡር የለም።",

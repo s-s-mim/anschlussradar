@@ -21,6 +21,10 @@ export function Footer() {
           <a href="https://transitous.org/sources/" target="_blank" rel="noopener noreferrer">
             {t("footer.planner")}
           </a>
+          .{" "}
+          <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">
+            {t("footer.dbData")}
+          </a>
           . {t("footer.notDb")}
         </p>
         <p>© 2026 {SITE.operatorName}</p>

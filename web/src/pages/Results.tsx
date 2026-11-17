@@ -90,6 +90,7 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
         <p className="muted">
           {s.arriveBy ? t("home.arrival") : t("home.departure")} {dateLabel}, {s.time}
         </p>
+        <div className="head-actions">
         <Link className="change" href={`/?${toParams(s)}`}>
           {t("results.change")}
         </Link>
@@ -104,6 +105,7 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
           </svg>
           {saved ? t("results.unsave") : t("results.save")}
         </button>
+        </div>
       </header>
 
       <LearningBanner stage={data?.stage ?? null} />
