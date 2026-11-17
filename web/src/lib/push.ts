@@ -62,7 +62,7 @@ export class PushError extends Error {
   }
 }
 
-async function subscription(): Promise<PushSubscriptionJSON> {
+export async function subscription(): Promise<PushSubscriptionJSON> {
   if (!pushSupported()) throw new PushError("unsupported");
   if ((await Notification.requestPermission()) !== "granted") throw new PushError("denied");
   let key: string;

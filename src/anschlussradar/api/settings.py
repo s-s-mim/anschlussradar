@@ -44,6 +44,13 @@ class ApiSettings(BaseSettings):
         default="https://github.com/s-s-mim/anschlussradar", alias="VAPID_SUBJECT"
     )
 
+    # Question box. Questions go to the same storage account as the watches.
+    # The AI step stays off until both Azure OpenAI values are set.
+    question_table_url: str = Field(default="", alias="QUESTION_TABLE_URL")
+    aoai_endpoint: str = Field(default="", alias="AZURE_OPENAI_ENDPOINT")
+    aoai_deployment: str = Field(default="", alias="AZURE_OPENAI_DEPLOYMENT")
+    help_file: str = Field(default="config/help.json", alias="HELP_FILE")
+
     # 'Hat's geklappt?' answers: a container in the Functions storage account.
     feedback_account_url: str = Field(default="", alias="FEEDBACK_ACCOUNT_URL")
     feedback_container: str = Field(default="feedback", alias="FEEDBACK_CONTAINER")

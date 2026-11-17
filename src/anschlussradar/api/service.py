@@ -7,6 +7,9 @@ GET  /api/v1/hubs                      recorded stations
 GET  /api/v1/hubs/{eva}/board          next departures and punctuality by hour
 GET  /api/v1/network                   punctuality of every recorded station (network map)
 GET  /api/v1/lines                     regional and S-Bahn lines seen at recorded stations
+POST /api/v1/questions                 send a question the help texts could not answer
+GET  /api/v1/questions/{id}            the answer, once there is one
+POST /api/v1/ask                       AI answer from the help texts (when switched on)
 GET  /api/v1/lines/{id}                one line: its stations in order and punctuality by hour
 GET  /api/v1/push/key                  public VAPID key for the browser
 POST /api/v1/watches                   watch a connection (device ID + push address)
@@ -27,6 +30,7 @@ from datetime import UTC, datetime
 from typing import Any
 
 from ..ml.serving import LoadedModel, ModelHolder, model_status
+from .assistant import Assistant, DailyCap
 from .board import StationBoards
 from .contact import ContactError, EmailSender, RateLimiter, validate
 from .feedback import MAX_PER_HOUR as FEEDBACK_PER_HOUR
@@ -38,6 +42,15 @@ from .lines import Lines
 from .messages import MessageProvider, NoMessages
 from .network import NetworkStatus
 from .push import Pusher
+from .questions import (
+    QUESTIONS_DAILY_TOTAL,
+    QUESTIONS_PER_DAY,
+    QuestionError,
+    QuestionStore,
+    new_question,
+    valid_id,
+)
+from .questions import validate as validate_question
 from .stations import HubMatcher, StationIndex
 from .tips import EARLIER_WINDOW, earlier_tip, needs_earlier, transfer_tips
 from .transitous import TransitousClient, TransitousError
@@ -80,6 +93,15 @@ class ApiService:
     watch_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(10))
     contact_limiter: RateLimiter = field(default_factory=RateLimiter)
     feedback_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(FEEDBACK_PER_HOUR))
+    questions: QuestionStore | None = None
+    assistant: Assistant | None = None
+    # Test phase: few questions per person and per day, see QUESTIONS_PER_DAY in questions.py.
+    question_limiter: RateLimiter = field(
+        default_factory=lambda: RateLimiter(QUESTIONS_PER_DAY, window_s=86400.0)
+    )
+    question_cap: DailyCap = field(default_factory=lambda: DailyCap(QUESTIONS_DAILY_TOTAL))
+    ask_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(10))
+    ask_cap: DailyCap = field(default_factory=DailyCap)
     started_at: float = field(default_factory=time.time)
 
     # stations -------------------------------------------------------------
@@ -186,6 +208,7 @@ class ApiService:
             "modelStage": self.models.get().stage.value,
             "transitousRequestsToday": usage.plan_requests,
             "transitousCacheHitsToday": usage.cache_hits,
+            "assistant": self.assistant is not None,
             "uptimeSeconds": round(time.time() - self.started_at),
         }
 
@@ -252,6 +275,64 @@ class ApiService:
         if body is None:
             return error(404, "unknown_line", "Unknown line.")
         return 200, body
+
+    # question box ---------------------------------------------------------------
+
+    def post_question(self, body: Any, client: str, now: datetime | None = None) -> Response:
+        if self.questions is None:
+            return error(503, "questions_unavailable", "Questions are not set up yet.")
+        try:
+            fields = validate_question(body)
+        except QuestionError as exc:
+            return error(400, "invalid_field", str(exc), field=exc.field)
+        if fields["subscription"] and self.pusher is None:
+            fields["subscription"] = ""  # alerts not set up: the answer still shows in the app
+        now = now or datetime.now(UTC)
+        if not self.question_limiter.allow(client) or not self.question_cap.take(now):
+            return error(
+                429, "too_many", "Question limit reached for today.", limit=QUESTIONS_PER_DAY
+            )
+        q = new_question(fields, now)
+        try:
+            self.questions.save(q)
+        except Exception:
+            log.exception("could not store a question")
+            return error(502, "questions_unavailable", "The question could not be saved.")
+        return 201, {
+            "question": q.to_public(),
+            "notify": bool(q.subscription),
+            "limit": QUESTIONS_PER_DAY,
+        }
+
+    def get_question(self, qid: Any) -> Response:
+        if self.questions is None:
+            return error(503, "questions_unavailable", "Questions are not set up yet.")
+        try:
+            q = self.questions.get(valid_id(qid))
+        except QuestionError as exc:
+            return error(404, "unknown_question", str(exc))
+        if q is None:
+            return error(404, "unknown_question", "Unknown question.")
+        return 200, {"question": q.to_public()}
+
+    def post_ask(self, body: Any, client: str, now: datetime | None = None) -> Response:
+        if self.assistant is None:
+            return 200, {"available": False, "answer": None}
+        if not isinstance(body, dict):
+            return error(400, "invalid_field", "Expected a JSON object.", field="body")
+        try:
+            fields = validate_question({"text": body.get("text"), "lang": body.get("lang")})
+        except QuestionError as exc:
+            return error(400, "invalid_field", str(exc), field=exc.field)
+        context = str(body.get("context") or "")[:1500]
+        if not self.ask_limiter.allow(client) or not self.ask_cap.take(now or datetime.now(UTC)):
+            return 200, {"available": True, "answer": None, "limited": True}
+        try:
+            answer = self.assistant.answer(fields["text"], fields["lang"], context)
+        except Exception:
+            log.exception("assistant failed")
+            answer = None
+        return 200, {"available": True, "answer": answer}
 
     # watched connections ---------------------------------------------------------
 

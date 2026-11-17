@@ -31,6 +31,12 @@ param deployApi bool = false
 @description('Public VAPID key for push alerts (scripts/make_vapid_keys.py). Empty: alerts stay off.')
 param vapidPublicKey string = ''
 
+@description('Azure OpenAI endpoint for the question box, e.g. https://<name>.openai.azure.com/. Empty = AI step off.')
+param openAiEndpoint string = ''
+
+@description('Name of the model deployment in Azure OpenAI, e.g. gpt-4.1-mini. Empty = AI step off.')
+param openAiDeployment string = ''
+
 @description('Extra web addresses allowed to call the API, e.g. https://anschlussradar.de once the domain exists')
 param extraWebOrigins array = []
 
@@ -279,6 +285,10 @@ resource ingestApp 'Microsoft.Web/sites@2024-04-01' = {
         { name: 'POLLER_BUDGET_PER_MINUTE', value: '50' }
         { name: 'SINK', value: 'azure' }
         { name: 'HUBS_FILE', value: 'config/hubs.csv' }
+        { name: 'HELP_FILE', value: 'config/help.json' }
+        { name: 'QUESTION_TABLE_URL', value: funcStorage.properties.primaryEndpoints.table }
+        { name: 'AZURE_OPENAI_ENDPOINT', value: openAiEndpoint }
+        { name: 'AZURE_OPENAI_DEPLOYMENT', value: openAiDeployment }
         { name: 'BLOB_ACCOUNT_URL', value: rawStorage.properties.primaryEndpoints.blob }
         { name: 'BLOB_CONTAINER', value: 'raw' }
         { name: 'KUSTO_QUERY_URI', value: kustoQueryUri }

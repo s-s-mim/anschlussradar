@@ -75,7 +75,7 @@ export function App() {
       page = <Station search={search} />;
       break;
     case "/help":
-      page = <Help />;
+      page = <Help search={search} />;
       break;
     case "/about":
       page = <About />;

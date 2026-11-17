@@ -196,6 +196,30 @@ To go public later: fill in `web/src/site.ts`, set `WEB_ACCESS` to `public` and 
 
 Without these steps the app works as before; only the "Check every day" button reports that alerts are not available.
 
+### Step 10: The question box
+
+The help page searches its own texts on the phone. Questions it can't answer can be sent to you anonymously; they land in the `questions` table next to the watched connections. Redeploy once (the deployment command from step 4) so the API gets `QUESTION_TABLE_URL`.
+
+**Answering questions from your PC**
+
+1. Install the Azure extras once: `pip install -e ".[azure]"`
+2. Give your own account write access to the tables (once):
+   `az role assignment create --assignee <your sign-in e-mail> --role "Storage Table Data Contributor" --scope <storage account resource ID>`
+   The resource ID comes from `az storage account list -g rg-anschlussradar-dev --query "[?contains(name,'fn')].id" -o tsv`.
+3. Add the table address to `.env`: `QUESTION_TABLE_URL=https://<storage account>.table.core.windows.net`
+4. `python scripts/questions.py list` shows open questions; `python scripts/questions.py answer` lets you answer them one by one. People who asked for a notification get it within 10 minutes. Saved questions are only ever answered by you, also after the AI step is switched on.
+
+Test phase: each person can send 2 questions a day, the whole app at most 50 (`QUESTIONS_PER_DAY` and `QUESTIONS_DAILY_TOTAL` in `src/anschlussradar/api/questions.py`). The app says so next to the send button.
+
+**Switching the AI step on (optional, a few euros a month at most)**
+
+1. Azure portal → Create a resource → Azure OpenAI, region Sweden Central or Germany West Central, resource group `rg-anschlussradar-dev`.
+2. In the Foundry portal: Deployments → Deploy model → `gpt-4.1-mini`, deployment type **Data Zone Standard (EU)**, so the data stays in the EU.
+3. Let the API use it without a key: `az role assignment create --assignee <API managed identity principal ID> --role "Cognitive Services OpenAI User" --scope <Azure OpenAI resource ID>`. Give your own account the same role if you want `questions.py answer --translate` to translate your answers.
+4. Add to `infra/main.dev.local.bicepparam`: `param openAiEndpoint = 'https://<name>.openai.azure.com/'` and `param openAiDeployment = 'gpt-4.1-mini'`, then run the deployment command from step 4 again.
+
+The AI only answers questions asked while it is switched on, at most 300 a day and 10 per person per hour. Questions saved before stay with you. To switch it off again, set both values back to `''` and redeploy.
+
 ## Design decisions
 
 - **Raw first.** Every response is stored unchanged before parsing, so a parser bug can be fixed and replayed from Blob Storage.

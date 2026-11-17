@@ -7,6 +7,7 @@ watched connection and day, so the load on Transitous stays tiny.
 
 from __future__ import annotations
 
+import json
 import logging
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
@@ -16,6 +17,7 @@ from zoneinfo import ZoneInfo
 
 from .journeys import Journey, build_journeys
 from .push import PushGone
+from .questions import expired, notify_payload
 from .transitous import TransitousError
 from .watch import Watch, inactive, today_departure
 
@@ -153,3 +155,36 @@ def cleanup(svc: ApiService, now: datetime | None = None) -> int:
     for device_id in gone:
         svc.watches.delete_device(device_id)
     return len(gone)
+
+
+def notify_answers(svc: ApiService) -> int:
+    """Push 'your question has an answer' to phones that asked for it."""
+    if svc.questions is None or svc.pusher is None:
+        return 0
+    sent = 0
+    for q in svc.questions.all():
+        if not q.answer or not q.subscription or q.notified:
+            continue
+        try:
+            svc.pusher.send(json.loads(q.subscription), notify_payload(q))
+            sent += 1
+        except PushGone:
+            pass  # the phone switched notifications off; the answer stays in "Meine Fragen"
+        except Exception:
+            log.exception("could not send an answer notification")
+            continue
+        # Notified (or no longer reachable): the push address is not needed any more.
+        q.notified, q.subscription = "1", ""
+        svc.questions.save(q)
+    return sent
+
+
+def cleanup_questions(svc: ApiService, now: datetime | None = None) -> int:
+    """Delete questions 30 days after the answer, or after 60 days without one."""
+    if svc.questions is None:
+        return 0
+    now = now or datetime.now(UTC)
+    old = [q.id for q in svc.questions.all() if expired(q, now)]
+    for qid in old:
+        svc.questions.delete(qid)
+    return len(old)

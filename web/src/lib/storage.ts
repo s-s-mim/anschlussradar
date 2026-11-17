@@ -11,7 +11,14 @@ const KEYS = {
   searched: "ar.searched",
   answered: "ar.answered",
   local: "ar.local",
+  questions: "ar.questions",
 } as const;
+
+export interface MyQuestion {
+  id: string;
+  text: string;
+  sent: string; // ISO time
+}
 
 export interface Route {
   from: Station;
@@ -65,6 +72,15 @@ export const store = {
   /** The last choice for "also buses, trams and underground", used as the default. */
   local: () => read<boolean>(KEYS.local, false),
   setLocal: (on: boolean) => write(KEYS.local, on),
+
+  /** Questions sent from the help page. Only the random ID and the text, on this phone. */
+  questions: () => read<MyQuestion[]>(KEYS.questions, []),
+  addQuestion(q: MyQuestion): void {
+    write(KEYS.questions, [q, ...store.questions().filter((x) => x.id !== q.id)].slice(0, 20));
+  },
+  removeQuestion(id: string): void {
+    write(KEYS.questions, store.questions().filter((x) => x.id !== id));
+  },
 
   /** After the first search the start page shows a short link instead of the intro. */
   hasSearched: () => read<boolean>(KEYS.searched, false),

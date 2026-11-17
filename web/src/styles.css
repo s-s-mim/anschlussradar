@@ -1623,3 +1623,108 @@ a.line-badge {
   border: 4px solid var(--petrol);
   background: var(--surface);
 }
+
+/* Question box */
+.qbox {
+  margin: 8px 0 28px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.qbox h2 {
+  margin-top: 0;
+}
+
+.qbox label[for="question"] {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.qbox textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  font: inherit;
+  resize: vertical;
+}
+
+.qbox textarea:focus {
+  outline: 2px solid var(--petrol);
+  outline-offset: 1px;
+}
+
+.qbox .matches {
+  margin: 12px 0;
+}
+
+.qbox .match {
+  border-bottom: 1px solid var(--line);
+  padding: 6px 0;
+}
+
+.qbox .match summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.qbox > form > button,
+.qbox .send .primary {
+  margin-top: 12px;
+}
+
+.ai-answer {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-inline-start: 4px solid var(--petrol);
+  background: var(--paper);
+  border-radius: 0 8px 8px 0;
+}
+
+.ai-answer p:first-child {
+  margin-top: 0;
+}
+
+.qbox .send {
+  margin-top: 12px;
+}
+
+.qbox .send .check {
+  margin-top: 8px;
+}
+
+.my-questions ul {
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.my-questions li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.my-questions li.highlight {
+  background: var(--petrol-soft);
+  padding-inline: 10px;
+  border-radius: 8px;
+}
+
+.my-questions .q {
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.my-questions .a {
+  margin: 0 0 4px;
+  white-space: pre-line;
+}
+
+.ai-answer .link-button {
+  padding: 0;
+  text-align: start;
+}

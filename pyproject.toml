@@ -26,6 +26,8 @@ azure = [
     "azure-storage-blob>=12.20",
     "azure-kusto-data>=4.5",
     "azure-kusto-ingest>=4.5",
+    "azure-data-tables>=12.5",
+    "openai>=1.50",
 ]
 ml = [
     "numpy>=1.26",

@@ -1,0 +1,142 @@
+{
+ "de": [
+  {
+   "q": "Was bedeutet die Prozentzahl?",
+   "a": "„84 % dieser Umstiege klappen“ heißt: Bei vergleichbaren Umstiegen in den letzten Wochen, also am selben Bahnhof, mit ähnlichen Zügen und ähnlich viel Umsteigezeit, wurde der Anschluss in 84 von 100 Fällen erreicht.\nDie Zahl rechts neben einer Verbindung ist die Chance, dass alle ihre Umstiege klappen. Bei einer Direktverbindung gibt es nichts zu verpassen, deshalb steht dort keine Zahl."
+  },
+  {
+   "q": "Was zählt als geschafft?",
+   "a": "Ein Umstieg zählt als geschafft, wenn der Anschlusszug nach der tatsächlichen Ankunft noch mindestens die Mindestumsteigezeit lässt. Die beträgt 3 Minuten, mit einem Fernzug 5 Minuten. Bei einem Wechsel zwischen Ebenen (zum Beispiel vom S-Bahn-Tiefbahnhof nach oben) kommen 2 Minuten dazu. Ob jemand gerannt ist oder ob der Zug gewartet hat, sehen wir nicht."
+  },
+  {
+   "q": "Warum steht bei manchen Umstiegen kein Wert?",
+   "a": "- Das Modell lernt noch. In den ersten Wochen gibt es nur den Live-Check.\n- Der Umstieg ist an einem Bahnhof, für den wir noch keine Daten sammeln. Im Moment sind das die großen Umsteigebahnhöfe, die Liste wächst.\n- Ein Teil der Fahrt ist ein Bus, eine Straßenbahn oder eine U-Bahn. Dafür sammeln wir keine Daten. Am Reisetag gibt es aber den Live-Check, und der Prozentwert der Fahrt gilt dann nur für die Zugumstiege."
+  },
+  {
+   "q": "Was zeigt der Live-Check?",
+   "a": "Am Reisetag vergleichen wir die aktuellen Verspätungen beider Züge mit der Mindestumsteigezeit. Die Reserve ist die Zeit, die darüber hinaus bleibt. „Klappt“ heißt: 5 Minuten Reserve oder mehr. „Knapp“ heißt: 2 bis 4 Minuten. „Gefährdet“ heißt: weniger als 2 Minuten, es reicht nur, wenn alles glattgeht. „Wird wohl nicht klappen“ heißt: Nach den aktuellen Zeiten fährt der Anschluss vor dir ab."
+  },
+  {
+   "q": "Wozu dient „Hat dieser Umstieg geklappt?“",
+   "a": "Nach einem Umstieg kannst du mit einem Tipp sagen, ob er geklappt hat. Gespeichert werden nur der Umstieg und deine Antwort, keine Angaben über dich. Die Antworten helfen, die Werte zu prüfen."
+  },
+  {
+   "q": "Kann ich mich darauf verlassen?",
+   "a": "Die Werte sind Schätzungen aus vergangenen Fahrten, keine Garantie. Bei Störungen, Bauarbeiten oder Streiks kann es ganz anders kommen. Achte unterwegs auf die Anzeigen und Durchsagen im Zug und am Bahnhof."
+  },
+  {
+   "q": "Kann ich hier Fahrkarten kaufen?",
+   "a": "Nein. AnschlussRadar zeigt nur Verbindungen und ihre Zuverlässigkeit."
+  },
+  {
+   "q": "Wie lege ich die App auf den Startbildschirm?",
+   "a": "iPhone: Öffne die Seite in Safari, tippe auf „Teilen“ und dann auf „Zum Home-Bildschirm“. Android: Öffne die Seite in Chrome, tippe auf das Menü (drei Punkte) und dann auf „App installieren“ oder „Zum Startbildschirm hinzufügen“."
+  },
+  {
+   "q": "Was bedeutet „Fährt hier meist … zu spät ab“?",
+   "a": "Das ist die Verspätung, mit der dieser Zug in den letzten 4 Wochen an diesem Bahnhof abgefahren ist. „Meist“ ist der mittlere Wert, „an schlechten Tagen“ der Wert, den 8 von 10 Fahrten nicht überschritten haben. Bei weniger als 5 aufgezeichneten Fahrten zeigen wir nichts."
+  },
+  {
+   "q": "Wie funktioniert „Jeden Tag prüfen“?",
+   "a": "Du wählst die Wochentage. 45 bis 75 Minuten vor der Abfahrt prüft AnschlussRadar die Verbindung. Nur wenn ein Umstieg gefährdet ist oder ein Zug ausfällt, bekommst du eine Mitteilung. Pro Gerät gehen 5 Verbindungen. Wird ein Gerät 90 Tage nicht genutzt, löschen wir seine Einträge. Auf dem iPhone geht das nur, wenn die App auf dem Startbildschirm liegt."
+  },
+  {
+   "q": "Was bedeuten die Tipps?",
+   "a": "Ist ein Umstieg unsicher, schlagen wir manchmal einen früheren Zug oder einen anderen Umsteigebahnhof vor, an dem es öfter klappt. Die Tipps kommen aus denselben Daten wie die Prozentwerte."
+  },
+  {
+   "q": "Was zeigen Netzkarte und Linien?",
+   "a": "Die Netzkarte zeigt, wie pünktlich die Züge an den aufgezeichneten Bahnhöfen in den letzten 2 Stunden oder 7 Tagen abgefahren sind. Unter „Linien“ siehst du jede Regional- und S-Bahn-Linie mit ihrer Pünktlichkeit der letzten 28 Tage, Bahnhof für Bahnhof."
+  },
+  {
+   "q": "Woher kommen die Gründe für Verspätungen?",
+   "a": "Die Deutsche Bahn veröffentlicht zu vielen Zügen kurze Meldungen, zum Beispiel „Bauarbeiten“ oder „Ein Wagen fehlt“. AnschlussRadar zeigt sie in deiner Sprache an."
+  },
+  {
+   "q": "Echte Erfahrung statt nur Fahrplan",
+   "a": "Für jeden Umstieg siehst du, wie oft er in den letzten Wochen wirklich geklappt hat."
+  },
+  {
+   "q": "Zuverlässigste Verbindung zuerst",
+   "a": "Sortiere nach der Chance, anzukommen, nicht nur nach der Ankunftszeit."
+  },
+  {
+   "q": "Live-Check am Reisetag",
+   "a": "Sind die Züge heute verspätet, siehst du sofort, ob dein Umstieg noch klappt."
+  },
+  {
+   "q": "Was AnschlussRadar nicht tut",
+   "a": "- Kein Konto und keine Anmeldung nötig (außer in der Demo-Phase)\n- Keine Cookies, kein Tracking, keine Statistik-Dienste\n- Keine Werbung, kein Verkauf oder Weitergeben von Daten\n- Keine Fahrkarten, keine Zahlungen\n- Kein Angebot der Deutschen Bahn\n- Keine Garantie: Die Werte sind Schätzungen aus vergangenen Fahrten"
+  }
+ ],
+ "en": [
+  {
+   "q": "What does the percentage mean?",
+   "a": "\"84% of these transfers work\" means: for similar transfers in recent weeks (same station, similar trains, similar time to change), the connection was made in 84 out of 100 cases.\nThe number next to a journey is the chance that all of its transfers work. A direct train has nothing to miss, so it gets no number."
+  },
+  {
+   "q": "What counts as made?",
+   "a": "A transfer counts as made when the connecting train leaves at least the minimum transfer time after the actual arrival. That time is 3 minutes, or 5 minutes with a long-distance train, plus 2 minutes when you change between levels (for example from the underground S-Bahn platforms). We can't see whether someone ran or whether the train waited."
+  },
+  {
+   "q": "Why do some transfers have no score?",
+   "a": "- The model is still learning. During the first weeks there is only the live check.\n- The transfer is at a station we don't collect data for yet. Right now these are the large transfer stations, and the list is growing.\n- Part of the trip is a bus, tram or underground line. We don't collect data for those. On the day of travel you still get the live check, and the trip's percentage then covers the train transfers only."
+  },
+  {
+   "q": "What does the live check show?",
+   "a": "On the day of travel we compare the current delays of both trains with the minimum transfer time. The time to spare is what's left on top of it. \"Fine\" means 5 minutes or more to spare. \"Tight\" means 2 to 4 minutes. \"At risk\" means less than 2 minutes, so it only works if nothing else goes wrong. \"Probably won't work\" means that by the current times the connection leaves before you arrive."
+  },
+  {
+   "q": "What is \"Did this transfer work?\" for?",
+   "a": "After a transfer you can say with one tap whether it worked. Only the transfer and your answer are stored, nothing about you. The answers help check the scores."
+  },
+  {
+   "q": "Can I rely on it?",
+   "a": "The scores are estimates from past trips, not a promise. Disruptions, engineering work or strikes can change everything. On the way, follow the displays and announcements on the train and at the station."
+  },
+  {
+   "q": "Can I buy tickets here?",
+   "a": "No. AnschlussRadar only shows connections and how reliable they are."
+  },
+  {
+   "q": "How do I add the app to my home screen?",
+   "a": "iPhone: open the page in Safari, tap \"Share\", then \"Add to Home Screen\". Android: open the page in Chrome, tap the menu (three dots), then \"Install app\" or \"Add to Home screen\"."
+  },
+  {
+   "q": "What does “Usually leaves here … min late” mean?",
+   "a": "It is the delay this train had when leaving this station over the last 4 weeks. “Usually” is the middle value, “on bad days” is the delay that 8 out of 10 trips did not exceed. With fewer than 5 recorded trips we show nothing."
+  },
+  {
+   "q": "How does “Check every day” work?",
+   "a": "You pick the weekdays. 45 to 75 minutes before departure, AnschlussRadar checks the connection. You only get a notification if a transfer is at risk or a train is cancelled. Each device can watch 5 connections. If a device isn't used for 90 days, we delete its entries. On iPhone this only works when the app is on the home screen."
+  },
+  {
+   "q": "What are the tips?",
+   "a": "If a transfer is uncertain, we sometimes suggest an earlier train or a different transfer station where it works more often. The tips come from the same data as the percentages."
+  },
+  {
+   "q": "What do the network map and the lines show?",
+   "a": "The network map shows how punctually trains left the recorded stations in the last 2 hours or 7 days. Under “Lines” you find every regional and S-Bahn line with its punctuality over the last 28 days, station by station."
+  },
+  {
+   "q": "Where do the reasons for delays come from?",
+   "a": "Deutsche Bahn publishes short notes for many trains, for example “Construction work” or “A coach is missing”. AnschlussRadar shows them in your language."
+  },
+  {
+   "q": "Real history, not just the timetable",
+   "a": "For every transfer you see how often it actually worked in recent weeks."
+  },
+  {
+   "q": "Most reliable first",
+   "a": "Sort by your chance of getting there, not only by arrival time."
+  },
+  {
+   "q": "Live check on the day",
+   "a": "If today's trains are late, you see straight away whether your transfer still works."
+  },
+  {
+   "q": "What AnschlussRadar doesn't do",
+   "a": "- No account or sign-in needed (except during the demo phase)\n- No cookies, no tracking, no analytics services\n- No ads, no selling or passing on of data\n- No tickets, no payments\n- Not a Deutsche Bahn service\n- No guarantee: the scores are estimates from past trips"
+  }
+ ]
+}

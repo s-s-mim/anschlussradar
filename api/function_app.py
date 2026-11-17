@@ -120,17 +120,22 @@ def remove_watch(req: func.HttpRequest) -> func.HttpResponse:
 @app.timer_trigger(schedule="0 */10 * * * *", arg_name="timer", run_on_startup=False)
 def check_watches(timer: func.TimerRequest) -> None:
     from anschlussradar.api.watcher import check_watches as run
+    from anschlussradar.api.watcher import notify_answers
 
-    result = run(service())
+    svc = service()
+    result = run(svc)
     if result.checked:
         logging.info("watches checked: %s", result)
+    if answered := notify_answers(svc):
+        logging.info("answer notifications sent: %s", answered)
 
 
 @app.timer_trigger(schedule="0 23 3 * * *", arg_name="timer", run_on_startup=False)
 def cleanup_watches(timer: func.TimerRequest) -> None:
-    from anschlussradar.api.watcher import cleanup
+    from anschlussradar.api.watcher import cleanup, cleanup_questions
 
     logging.info("inactive devices deleted: %s", cleanup(service()))
+    logging.info("old questions deleted: %s", cleanup_questions(service()))
 
 
 def _client(req: func.HttpRequest) -> str:
@@ -148,6 +153,29 @@ def feedback(req: func.HttpRequest) -> func.HttpResponse:
     if result[0] >= 500:
         logging.warning("feedback failed with %s", result[0])
     return respond(result)
+
+
+@app.route(route="questions", methods=["POST"])
+def post_question(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        body = req.get_json()
+    except ValueError:
+        body = None
+    return respond(service().post_question(body, _client(req)))
+
+
+@app.route(route="questions/{id}", methods=["GET"])
+def get_question(req: func.HttpRequest) -> func.HttpResponse:
+    return respond(service().get_question(req.route_params.get("id")))
+
+
+@app.route(route="ask", methods=["POST"])
+def ask(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        body = req.get_json()
+    except ValueError:
+        body = None
+    return respond(service().post_ask(body, _client(req)))
 
 
 @app.route(route="contact", methods=["POST"])

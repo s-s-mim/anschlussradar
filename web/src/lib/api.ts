@@ -93,3 +93,36 @@ export function getLine(id: string, signal?: AbortSignal): Promise<LineDetail> {
 export function getBoard(eva: number, signal?: AbortSignal): Promise<Board> {
   return request<Board>(`/hubs/${eva}/board`, { signal });
 }
+
+export interface QuestionView {
+  id: string;
+  text: string;
+  answer: string | null;
+  answeredAt: string | null;
+}
+
+export function sendQuestion(
+  text: string,
+  lang: string,
+  subscription?: PushSubscriptionJSON,
+): Promise<{ question: QuestionView; notify: boolean }> {
+  return request("/questions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, lang, subscription }),
+  });
+}
+
+export function getQuestion(id: string): Promise<QuestionView> {
+  return request<{ question: QuestionView }>(`/questions/${encodeURIComponent(id)}`).then((r) => r.question);
+}
+
+/** The AI step. available=false while it is switched off; answer=null when it doesn't know. */
+export function ask(text: string, lang: string): Promise<{ available: boolean; answer: string | null }> {
+  return request("/ask", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, lang }),
+  });
+}
+

@@ -212,7 +212,30 @@ function PrivacyDe() {
         </p>
       </Section>
 
-      <Section title="8. Deine Rechte">
+      <Section title="8. Fragen auf der Hilfeseite">
+        <p>
+          Die Suche in den Hilfetexten läuft nur auf deinem Gerät; dabei wird nichts gesendet. Wenn du eine Frage
+          absendest, speichere ich: den Text der Frage, die Sprache, den Zeitpunkt und eine zufällige Kennung. Name und
+          E-Mail-Adresse werden nicht abgefragt. Auf deinem Gerät bleiben die Kennung und der Text, damit die Antwort
+          unter „Meine Fragen“ erscheint. Wenn du um eine Benachrichtigung bittest, speichere ich zusätzlich die
+          Push-Adresse deines Browsers, bis die Nachricht verschickt ist; der Versand läuft wie in Abschnitt 7
+          beschrieben.
+        </p>
+        <p>
+          Ist die automatische Antwort eingeschaltet, werden Fragen, zu denen die Hilfetexte nichts passendes enthalten,
+          an Azure OpenAI von Microsoft geschickt (Verarbeitung in der EU). Microsoft nutzt diese Daten nicht zum
+          Training seiner Modelle. Diese Fragen speichere ich nicht, außer du sendest sie danach selbst ab. Bitte
+          schreib keine persönlichen Daten in eine Frage.
+        </p>
+        <p>
+          Die Daten liegen in Microsoft Azure (Frankfurt). Fragen werden 30 Tage nach der Antwort gelöscht, Fragen ohne
+          Antwort nach 60 Tagen. Rechtsgrundlage ist mein berechtigtes Interesse, Fragen zu beantworten und die Hilfe zu
+          verbessern (Art. 6 Abs. 1 lit. f DSGVO), für die Benachrichtigung deine Einwilligung (Art. 6 Abs. 1 lit. a
+          DSGVO, § 25 Abs. 1 TDDDG).
+        </p>
+      </Section>
+
+      <Section title="9. Deine Rechte">
         <p>
           Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung
           der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage
@@ -336,7 +359,27 @@ function PrivacyEn() {
         </p>
       </Section>
 
-      <Section title="8. Your rights">
+      <Section title="8. Questions on the help page">
+        <p>
+          The search in the help texts runs only on your device; nothing is sent. When you send a question, I store:
+          the text of the question, the language, the time and a random ID. Name and email address are not asked for.
+          The ID and the text stay on your device so the answer can appear under "My questions". If you ask for a
+          notification, I also store your browser's push address until the message has been sent; sending works as
+          described in section 7.
+        </p>
+        <p>
+          When the automatic answer is switched on, questions the help texts don't cover are sent to Microsoft's Azure
+          OpenAI (processed in the EU). Microsoft does not use this data to train its models. I don't store these
+          questions unless you send them afterwards yourself. Please don't put personal data in a question.
+        </p>
+        <p>
+          The data is stored in Microsoft Azure (Frankfurt). Questions are deleted 30 days after the answer, and after
+          60 days if there is no answer. The legal basis is my legitimate interest in answering questions and improving
+          the help (Art. 6(1)(f) GDPR), and for the notification your consent (Art. 6(1)(a) GDPR, § 25(1) TDDDG).
+        </p>
+      </Section>
+
+      <Section title="9. Your rights">
         <p>
           You have the right of access (Art. 15 GDPR), rectification (Art. 16), erasure (Art. 17), restriction of
           processing (Art. 18), data portability (Art. 20) and to object to processing based on Art. 6(1)(f) (Art.

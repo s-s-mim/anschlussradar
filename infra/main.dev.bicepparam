@@ -20,3 +20,7 @@ param kustoAppId = '<app registration client id>'
 param deployApi = true
 param deployWebApp = true
 param staticWebAppLocation = 'centralus'
+
+// Question box, AI step (optional). Leave empty to keep it off. See README step 10.
+param openAiEndpoint = ''
+param openAiDeployment = ''

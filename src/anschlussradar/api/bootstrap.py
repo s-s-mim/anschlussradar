@@ -8,6 +8,7 @@ from pathlib import Path
 from ..ingest.hubs import load_hubs
 from ..ml.registry import HttpReadStore, LocalStore, ModelRegistry
 from ..ml.serving import ModelHolder
+from .assistant import Assistant, AzureAssistant, load_help
 from .board import StationBoards
 from .contact import AcsEmailSender, EmailSender
 from .feedback import BlobFeedbackStore, FeedbackStore
@@ -18,6 +19,7 @@ from .lines import Lines
 from .messages import KustoMessages, MessageProvider, NoMessages
 from .network import NetworkStatus
 from .push import Pusher, WebPusher
+from .questions import QuestionStore, TableQuestionStore
 from .service import ApiService
 from .settings import ApiSettings
 from .stations import HubMatcher, StationIndex
@@ -90,6 +92,21 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         except Exception:
             log.exception("could not set up watched connections")
 
+    questions: QuestionStore | None = None
+    if settings.question_table_url:
+        try:
+            questions = TableQuestionStore(settings.question_table_url)
+        except Exception:
+            log.exception("could not set up the question store")
+
+    assistant: Assistant | None = None
+    if settings.aoai_endpoint and settings.aoai_deployment:
+        try:
+            help_text = load_help(Path(settings.help_file))
+            assistant = AzureAssistant(settings.aoai_endpoint, settings.aoai_deployment, help_text)
+        except Exception:
+            log.exception("could not set up the assistant; the question box works without it")
+
     hubs = HubMatcher(load_hubs(Path(settings.hubs_file)))
     network = (
         NetworkStatus(kusto_runner(*kusto), hubs, stations) if settings.kusto_query_uri else None
@@ -110,6 +127,8 @@ def build_service(settings: ApiSettings, local_models_dir: Path | None = None) -
         boards=boards,
         network=network,
         lines=lines,
+        questions=questions,
+        assistant=assistant,
         forecasts=forecasts,
         watches=watches,
         pusher=pusher,

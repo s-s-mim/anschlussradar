@@ -3,7 +3,7 @@ name: deploy-api
 on:
   push:
     branches: [main]
-    paths: ["src/**", "api/**", "config/hubs.csv"]
+    paths: ["src/**", "api/**", "config/hubs.csv", "config/help.json"]
   workflow_dispatch:
 
 permissions:
@@ -30,6 +30,7 @@ jobs:
           cp -r src/anschlussradar api/anschlussradar
           mkdir -p api/config
           cp config/hubs.csv api/config/hubs.csv
+          cp config/help.json api/config/help.json
       - uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
