@@ -31,7 +31,7 @@ LineStations(c: string, l: string, o: string, days: int) {
         | where not(incomplete) and isnotnull(dep_pt) and dep_pt > ago(days * 1d)
         | where category == c and line == l and operator == o;
     let main_dest = toscalar(f | summarize n = count() by destination | top 1 by n | project destination);
-    let order = f
+    let positions = f
         | where destination == main_dest
         | extend trip = strcat(number, "|", tostring(service_date))
         | order by trip asc, dep_pt asc
@@ -44,7 +44,7 @@ LineStations(c: string, l: string, o: string, days: int) {
         cancelled = countif(dep_cancelled),
         avg_delay = avgif(dep_delay_min, not(dep_cancelled))
       by eva
-    | join kind=leftouter order on eva
+    | join kind=leftouter positions on eva
     | project eva, departures, on_time, cancelled, avg_delay, pos
 }
 
