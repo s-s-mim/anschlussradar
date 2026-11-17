@@ -2,6 +2,7 @@ import { LANGUAGES, useI18n } from "../i18n";
 import type { Lang } from "../i18n";
 import { Link } from "../lib/router";
 import { LogoMark } from "./Logo";
+import { NavLinks } from "./TabBar";
 
 export function Header({ path }: { path: string }) {
   const { t, lang, setLang } = useI18n();
@@ -15,10 +16,8 @@ export function Header({ path }: { path: string }) {
           <LogoMark />
           <span>AnschlussRadar</span>
         </Link>
-        <nav className="header-nav" aria-label={t("nav.search")}>
-          <Link href="/help" aria-current={path === "/help" ? "page" : undefined}>
-            {t("nav.help")}
-          </Link>
+        <div className="header-nav">
+          <NavLinks path={path} className="top-links" />
           {/* A native menu: works with screen readers and opens the phone's own picker. */}
           <label className="lang">
             <span className="lang-code" aria-hidden="true">
@@ -32,7 +31,7 @@ export function Header({ path }: { path: string }) {
               ))}
             </select>
           </label>
-        </nav>
+        </div>
       </div>
     </header>
   );

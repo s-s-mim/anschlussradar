@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const ro: Translation = {
   nav: {
     search: "Căutare",
+    main: "Meniu principal",
     stations: "Gări",
     map: "Harta rețelei",
     lines: "Linii",
@@ -35,12 +36,19 @@ export const ro: Translation = {
     remove: "Elimină",
     whyTitle: "Ce face AnschlussRadar diferit",
     whyLink: "Ce face AnschlussRadar diferit?",
+    whyMore: "Vezi toate diferențele",
     growing:
-      "Găsești deja legături în toată Germania. Scorurile de fiabilitate acoperă tot mai multe gări, iar alte mijloace de transport vor fi adăugate, și pe baza părerilor voastre.",
+      "Găsești legături în toată Germania, inclusiv cu autobuzul, tramvaiul și metroul. Valorile de fiabilitate acoperă tot mai multe gări, și datorită feedbackului vostru.",
     why: [
       ["Experiență reală, nu doar orar", "Pentru fiecare transfer vezi cât de des a reușit cu adevărat în ultimele săptămâni."],
       ["Cea mai sigură legătură mai întâi", "Sortează după șansa de a ajunge, nu doar după ora de sosire."],
       ["Verificare live în ziua călătoriei", "Dacă trenurile au întârziere azi, vezi imediat dacă transferul mai reușește."],
+      ["Vezi întârzierile dinainte", "Pentru multe trenuri vezi cu cât pleacă de obicei mai târziu din această gară și cu cât în zilele proaste."],
+      ["Avertizare doar când e nevoie", "Lasă aplicația să-ți verifice legătura zilnică. Primești o notificare doar dacă o schimbare este în pericol sau un tren este anulat."],
+      ["Harta rețelei și liniile", "Vezi dintr-o privire unde trenurile sunt acum la timp și unde nu, și cât de fiabilă este linia ta."],
+      ["Și autobuz, tramvai și metrou", "La cerere, AnschlussRadar caută legături cu toate mijloacele de transport. În ziua călătoriei, verificarea live include și aceste schimbări."],
+      ["În 13 limbi", "De la germană și engleză la turcă, ucraineană, arabă, bengaleză și amharică."],
+      ["Întreabă pur și simplu", "Ajutorul găsește răspunsuri potrivite direct pe dispozitivul tău. Dacă niciunul nu se potrivește, ne poți trimite întrebarea anonim."],
     ],
   },
   station: {
@@ -209,6 +217,8 @@ export const ro: Translation = {
     hourlyLead: "Plecările acestei linii din gările înregistrate, ultimele {days} zile.",
   },
   qbox: {
+    answeredHint: "Întrebarea ta are un răspuns.",
+    read: "Citește răspunsul",
     title: "Întreabă-ne",
     label: "Ce vrei să afli?",
     hint: "de ex. De ce nu am nicio valoare la schimbare?",
@@ -235,6 +245,11 @@ export const ro: Translation = {
     all: "Toate întrebările și răspunsurile",
   },
   about: {
+    soonTitle: "În curând",
+    soon: {
+      scores: ["Procente și sfaturi", "Când vor fi înregistrate destule curse, fiecare schimbare din gările înregistrate va primi un procent, iar aplicația va propune alternative mai sigure. Până atunci există verificarea live."],
+      weather: ["Prognoza întârzierilor cu vremea", "Un model care învață ține cont de vreme și de anotimp. Înlocuiește prognoza actuală doar când se dovedește mai precis."],
+    },
     notTitle: "Ce nu face AnschlussRadar",
     not: [
       "Nu e nevoie de cont sau autentificare (în afara fazei demo)",
@@ -317,7 +332,7 @@ export const ro: Translation = {
       },
       {
         q: "De unde vin motivele întârzierilor?",
-        a: ["Deutsche Bahn publică mesaje scurte pentru multe trenuri, de exemplu „Lucrări de construcție” sau „Lipsește un vagon”. AnschlussRadar le afișează în limba ta."],
+        a: ["Deutsche Bahn publică mesaje scurte pentru multe trenuri, de exemplu „Lucrări de construcție” sau „Lipsește un vagon”. AnschlussRadar le afișează în germană și engleză, iar în celelalte limbi deocamdată în engleză."],
       },
     ],
     more: "Mai ai o întrebare?",

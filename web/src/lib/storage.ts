@@ -18,6 +18,7 @@ export interface MyQuestion {
   id: string;
   text: string;
   sent: string; // ISO time
+  seen?: boolean; // the answer was shown on the help page
 }
 
 export interface Route {
@@ -77,6 +78,9 @@ export const store = {
   questions: () => read<MyQuestion[]>(KEYS.questions, []),
   addQuestion(q: MyQuestion): void {
     write(KEYS.questions, [q, ...store.questions().filter((x) => x.id !== q.id)].slice(0, 20));
+  },
+  markSeen(id: string): void {
+    write(KEYS.questions, store.questions().map((q) => (q.id === id ? { ...q, seen: true } : q)));
   },
   removeQuestion(id: string): void {
     write(KEYS.questions, store.questions().filter((x) => x.id !== id));

@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const pl: Translation = {
   nav: {
     search: "Szukaj",
+    main: "Menu główne",
     stations: "Stacje",
     map: "Mapa sieci",
     lines: "Linie",
@@ -35,12 +36,19 @@ export const pl: Translation = {
     remove: "Usuń",
     whyTitle: "Co AnschlussRadar robi inaczej",
     whyLink: "Co AnschlussRadar robi inaczej?",
+    whyMore: "Zobacz wszystkie różnice",
     growing:
-      "Połączenia znajdziesz już w całych Niemczech. Oceny niezawodności obejmują coraz więcej stacji, a kolejne środki transportu dojdą, także na podstawie waszych opinii.",
+      "Połączenia znajdziesz w całych Niemczech, także z autobusem, tramwajem i metrem. Oceny niezawodności obejmują coraz więcej stacji, również dzięki waszym opiniom.",
     why: [
       ["Prawdziwe doświadczenie, nie tylko rozkład", "Dla każdej przesiadki widzisz, jak często naprawdę się udawała w ostatnich tygodniach."],
       ["Najpierw najpewniejsze połączenie", "Sortuj według szansy na dojazd, nie tylko według godziny przyjazdu."],
       ["Kontrola na żywo w dniu podróży", "Jeśli pociągi mają dziś opóźnienie, od razu widzisz, czy przesiadka jeszcze się uda."],
+      ["Zobacz opóźnienia z wyprzedzeniem", "Dla wielu pociągów widzisz, jak bardzo zwykle się spóźniają przy odjeździe z tej stacji, a jak bardzo w złe dni."],
+      ["Powiadomienie tylko wtedy, gdy trzeba", "Zleć sprawdzanie swojego codziennego połączenia. Powiadomienie przychodzi tylko wtedy, gdy przesiadka jest zagrożona albo pociąg odwołany."],
+      ["Mapa sieci i linie", "Zobacz od razu, gdzie pociągi są teraz punktualne, a gdzie nie, i jak niezawodna jest twoja linia."],
+      ["Także autobus, tramwaj i metro", "Na życzenie AnschlussRadar szuka połączeń wszystkimi środkami transportu. W dniu podróży sprawdzenie na żywo obejmuje też te przesiadki."],
+      ["W 13 językach", "Od niemieckiego i angielskiego po turecki, ukraiński, arabski, bengalski i amharski."],
+      ["Po prostu zapytaj", "Pomoc znajduje pasujące odpowiedzi bezpośrednio na twoim urządzeniu. Jeśli żadna nie pasuje, możesz anonimowo wysłać nam pytanie."],
     ],
   },
   station: {
@@ -211,6 +219,8 @@ export const pl: Translation = {
     hourlyLead: "Odjazdy tej linii z rejestrowanych stacji, ostatnie {days} dni.",
   },
   qbox: {
+    answeredHint: "Twoje pytanie ma odpowiedź.",
+    read: "Przeczytaj odpowiedź",
     title: "Zapytaj nas",
     label: "Co chcesz wiedzieć?",
     hint: "np. Dlaczego przy mojej przesiadce nie ma wartości?",
@@ -237,6 +247,11 @@ export const pl: Translation = {
     all: "Wszystkie pytania i odpowiedzi",
   },
   about: {
+    soonTitle: "Wkrótce",
+    soon: {
+      scores: ["Procenty i wskazówki", "Gdy zarejestrujemy wystarczająco dużo przejazdów, każda przesiadka na rejestrowanych stacjach dostanie wartość procentową, a aplikacja zaproponuje pewniejsze alternatywy. Do tego czasu jest sprawdzenie na żywo."],
+      weather: ["Prognoza opóźnień z pogodą", "Uczący się model uwzględnia pogodę i porę roku. Zastąpi obecną prognozę dopiero wtedy, gdy okaże się dokładniejszy."],
+    },
     notTitle: "Czego AnschlussRadar nie robi",
     not: [
       "Nie wymaga konta ani logowania (poza fazą demo)",
@@ -319,7 +334,7 @@ export const pl: Translation = {
       },
       {
         q: "Skąd pochodzą przyczyny opóźnień?",
-        a: ["Deutsche Bahn publikuje krótkie komunikaty dla wielu pociągów, np. „Prace budowlane” albo „Brakuje wagonu”. AnschlussRadar pokazuje je w twoim języku."],
+        a: ["Deutsche Bahn publikuje krótkie komunikaty dla wielu pociągów, np. „Prace budowlane” albo „Brakuje wagonu”. AnschlussRadar pokazuje je po niemiecku i angielsku, w pozostałych językach na razie po angielsku."],
       },
     ],
     more: "Masz jeszcze pytanie?",

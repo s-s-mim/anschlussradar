@@ -4,6 +4,7 @@ import type { Translation } from "./de";
 export const tr: Translation = {
   nav: {
     search: "Arama",
+    main: "Ana menü",
     stations: "İstasyonlar",
     map: "Ağ haritası",
     lines: "Hatlar",
@@ -35,12 +36,19 @@ export const tr: Translation = {
     remove: "Kaldır",
     whyTitle: "AnschlussRadar'ı farklı kılan ne?",
     whyLink: "AnschlussRadar neyi farklı yapıyor?",
+    whyMore: "Tüm farkları gör",
     growing:
-      "Almanya'nın her yerinde bağlantı bulabilirsiniz. Güvenilirlik değerleri giderek daha fazla istasyonda sunuluyor ve geri bildirimlerinize göre başka ulaşım türleri de eklenecek.",
+      "Almanya'nın her yerinde, otobüs, tramvay ve metro dahil bağlantı bulabilirsin. Güvenilirlik değerleri, geri bildirimlerinle de birlikte giderek daha fazla istasyonu kapsıyor.",
     why: [
       ["Sadece tarife değil, gerçek deneyim", "Her aktarmanın son haftalarda gerçekte ne sıklıkla başarılı olduğunu görürsünüz."],
       ["Önce en güvenilir bağlantı", "Sadece varış saatine göre değil, varma şansınıza göre sıralayın."],
       ["Yolculuk günü canlı kontrol", "Trenler bugün gecikiyorsa aktarmanızın hâlâ işe yarayıp yaramadığını hemen görürsünüz."],
+      ["Gecikmeyi önceden gör", "Birçok tren için bu istasyondan genellikle ne kadar geç kalktığını ve kötü günlerde ne kadar geç kalktığını görürsün."],
+      ["Yalnızca gerektiğinde uyarı", "Günlük bağlantını kontrol ettir. Yalnızca bir aktarma tehlikedeyse veya bir tren iptal edilirse bildirim gelir."],
+      ["Ağ haritası ve hatlar", "Trenlerin şu anda nerede dakik olduğunu, nerede olmadığını ve hattının ne kadar güvenilir olduğunu bir bakışta gör."],
+      ["Otobüs, tramvay ve metro da", "İstersen AnschlussRadar tüm ulaşım türleriyle bağlantı arar. Yolculuk günü canlı kontrol bu aktarmaları da kapsar."],
+      ["13 dilde", "Almanca ve İngilizceden Türkçe, Ukraynaca ve Arapçaya, Bengalce ve Amharcaya kadar."],
+      ["Sor yeter", "Yardım, uygun yanıtları doğrudan cihazında bulur. Hiçbiri uymazsa soruyu bize anonim olarak gönderebilirsin."],
     ],
   },
   station: {
@@ -207,6 +215,8 @@ export const tr: Translation = {
     hourlyLead: "Bu hattın kayıtlı istasyonlardaki kalkışları, son {days} gün.",
   },
   qbox: {
+    answeredHint: "Soruna yanıt verildi.",
+    read: "Yanıtı oku",
     title: "Bize sor",
     label: "Ne öğrenmek istersin?",
     hint: "ör. Aktarmamda neden değer yok?",
@@ -233,6 +243,11 @@ export const tr: Translation = {
     all: "Tüm sorular ve yanıtlar",
   },
   about: {
+    soonTitle: "Yakında",
+    soon: {
+      scores: ["Yüzdeler ve ipuçları", "Yeterince sefer kaydedildiğinde kayıtlı istasyonlardaki her aktarma bir yüzde alır ve uygulama daha güvenli alternatifler önerir. O zamana kadar canlı kontrol var."],
+      weather: ["Hava durumuyla gecikme tahmini", "Öğrenen bir model hava durumunu ve mevsimi hesaba katar. Mevcut tahminin yerini ancak daha isabetli olduğu kanıtlandığında alır."],
+    },
     notTitle: "AnschlussRadar'ın yapmadıkları",
     not: [
       "Hesap ve giriş gerekmez (demo dönemi hariç)",
@@ -315,7 +330,7 @@ export const tr: Translation = {
       },
       {
         q: "Gecikme nedenleri nereden geliyor?",
-        a: ["Deutsche Bahn birçok tren için kısa notlar yayımlar, örneğin “İnşaat çalışmaları” veya “Bir vagon eksik”. AnschlussRadar bunları senin dilinde gösterir."],
+        a: ["Deutsche Bahn birçok tren için kısa notlar yayımlar, örneğin “İnşaat çalışmaları” veya “Bir vagon eksik”. AnschlussRadar bunları Almanca ve İngilizce gösterir, diğer dillerde şimdilik İngilizce."],
       },
     ],
     more: "Başka sorunuz mu var?",

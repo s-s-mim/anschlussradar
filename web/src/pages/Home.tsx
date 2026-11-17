@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { LearningBanner } from "../components/LearningBanner";
 import { StationInput } from "../components/StationInput";
+import { AnsweredHint } from "../components/QuestionBox";
 import { WatchedList } from "../components/WatchedList";
 import { WhyList } from "../components/Why";
 import { useI18n } from "../i18n";
@@ -50,6 +51,7 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
 
       <div className="wrap">
         <LearningBanner stage={stage} />
+        <AnsweredHint />
         <form className="search" onSubmit={submit} noValidate>
           <div className="stations">
             <StationInput label={t("home.from")} value={from} onChange={setFrom} invalid={tried && !from} />
@@ -122,7 +124,10 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
         {newVisitor ? (
           <section className="why" aria-labelledby="why-title">
             <h2 id="why-title">{t("home.whyTitle")}</h2>
-            <WhyList />
+            <WhyList limit={4} />
+            <p className="small">
+              <Link href="/about#anders">{t("home.whyMore")}</Link>
+            </p>
           </section>
         ) : (
           <p className="why-link small">

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
+import { NavLinks } from "./components/TabBar";
 import { useI18n } from "./i18n";
 import { getModelStatus } from "./lib/api";
 import { useLocation } from "./lib/router";
@@ -78,7 +79,7 @@ export function App() {
       page = <Help search={search} />;
       break;
     case "/about":
-      page = <About />;
+      page = <About stage={stage} />;
       break;
     case "/contact":
       page = <Contact />;
@@ -100,6 +101,7 @@ export function App() {
         {page}
       </main>
       <Footer />
+      <NavLinks path={path} className="tab-bar" />
     </>
   );
 }

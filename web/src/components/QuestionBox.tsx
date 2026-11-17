@@ -10,6 +10,7 @@ import type { QuestionView } from "../lib/api";
 import type { HelpEntry } from "../lib/helpSearch";
 import { searchHelp } from "../lib/helpSearch";
 import { pushSupported, subscription } from "../lib/push";
+import { Link } from "../lib/router";
 import { store } from "../lib/storage";
 
 /** Test phase: questions per phone per 24 hours. The server has the same limit. */
@@ -183,7 +184,10 @@ export function MyQuestions({ version, highlight }: { version: number; highlight
     setItems(list);
     for (const q of list) {
       getQuestion(q.id)
-        .then((v) => setViews((old) => ({ ...old, [q.id]: v })))
+        .then((v) => {
+          setViews((old) => ({ ...old, [q.id]: v }));
+          if (v.answer) store.markSeen(q.id); // shown here: no more hint on the start page
+        })
         .catch((e: unknown) => {
           // Deleted on the server (old or spam): forget it here too.
           if (e instanceof ApiError && e.status === 404) setViews((old) => ({ ...old, [q.id]: "gone" }));
@@ -219,5 +223,33 @@ export function MyQuestions({ version, highlight }: { version: number; highlight
         })}
       </ul>
     </section>
+  );
+}
+
+/** On the start page: "Deine Frage wurde beantwortet." for answers not yet read. */
+export function AnsweredHint() {
+  const { t } = useI18n();
+  const [answered, setAnswered] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Only unread questions from the last 60 days, at most 3 requests.
+    const open = store
+      .questions()
+      .filter((q) => !q.seen && Date.now() - Date.parse(q.sent) < 60 * 86_400_000)
+      .slice(0, 3);
+    for (const q of open) {
+      getQuestion(q.id)
+        .then((v) => {
+          if (v.answer) setAnswered((cur) => cur ?? q.id);
+        })
+        .catch(() => undefined);
+    }
+  }, []);
+
+  if (!answered) return null;
+  return (
+    <p className="notice answered-hint">
+      {t("qbox.answeredHint")} <Link href={`/help?question=${answered}#my-questions`}>{t("qbox.read")}</Link>
+    </p>
   );
 }

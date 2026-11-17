@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { NotList, WhyList } from "../components/Why";
+import { NotList, Soon, WhyList } from "../components/Why";
+import type { Stage } from "../lib/types";
 import { useI18n } from "../i18n";
 import { Link } from "../lib/router";
 import { de } from "../i18n/de";
@@ -10,7 +11,7 @@ const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 const GROWING_DE = de.home.growing;
 const GROWING_EN = en.home.growing;
 
-function De() {
+function De({ stage }: { stage: Stage | null }) {
   return (
     <>
       <h1>Über AnschlussRadar</h1>
@@ -27,6 +28,7 @@ function De() {
       <div className="about-why">
         <WhyList />
       </div>
+      <Soon stage={stage} />
       <p>{GROWING_DE}</p>
       <NotList />
       <h2>So funktioniert es</h2>
@@ -83,7 +85,7 @@ function De() {
   );
 }
 
-function En({ withWhy = true }: { withWhy?: boolean }) {
+function En({ withWhy = true, stage }: { withWhy?: boolean; stage: Stage | null }) {
   return (
     <>
       <h1>About AnschlussRadar</h1>
@@ -102,6 +104,7 @@ function En({ withWhy = true }: { withWhy?: boolean }) {
           <div className="about-why">
             <WhyList />
           </div>
+          <Soon stage={stage} />
           <p>{GROWING_EN}</p>
           <NotList />
         </>
@@ -158,14 +161,14 @@ function En({ withWhy = true }: { withWhy?: boolean }) {
   );
 }
 
-export function About() {
+export function About({ stage }: { stage: Stage | null }) {
   const { lang, dict } = useI18n();
   useEffect(() => {
     // "/about#anders" from the start page: jump to that section.
     if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
   }, []);
   if (lang === "de" || lang === "en") {
-    return <div className="page prose wrap narrow">{lang === "de" ? <De /> : <En />}</div>;
+    return <div className="page prose wrap narrow">{lang === "de" ? <De stage={stage} /> : <En stage={stage} />}</div>;
   }
   // Other languages: the key points translated, the rest in English.
   return (
@@ -175,11 +178,12 @@ export function About() {
       <div className="about-why">
         <WhyList />
       </div>
+      <Soon stage={stage} />
       <p>{dict.home.growing}</p>
       <NotList />
       <p className="muted lang-note">{dict.about.onlyDeEn}</p>
       <div lang="en" dir="ltr">
-        <En withWhy={false} />
+        <En withWhy={false} stage={stage} />
       </div>
     </div>
   );

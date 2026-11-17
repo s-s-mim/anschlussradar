@@ -50,7 +50,7 @@
   },
   {
    "q": "Woher kommen die Gründe für Verspätungen?",
-   "a": "Die Deutsche Bahn veröffentlicht zu vielen Zügen kurze Meldungen, zum Beispiel „Bauarbeiten“ oder „Ein Wagen fehlt“. AnschlussRadar zeigt sie in deiner Sprache an."
+   "a": "Die Deutsche Bahn veröffentlicht zu vielen Zügen kurze Meldungen, zum Beispiel „Bauarbeiten“ oder „Ein Wagen fehlt“. AnschlussRadar zeigt sie auf Deutsch und Englisch, in den anderen Sprachen vorerst auf Englisch."
   },
   {
    "q": "Echte Erfahrung statt nur Fahrplan",
@@ -63,6 +63,30 @@
   {
    "q": "Live-Check am Reisetag",
    "a": "Sind die Züge heute verspätet, siehst du sofort, ob dein Umstieg noch klappt."
+  },
+  {
+   "q": "Verspätung vorher sehen",
+   "a": "Bei vielen Zügen siehst du, wie viel später sie an diesem Bahnhof meist abfahren, und wie viel an schlechten Tagen."
+  },
+  {
+   "q": "Warnung nur, wenn es nötig ist",
+   "a": "Lass deine tägliche Verbindung prüfen. Eine Mitteilung kommt nur, wenn ein Umstieg gefährdet ist oder ein Zug ausfällt."
+  },
+  {
+   "q": "Netzkarte und Linien",
+   "a": "Sieh auf einen Blick, wo die Züge gerade pünktlich sind und wo nicht, und wie zuverlässig deine Linie ist."
+  },
+  {
+   "q": "Auch mit Bus, Tram und U-Bahn",
+   "a": "Auf Wunsch sucht AnschlussRadar Verbindungen mit allen Verkehrsmitteln. Am Reisetag prüft der Live-Check auch diese Umstiege."
+  },
+  {
+   "q": "In 13 Sprachen",
+   "a": "Von Deutsch und Englisch über Türkisch, Ukrainisch und Arabisch bis Bengalisch und Amharisch."
+  },
+  {
+   "q": "Frag einfach",
+   "a": "Die Hilfe findet passende Antworten direkt auf deinem Gerät. Passt keine, kannst du uns die Frage anonym schicken."
   },
   {
    "q": "Was AnschlussRadar nicht tut",
@@ -120,7 +144,7 @@
   },
   {
    "q": "Where do the reasons for delays come from?",
-   "a": "Deutsche Bahn publishes short notes for many trains, for example “Construction work” or “A coach is missing”. AnschlussRadar shows them in your language."
+   "a": "Deutsche Bahn publishes short notes for many trains, for example “Construction work” or “A coach is missing”. AnschlussRadar shows them in German and English, and in English for the other languages for now."
   },
   {
    "q": "Real history, not just the timetable",
@@ -133,6 +157,30 @@
   {
    "q": "Live check on the day",
    "a": "If today's trains are late, you see straight away whether your transfer still works."
+  },
+  {
+   "q": "See delays coming",
+   "a": "For many trains you see how late they usually leave this station, and how late on bad days."
+  },
+  {
+   "q": "Alerts only when needed",
+   "a": "Have your daily connection checked. You only get a notification if a transfer is at risk or a train is cancelled."
+  },
+  {
+   "q": "Network map and lines",
+   "a": "See at a glance where trains are on time right now and where not, and how reliable your line is."
+  },
+  {
+   "q": "Buses, trams and underground too",
+   "a": "If you like, AnschlussRadar finds connections with all modes. On the day of travel the live check covers these transfers too."
+  },
+  {
+   "q": "In 13 languages",
+   "a": "From German and English to Turkish, Ukrainian, Arabic, Bengali and Amharic."
+  },
+  {
+   "q": "Just ask",
+   "a": "The help finds fitting answers right on your device. If none fits, you can send us the question anonymously."
   },
   {
    "q": "What AnschlussRadar doesn't do",

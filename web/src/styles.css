@@ -58,15 +58,17 @@
   box-sizing: border-box;
 }
 
+/* 15px base: everything in rem scales with it. */
 html {
   -webkit-text-size-adjust: 100%;
+  font-size: 93.75%;
 }
 
 body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font: 16px/1.5 var(--body);
+  font: 1rem/1.5 var(--body);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -104,11 +106,11 @@ h3 {
 }
 
 h1 {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
 }
 
 h2 {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   margin-top: 1.6em;
 }
 
@@ -137,7 +139,7 @@ small {
 }
 
 .lead {
-  font-size: 1.075rem;
+  font-size: 1.03rem;
   color: var(--muted);
   max-width: 36rem;
 }
@@ -278,12 +280,12 @@ time,
 
 /* home */
 .hero {
-  padding-top: 36px;
+  padding-top: 24px;
   padding-bottom: 8px;
 }
 
 .hero h1 {
-  font-size: clamp(2.2rem, 9vw, 3.4rem);
+  font-size: clamp(1.9rem, 7.5vw, 2.8rem);
   line-height: 1.02;
   letter-spacing: -0.01em;
   color: var(--petrol-strong);
@@ -360,6 +362,7 @@ input,
 select,
 textarea {
   font: inherit;
+  font-size: 16px; /* below 16px, iPhones zoom into the field when you tap it */
   color: var(--ink);
   background: var(--surface);
   border: 1.5px solid var(--line);
@@ -1050,10 +1053,10 @@ mark {
 
 @media (min-width: 640px) {
   h1 {
-    font-size: 2rem;
+    font-size: 1.85rem;
   }
   .hero {
-    padding-top: 56px;
+    padding-top: 44px;
   }
   .search {
     padding: 20px;
@@ -1117,7 +1120,7 @@ mark {
 
 @media (min-width: 640px) {
   .why .why-list {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
 }
@@ -1649,7 +1652,6 @@ a.line-badge {
   padding: 10px 12px;
   border: 1.5px solid var(--line);
   border-radius: 10px;
-  font: inherit;
   resize: vertical;
 }
 
@@ -1727,4 +1729,87 @@ a.line-badge {
 .ai-answer .link-button {
   padding: 0;
   text-align: start;
+}
+
+/* Main navigation: tab bar at the bottom on phones, links in the header on wider screens */
+.top-links {
+  display: none;
+}
+
+.tab-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tab-bar a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 7px 2px 6px;
+  min-height: 52px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.tab-bar a[aria-current="page"] {
+  color: var(--petrol);
+}
+
+.tab-bar a[aria-current="page"] svg {
+  background: var(--petrol-soft);
+  border-radius: 999px;
+  padding: 2px 12px;
+  width: 46px;
+  height: 26px;
+}
+
+/* room for the tab bar under the footer */
+body {
+  padding-bottom: calc(60px + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 720px) {
+  .tab-bar {
+    display: none;
+  }
+  body {
+    padding-bottom: 0;
+  }
+  .top-links {
+    display: flex;
+    gap: 18px;
+  }
+  .top-links svg {
+    display: none;
+  }
+  .top-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .top-links a[aria-current="page"] {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+}
+
+/* not live yet: an empty point instead of the yellow one */
+.soon-list li::before {
+  background: var(--paper);
+}
+
+.answered-hint {
+  margin: 0 0 12px;
 }

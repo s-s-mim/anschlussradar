@@ -3,6 +3,7 @@
 export const de = {
   nav: {
     search: "Suche",
+    main: "Hauptmenü",
     stations: "Bahnhöfe",
     map: "Netzkarte",
     lines: "Linien",
@@ -34,12 +35,19 @@ export const de = {
     remove: "Entfernen",
     whyTitle: "Was AnschlussRadar anders macht",
     whyLink: "Was macht AnschlussRadar anders?",
+    whyMore: "Alle Unterschiede ansehen",
     growing:
-      "Verbindungen findest du schon für ganz Deutschland. Zuverlässigkeitswerte gibt es an immer mehr Bahnhöfen, und weitere Verkehrsmittel kommen dazu, auch nach euren Rückmeldungen.",
+      "Verbindungen findest du für ganz Deutschland, auch mit Bus, Tram und U-Bahn. Zuverlässigkeitswerte gibt es an immer mehr Bahnhöfen, auch nach euren Rückmeldungen.",
     why: [
       ["Echte Erfahrung statt nur Fahrplan", "Für jeden Umstieg siehst du, wie oft er in den letzten Wochen wirklich geklappt hat."],
       ["Zuverlässigste Verbindung zuerst", "Sortiere nach der Chance, anzukommen, nicht nur nach der Ankunftszeit."],
       ["Live-Check am Reisetag", "Sind die Züge heute verspätet, siehst du sofort, ob dein Umstieg noch klappt."],
+      ["Verspätung vorher sehen", "Bei vielen Zügen siehst du, wie viel später sie an diesem Bahnhof meist abfahren, und wie viel an schlechten Tagen."],
+      ["Warnung nur, wenn es nötig ist", "Lass deine tägliche Verbindung prüfen. Eine Mitteilung kommt nur, wenn ein Umstieg gefährdet ist oder ein Zug ausfällt."],
+      ["Netzkarte und Linien", "Sieh auf einen Blick, wo die Züge gerade pünktlich sind und wo nicht, und wie zuverlässig deine Linie ist."],
+      ["Auch mit Bus, Tram und U-Bahn", "Auf Wunsch sucht AnschlussRadar Verbindungen mit allen Verkehrsmitteln. Am Reisetag prüft der Live-Check auch diese Umstiege."],
+      ["In 13 Sprachen", "Von Deutsch und Englisch über Türkisch, Ukrainisch und Arabisch bis Bengalisch und Amharisch."],
+      ["Frag einfach", "Die Hilfe findet passende Antworten direkt auf deinem Gerät. Passt keine, kannst du uns die Frage anonym schicken."],
     ],
   },
   station: {
@@ -206,6 +214,8 @@ export const de = {
     hourlyLead: "Abfahrten dieser Linie an den aufgezeichneten Bahnhöfen, letzte {days} Tage.",
   },
   qbox: {
+    answeredHint: "Deine Frage wurde beantwortet.",
+    read: "Antwort lesen",
     title: "Frag uns",
     label: "Was möchtest du wissen?",
     hint: "z. B. Warum steht bei meinem Umstieg kein Wert?",
@@ -232,6 +242,11 @@ export const de = {
     all: "Alle Fragen und Antworten",
   },
   about: {
+    soonTitle: "Bald verfügbar",
+    soon: {
+      scores: ["Prozentwerte und Tipps", "Sobald genug Fahrten aufgezeichnet sind, bekommt jeder Umstieg an den aufgezeichneten Bahnhöfen einen Prozentwert, und die App schlägt sicherere Alternativen vor. Bis dahin gibt es den Live-Check."],
+      weather: ["Verspätungsprognose mit Wetter", "Ein lernendes Modell bezieht Wetter und Jahreszeit mit ein. Es ersetzt die jetzige Prognose erst, wenn es nachweislich genauer ist."],
+    },
     notTitle: "Was AnschlussRadar nicht tut",
     not: [
       "Kein Konto und keine Anmeldung nötig (außer in der Demo-Phase)",
@@ -314,7 +329,7 @@ export const de = {
       },
       {
         q: "Woher kommen die Gründe für Verspätungen?",
-        a: ["Die Deutsche Bahn veröffentlicht zu vielen Zügen kurze Meldungen, zum Beispiel „Bauarbeiten“ oder „Ein Wagen fehlt“. AnschlussRadar zeigt sie in deiner Sprache an."],
+        a: ["Die Deutsche Bahn veröffentlicht zu vielen Zügen kurze Meldungen, zum Beispiel „Bauarbeiten“ oder „Ein Wagen fehlt“. AnschlussRadar zeigt sie auf Deutsch und Englisch, in den anderen Sprachen vorerst auf Englisch."],
       },
     ],
     more: "Noch eine Frage offen?",

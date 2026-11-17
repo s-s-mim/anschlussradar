@@ -3,6 +3,7 @@ import type { Translation } from "./de";
 export const en: Translation = {
   nav: {
     search: "Search",
+    main: "Main menu",
     stations: "Stations",
     map: "Network map",
     lines: "Lines",
@@ -34,12 +35,19 @@ export const en: Translation = {
     remove: "Remove",
     whyTitle: "What AnschlussRadar does differently",
     whyLink: "What does AnschlussRadar do differently?",
+    whyMore: "See all differences",
     growing:
-      "You can already find connections all over Germany. Reliability scores cover more and more stations, and more kinds of transport are coming, partly based on your feedback.",
+      "You can find connections all over Germany, buses, trams and underground included. Reliability scores cover more and more stations, also based on your feedback.",
     why: [
       ["Real history, not just the timetable", "For every transfer you see how often it actually worked in recent weeks."],
       ["Most reliable first", "Sort by your chance of getting there, not only by arrival time."],
       ["Live check on the day", "If today's trains are late, you see straight away whether your transfer still works."],
+      ["See delays coming", "For many trains you see how late they usually leave this station, and how late on bad days."],
+      ["Alerts only when needed", "Have your daily connection checked. You only get a notification if a transfer is at risk or a train is cancelled."],
+      ["Network map and lines", "See at a glance where trains are on time right now and where not, and how reliable your line is."],
+      ["Buses, trams and underground too", "If you like, AnschlussRadar finds connections with all modes. On the day of travel the live check covers these transfers too."],
+      ["In 13 languages", "From German and English to Turkish, Ukrainian, Arabic, Bengali and Amharic."],
+      ["Just ask", "The help finds fitting answers right on your device. If none fits, you can send us the question anonymously."],
     ],
   },
   station: {
@@ -206,6 +214,8 @@ export const en: Translation = {
     hourlyLead: "Departures of this line at the recorded stations, last {days} days.",
   },
   qbox: {
+    answeredHint: "Your question has been answered.",
+    read: "Read the answer",
     title: "Ask us",
     label: "What would you like to know?",
     hint: "e.g. Why is there no score for my transfer?",
@@ -232,6 +242,11 @@ export const en: Translation = {
     all: "All questions and answers",
   },
   about: {
+    soonTitle: "Coming soon",
+    soon: {
+      scores: ["Percentages and tips", "Once enough trips are recorded, every transfer at the recorded stations gets a percentage, and the app suggests safer alternatives. Until then there is the live check."],
+      weather: ["Delay forecast with weather", "A learning model takes weather and the time of year into account. It replaces the current forecast only once it is shown to be more accurate."],
+    },
     notTitle: "What AnschlussRadar doesn't do",
     not: [
       "No account or sign-in needed (except during the demo phase)",
@@ -314,7 +329,7 @@ export const en: Translation = {
       },
       {
         q: "Where do the reasons for delays come from?",
-        a: ["Deutsche Bahn publishes short notes for many trains, for example “Construction work” or “A coach is missing”. AnschlussRadar shows them in your language."],
+        a: ["Deutsche Bahn publishes short notes for many trains, for example “Construction work” or “A coach is missing”. AnschlussRadar shows them in German and English, and in English for the other languages for now."],
       },
     ],
     more: "Still have a question?",
