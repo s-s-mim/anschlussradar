@@ -126,6 +126,7 @@ export const ro: Translation = {
     retry: "Încearcă din nou",
   },
   contact: {
+    about: "Mai multe despre mine:",
     title: "Contact",
     lead: "Întrebări, erori sau idei: scrie-mi un e-mail. De obicei răspund în câteva zile.",
     privacyNote: "Folosesc adresa ta de e-mail doar ca să-ți răspund. Mai multe în politica de confidențialitate.",
@@ -252,6 +253,18 @@ export const ro: Translation = {
     waiting: "Încă niciun răspuns",
     remove: "Elimină",
     all: "Toate întrebările și răspunsurile",
+  },
+  update: {
+    available: "Versiune nouă disponibilă",
+    reload: "Reîncarcă",
+  },
+  near: {
+    mine: "Locația mea",
+    list: "Gări în apropiere",
+    locating: "Se determină locația …",
+    denied: "Accesul la locație nu este permis. Îl poți permite în setările browserului.",
+    failed: "Locația nu a putut fi determinată. Te rog scrie gara.",
+    none: "Nicio gară pe o rază de 3 km.",
   },
   about: {
     soonTitle: "În curând",

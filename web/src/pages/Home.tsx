@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { LearningBanner } from "../components/LearningBanner";
+import { NearMe } from "../components/NearMe";
 import { StationInput } from "../components/StationInput";
 import { AnsweredHint } from "../components/QuestionBox";
 import { WatchedList } from "../components/WatchedList";
@@ -54,7 +55,10 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
         <AnsweredHint />
         <form className="search" onSubmit={submit} noValidate>
           <div className="stations">
-            <StationInput label={t("home.from")} value={from} onChange={setFrom} invalid={tried && !from} />
+            <div className="from-field">
+              <StationInput label={t("home.from")} value={from} onChange={setFrom} invalid={tried && !from} />
+              <NearMe onPick={setFrom} />
+            </div>
             <button
               type="button"
               className="swap"

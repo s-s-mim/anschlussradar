@@ -222,38 +222,63 @@ time,
 
 .lang {
   position: relative;
+}
+
+.lang-button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  min-height: 34px;
   border: 1.5px solid rgba(255, 255, 255, 0.55);
   border-radius: 999px;
-  padding: 7px 11px;
+  padding: 6px 11px;
+  background: transparent;
   color: #fff;
   font: 600 0.8rem/1 var(--display);
   cursor: pointer;
 }
 
-.lang::after {
-  content: "";
-  border: 4px solid transparent;
-  border-top-color: currentColor;
-  margin-top: 4px;
-}
-
-/* The real select lies invisibly on top: tapping opens the phone's own picker. */
-.lang select {
+/* A small list under the button, not the phone's full-screen picker. */
+.lang-list {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-  font-size: 16px;
+  inset-inline-end: 0;
+  top: calc(100% + 6px);
+  z-index: 30;
+  min-width: 170px;
+  max-height: min(60vh, 420px);
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
-.lang:focus-within {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
+.lang-list button {
+  display: block;
+  width: 100%;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  text-align: start;
+  cursor: pointer;
+}
+
+.lang-list button:hover,
+.lang-list button:focus-visible {
+  background: var(--paper);
+}
+
+.lang-list button[aria-checked="true"] {
+  background: var(--petrol-soft);
+  color: var(--petrol);
+  font-weight: 600;
 }
 
 /* footer */
@@ -320,7 +345,8 @@ time,
   align-items: end;
 }
 
-.stations > .field:first-child {
+.stations > .field:first-child,
+.stations > .from-field {
   grid-column: 1;
   grid-row: 1;
 }
@@ -1858,4 +1884,101 @@ body {
 .bar-readout {
   margin: 8px 0 4px;
   min-height: 1.4em;
+}
+
+/* Mein Standort / Bahnhöfe in der Nähe */
+.near-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--petrol);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chip:disabled {
+  opacity: 0.6;
+}
+
+.near-me p {
+  margin: 6px 0 0;
+}
+
+.near-list {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.near-list button {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.near-list li:last-child button {
+  border-bottom: 0;
+}
+
+/* Neue Version verfügbar */
+.update-note {
+  position: fixed;
+  inset-inline: 12px;
+  bottom: calc(68px + env(safe-area-inset-bottom));
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 10px 12px 10px 16px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  font-size: 0.9rem;
+}
+
+.update-note button {
+  border: 0;
+  border-radius: 8px;
+  padding: 7px 12px;
+  background: var(--signal, #ffc83d);
+  color: #14232b;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (min-width: 720px) {
+  .update-note {
+    bottom: 16px;
+  }
 }

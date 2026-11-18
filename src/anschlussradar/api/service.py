@@ -1,6 +1,7 @@
 """The API's handlers as plain Python: (status code, JSON body) in, no HTTP framework.
 
 GET  /api/v1/stations?q=frankfurt
+POST /api/v1/stations/nearby          up to 5 stations within 3 km of a position (in the body)
 GET  /api/v1/journeys?from=<id or lat,lon>&to=...&time=<ISO>&arriveBy=false&sort=fastest|reliable&rail=true
 GET  /api/v1/model/status
 GET  /api/v1/hubs                      recorded stations
@@ -115,6 +116,20 @@ class ApiService:
         except ValueError:
             n = 8
         return 200, {"stations": [s.to_dict() for s in self.stations.search(q, n)]}
+
+    def post_nearby(self, body: Any) -> Response:
+        """Stations near a position. The position comes in the request body, so it
+        never appears in a URL or a request log, and it is rounded to about 100 m
+        before use. Nothing about it is stored."""
+        try:
+            lat = round(float(body["lat"]), 3)
+            lon = round(float(body["lon"]), 3)
+        except (TypeError, KeyError, ValueError):
+            return error(400, "invalid_field", "Expected lat and lon.", field="position")
+        if not (47.0 <= lat <= 55.2 and 5.5 <= lon <= 15.5):
+            return 200, {"stations": [], "outside": True}
+        hits = self.stations.nearby(lat, lon)
+        return 200, {"stations": [{**s.to_dict(), "distanceM": d} for s, d in hits]}
 
     # journeys -----------------------------------------------------------------
 

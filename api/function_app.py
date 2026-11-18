@@ -48,6 +48,15 @@ def stations(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_stations(req.params.get("q"), req.params.get("limit")), 86400)
 
 
+@app.route(route="stations/nearby", methods=["POST"])
+def stations_nearby(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        body = req.get_json()
+    except ValueError:
+        body = None
+    return respond(service().post_nearby(body))
+
+
 @app.route(route="journeys", methods=["GET"])
 def journeys(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_journeys(dict(req.params)), 60)

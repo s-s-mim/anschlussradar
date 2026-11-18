@@ -121,6 +121,29 @@ class StationIndex:
         hits.sort(key=lambda pair: (-pair[0], len(pair[1].name)))
         return [s for _, s in hits[:limit]]
 
+    def nearby(
+        self, lat: float, lon: float, limit: int = 5, max_m: float = 3000
+    ) -> list[tuple[Station, int]]:
+        """Closest stations with their distance in metres (as the crow flies)."""
+        out = []
+        for s in self.stations:
+            # Cheap box test first; 0.05 degrees is about 3.5 to 5.5 km in Germany.
+            if abs(s.lat - lat) > 0.05 or abs(s.lon - lon) > 0.08:
+                continue
+            d = distance_m(lat, lon, s.lat, s.lon)
+            if d <= max_m:
+                out.append((s, round(d)))
+        out.sort(key=lambda pair: pair[1])
+        return out[:limit]
+
+
+def distance_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Great-circle distance (haversine)."""
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp, dl = p2 - p1, math.radians(lon2 - lon1)
+    a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * 6_371_000 * math.asin(math.sqrt(a))
+
 
 @dataclass(frozen=True, slots=True)
 class HubMatch:

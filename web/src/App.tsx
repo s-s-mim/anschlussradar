@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { NavLinks } from "./components/TabBar";
+import { UpdateNote } from "./components/UpdateNote";
 import { useI18n } from "./i18n";
 import { getModelStatus } from "./lib/api";
 import { useLocation } from "./lib/router";
@@ -100,6 +101,7 @@ export function App() {
       <main id="main" ref={main} tabIndex={-1}>
         {page}
       </main>
+      <UpdateNote />
       <Footer />
       <NavLinks path={path} className="tab-bar" />
     </>

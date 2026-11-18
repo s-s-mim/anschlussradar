@@ -1,15 +1,21 @@
-// Details for the legal notice (Impressum) and the privacy policy.
-// FILL THESE IN before the app goes public. Until then the pages show the
-// placeholders in brackets, so nothing wrong is published by accident.
+// Details for the legal notice (Impressum), the contact page and the privacy policy.
 export const SITE = {
   operatorName: "Sheikh Sharfuddin Mim",
-  street: "[Straße und Hausnummer]",
-  city: "[PLZ] Kriftel",
+  street: "Sodener Str. 5",
+  city: "60326 Frankfurt am Main",
   country: "Deutschland",
-  // A separate address only for this app, e.g. kontakt@anschlussradar.de, not your private one.
-  email: "[kontakt@ihre-domain.de]",
+  // Split so the address does not sit in the page as one plain string for spam bots;
+  // the pages join it again.
+  emailUser: "sharfuddin730",
+  emailDomain: "gmail.com",
+  linkedin: "https://www.linkedin.com/in/sheikh-sharfuddin-mim",
   sourceCode: "https://github.com/s-s-mim/anschlussradar",
+  // The GitHub repository is private until the public launch. Set to true once it is
+  // public, so the app shows the link (a private repository answers "404" to visitors).
+  sourcePublic: false,
   privacyUpdated: "November 2026",
 };
+
+export const siteEmail = () => `${SITE.emailUser}@${SITE.emailDomain}`;
 
 export const isPlaceholder = (value: string) => value.startsWith("[") || value.includes("[");

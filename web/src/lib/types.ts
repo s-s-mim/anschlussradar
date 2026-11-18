@@ -11,6 +11,11 @@ export interface Station {
   lon: number;
 }
 
+export interface NearbyStation extends Station {
+  /** As the crow flies, in metres. */
+  distanceM: number;
+}
+
 export interface Leg {
   mode: string;
   line: string | null;

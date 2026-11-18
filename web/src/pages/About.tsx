@@ -45,11 +45,23 @@ function De({ stage }: { stage: Stage | null }) {
       <h2>Wer steckt dahinter?</h2>
       <p>
         AnschlussRadar ist ein privates, nicht kommerzielles Projekt von {SITE.operatorName}. Es gibt keine Werbung,
-        keine Konten und kein Tracking. Der Quellcode ist offen (MIT-Lizenz):{" "}
-        <a href={SITE.sourceCode} {...ext}>
-          {SITE.sourceCode.replace("https://", "")}
+        keine Konten und kein Tracking. Mehr über mich auf{" "}
+        <a href={SITE.linkedin} {...ext}>
+          LinkedIn
         </a>
         .
+        {SITE.sourcePublic ? (
+          <>
+            {" "}
+            Der Quellcode ist offen (MIT-Lizenz):{" "}
+            <a href={SITE.sourceCode} {...ext}>
+              {SITE.sourceCode.replace("https://", "")}
+            </a>
+            .
+          </>
+        ) : (
+          " Der Quellcode wird mit dem öffentlichen Start unter der MIT-Lizenz veröffentlicht."
+        )}
       </p>
       <h2>Daten und Dank</h2>
       <ul>
@@ -140,11 +152,23 @@ function En({ withWhy = true, stage }: { withWhy?: boolean; stage: Stage | null 
       <h2>Who is behind it?</h2>
       <p>
         AnschlussRadar is a private, non-commercial project by {SITE.operatorName}. There are no ads, no accounts and
-        no tracking. The source code is open (MIT licence):{" "}
-        <a href={SITE.sourceCode} {...ext}>
-          {SITE.sourceCode.replace("https://", "")}
+        no tracking. More about me on{" "}
+        <a href={SITE.linkedin} {...ext}>
+          LinkedIn
         </a>
         .
+        {SITE.sourcePublic ? (
+          <>
+            {" "}
+            The source code is open (MIT licence):{" "}
+            <a href={SITE.sourceCode} {...ext}>
+              {SITE.sourceCode.replace("https://", "")}
+            </a>
+            .
+          </>
+        ) : (
+          " The source code will be published under the MIT licence with the public launch."
+        )}
       </p>
       <h2>Data and thanks</h2>
       <ul>

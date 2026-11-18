@@ -123,6 +123,7 @@ export const en: Translation = {
     retry: "Try again",
   },
   contact: {
+    about: "More about me:",
     title: "Contact",
     lead: "Questions, bugs or ideas: send me an email. I usually answer within a few days.",
     privacyNote: "I only use your email to reply to you. More in the privacy policy.",
@@ -249,6 +250,18 @@ export const en: Translation = {
     waiting: "No answer yet",
     remove: "Remove",
     all: "All questions and answers",
+  },
+  update: {
+    available: "New version available",
+    reload: "Reload",
+  },
+  near: {
+    mine: "My location",
+    list: "Stations nearby",
+    locating: "Finding your location …",
+    denied: "Location access is not allowed. You can allow it in your browser settings.",
+    failed: "Your location could not be found. Please type the station.",
+    none: "No station within 3 km.",
   },
   about: {
     soonTitle: "Coming soon",

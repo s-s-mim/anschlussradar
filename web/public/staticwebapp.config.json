@@ -12,6 +12,6 @@
     "Content-Security-Policy": "default-src 'self'; connect-src 'self' https://*.azurewebsites.net; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
     "Referrer-Policy": "no-referrer",
     "X-Content-Type-Options": "nosniff",
-    "Permissions-Policy": "geolocation=(), camera=(), microphone=(), interest-cohort=()"
+    "Permissions-Policy": "geolocation=(self), camera=(), microphone=(), interest-cohort=()"
   }
 }

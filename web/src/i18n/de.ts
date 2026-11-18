@@ -123,6 +123,7 @@ export const de = {
     retry: "Noch einmal versuchen",
   },
   contact: {
+    about: "Mehr über mich:",
     title: "Kontakt",
     lead: "Fragen, Hinweise auf Fehler oder Ideen: Schreib mir eine E-Mail. Ich antworte meistens innerhalb von ein paar Tagen.",
     privacyNote: "Deine E-Mail nutze ich nur, um dir zu antworten. Mehr dazu in der Datenschutzerklärung.",
@@ -249,6 +250,18 @@ export const de = {
     waiting: "Noch keine Antwort",
     remove: "Entfernen",
     all: "Alle Fragen und Antworten",
+  },
+  update: {
+    available: "Neue Version verfügbar",
+    reload: "Neu laden",
+  },
+  near: {
+    mine: "Mein Standort",
+    list: "Bahnhöfe in der Nähe",
+    locating: "Standort wird ermittelt …",
+    denied: "Der Standortzugriff ist nicht erlaubt. Du kannst ihn in den Einstellungen deines Browsers erlauben.",
+    failed: "Der Standort konnte nicht ermittelt werden. Bitte gib den Bahnhof ein.",
+    none: "Kein Bahnhof im Umkreis von 3 km.",
   },
   about: {
     soonTitle: "Bald verfügbar",

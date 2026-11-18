@@ -128,6 +128,7 @@ export const pl: Translation = {
     retry: "Spróbuj ponownie",
   },
   contact: {
+    about: "Więcej o mnie:",
     title: "Kontakt",
     lead: "Pytania, zgłoszenia błędów lub pomysły: napisz do mnie e-mail. Zwykle odpowiadam w ciągu kilku dni.",
     privacyNote: "Twojego adresu e-mail używam tylko do odpowiedzi. Więcej w polityce prywatności.",
@@ -254,6 +255,18 @@ export const pl: Translation = {
     waiting: "Jeszcze bez odpowiedzi",
     remove: "Usuń",
     all: "Wszystkie pytania i odpowiedzi",
+  },
+  update: {
+    available: "Dostępna nowa wersja",
+    reload: "Odśwież",
+  },
+  near: {
+    mine: "Moja lokalizacja",
+    list: "Stacje w pobliżu",
+    locating: "Ustalanie lokalizacji …",
+    denied: "Dostęp do lokalizacji jest zablokowany. Możesz go włączyć w ustawieniach przeglądarki.",
+    failed: "Nie udało się ustalić lokalizacji. Wpisz stację.",
+    none: "Brak stacji w promieniu 3 km.",
   },
   about: {
     soonTitle: "Wkrótce",

@@ -124,6 +124,7 @@ export const tr: Translation = {
     retry: "Tekrar dene",
   },
   contact: {
+    about: "Hakkımda daha fazlası:",
     title: "İletişim",
     lead: "Sorular, hata bildirimleri veya fikirler için bana e-posta yazın. Genellikle birkaç gün içinde yanıt veririm.",
     privacyNote: "E-postanızı yalnızca size yanıt vermek için kullanırım. Ayrıntılar gizlilik bildiriminde.",
@@ -250,6 +251,18 @@ export const tr: Translation = {
     waiting: "Henüz yanıt yok",
     remove: "Kaldır",
     all: "Tüm sorular ve yanıtlar",
+  },
+  update: {
+    available: "Yeni sürüm mevcut",
+    reload: "Yeniden yükle",
+  },
+  near: {
+    mine: "Konumum",
+    list: "Yakındaki istasyonlar",
+    locating: "Konum belirleniyor …",
+    denied: "Konum erişimine izin verilmiyor. Tarayıcı ayarlarından izin verebilirsin.",
+    failed: "Konum belirlenemedi. Lütfen istasyonu yaz.",
+    none: "3 km içinde istasyon yok.",
   },
   about: {
     soonTitle: "Yakında",

@@ -354,3 +354,19 @@ def test_local_transport_gets_live_check_but_no_score(tmp_path: Path) -> None:
     # The score covers the train transfer only, and says so.
     assert j["reliability"] == pytest.approx(0.8)
     assert j["reliabilityTrainsOnly"] is True
+
+
+def test_nearby_stations_round_the_position(tmp_path: Path) -> None:
+    svc = make_service(tmp_path)
+    # A point a few hundred metres from Kriftel station in the test station list.
+    s7 = svc.stations.by_id["s7"]
+    status, body = svc.post_nearby({"lat": s7.lat + 0.0021, "lon": s7.lon + 0.00049})
+    assert status == 200
+    first = body["stations"][0]
+    assert first["id"] == "s7" and 150 < first["distanceM"] < 350
+    assert svc.post_nearby({"lat": 48.85, "lon": 2.35})[1] == {
+        "stations": [],
+        "outside": True,
+    }  # Paris
+    assert svc.post_nearby({"lat": "x"})[0] == 400
+    assert svc.post_nearby(None)[0] == 400

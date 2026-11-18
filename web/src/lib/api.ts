@@ -1,4 +1,4 @@
-import type { ApiErrorBody, Board, Hub, JourneysResponse, LineDetail, LineSummary, ModelStatus, NetworkStation, Station } from "./types";
+import type { ApiErrorBody, Board, Hub, JourneysResponse, LineDetail, LineSummary, ModelStatus, NearbyStation, NetworkStation, Station } from "./types";
 
 const BASE = (import.meta.env.VITE_API_BASE || "/api/v1").replace(/\/$/, "");
 
@@ -124,5 +124,14 @@ export function ask(text: string, lang: string): Promise<{ available: boolean; a
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text, lang }),
   });
+}
+
+/** Stations near a position. The position goes in the body, never in the address. */
+export function nearbyStations(lat: number, lon: number): Promise<NearbyStation[]> {
+  return request<{ stations: NearbyStation[] }>("/stations/nearby", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ lat, lon }),
+  }).then((r) => r.stations);
 }
 

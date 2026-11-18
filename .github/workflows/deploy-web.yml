@@ -27,6 +27,7 @@ jobs:
           VITE_API_BASE: ${{ vars.API_BASE_URL }}
           WEB_ACCESS: ${{ vars.WEB_ACCESS }}
           VITE_WEB_ACCESS: ${{ vars.WEB_ACCESS }}
+          SITE_URL: ${{ vars.SITE_URL }}   # e.g. https://anschlussradar.de, once the domain is live
         run: |
           npm install --no-audit --no-fund
           npm run build

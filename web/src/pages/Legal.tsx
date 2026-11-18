@@ -6,7 +6,7 @@ import { useI18n } from "../i18n";
 import { NotList } from "../components/Why";
 import { removeAllWatches } from "../lib/push";
 import { store } from "../lib/storage";
-import { SITE, isPlaceholder } from "../site";
+import { SITE, isPlaceholder, siteEmail } from "../site";
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 
@@ -32,7 +32,7 @@ function Address() {
 }
 
 function Email() {
-  return isPlaceholder(SITE.email) ? <mark>{SITE.email}</mark> : <a href={`mailto:${SITE.email}`}>{SITE.email}</a>;
+  return <a href={`mailto:${siteEmail()}`}>{siteEmail()}</a>;
 }
 
 export function Impressum() {
@@ -157,6 +157,14 @@ function PrivacyDe() {
           Außerdem wird gezählt, wie viele Suchen es pro Tag gibt. Beides lässt sich keiner Person zuordnen.
           Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO: Ohne diese Verarbeitung könnte die App keine Verbindungen
           anzeigen.
+        </p>
+        <p>
+          Wenn du auf „Mein Standort“ oder „Bahnhöfe in der Nähe“ tippst, fragt dein Browser nach deinem Standort.
+          Die App rundet ihn auf deinem Gerät auf etwa 100 Meter und schickt ihn an den Server von AnschlussRadar,
+          der damit die nächsten Bahnhöfe sucht. Der Standort wird nicht gespeichert, nicht weitergegeben und nicht
+          in Adressen oder Protokolle geschrieben; die Suche arbeitet danach nur mit dem gewählten Bahnhof.
+          Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die du mit dem Tippen und der
+          Freigabe im Browser gibst und dort jederzeit widerrufen kannst.
         </p>
       </Section>
 
@@ -310,6 +318,13 @@ function PrivacyEn() {
         <p>
           Search results stay in memory for up to two minutes so that repeated searches are faster, and the server counts how many searches there are per day. Neither can be linked to a person. The legal basis is Art. 6(1)(f)
           GDPR: without this the app couldn't show connections.
+        </p>
+        <p>
+          When you tap "My location" or "Stations nearby", your browser asks for your location. The app rounds it
+          on your device to about 100 metres and sends it to the AnschlussRadar server, which uses it to find the
+          nearest stations. The location is not stored, not passed on and not written into addresses or logs; the
+          search then works with the station you picked. The legal basis is your consent (Art. 6(1)(a) GDPR), which
+          you give by tapping and allowing it in the browser, and can withdraw there at any time.
         </p>
       </Section>
 
