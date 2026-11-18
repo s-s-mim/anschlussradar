@@ -347,7 +347,7 @@ export function JourneyCard({
       {open && (
         <ol className="itinerary">
           {journey.walkStart && first && (
-            <WalkRow walk={journey.walkStart} text={t("walk.toStop", { stop: first.from })} />
+            <WalkRow walk={journey.walkStart} text={t("walk.toStop", { stop: first.from ?? "" })} />
           )}
           {journey.legs.flatMap((leg, i) => {
             const tr = journey.transfers[i];
@@ -357,7 +357,7 @@ export function JourneyCard({
             return rows;
           })}
           {journey.walkEnd && last && (
-            <WalkRow walk={journey.walkEnd} text={t("walk.fromStop", { stop: last.to })} />
+            <WalkRow walk={journey.walkEnd} text={t("walk.fromStop", { stop: last.to ?? "" })} />
           )}
           {/* No daily check from "Mein Standort" or an address: it would store a position on the server. */}
           {from && to && !privatePlace(from) && !privatePlace(to) && first?.departurePlanned && (
