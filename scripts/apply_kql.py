@@ -62,17 +62,28 @@ def main() -> int:
     client = KustoClient(kusto_connection(settings.kusto_query_uri, settings, args.interactive))
     from azure.kusto.data.exceptions import KustoServiceError
 
+    # A failing command in one file stops that file only: later files are independent
+    # (each defines its own functions), so one mistake no longer hides all of them.
+    failed: list[str] = []
+    skip_file = ""
     for i, (name, cmd) in enumerate(commands, start=1):
         first_line = cmd.splitlines()[0][:90]
+        if name == skip_file:
+            print(f"[{i}/{len(commands)}] {name}: skipped after an earlier error in this file")
+            continue
         print(f"[{i}/{len(commands)}] {name}: {first_line}")
         try:
             client.execute_mgmt(settings.kusto_database, cmd)
         except KustoServiceError as exc:
-            # Show the whole failing command and the server's short message, not a long
-            # stack trace. Every command is idempotent, so a rerun after the fix is safe.
+            # The whole failing command and the server's short message, not a long stack
+            # trace. Every command is idempotent, so a rerun after the fix is safe.
             print(f"\nFAILED in {name}, command {i}:\n\n{cmd}\n")
             print(f"Error: {exc}"[:2000])
-            return 1
+            failed.append(name)
+            skip_file = name
+    if failed:
+        print(f"\n{len(failed)} file(s) failed: {', '.join(failed)}")
+        return 1
     print(f"applied {len(commands)} commands")
     return 0
 

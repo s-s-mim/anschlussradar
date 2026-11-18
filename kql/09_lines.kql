@@ -35,7 +35,7 @@ LineStations(c: string, l: string, o: string, days: int) {
         | where destination == main_dest
         | extend trip = strcat(number, "|", tostring(service_date))
         | order by trip asc, dep_pt asc
-        | extend pos = row_number(1, prev(trip) != trip)
+        | extend pos = row_number(1, trip != prev(trip, 1, ""))
         | summarize pos = avg(pos) by eva;
     f
     | summarize

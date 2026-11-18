@@ -8,7 +8,8 @@ DelayForecastStats(days: int) {
     let facts = StopFacts
         | where service_date > ago(days * 1d)
         | where not(incomplete) and isnotnull(dep_pt) and not(dep_cancelled) and isnotnull(dep_delay_min)
-        | extend delay = max_of(0, min_of(dep_delay_min, 120)),
+        // max_of/min_of want one type: the column is int, the literals are long.
+        | extend delay = max_of(0, min_of(tolong(dep_delay_min), 120)),
                  hour = toint(hourofday(datetime_utc_to_local(dep_pt, "Europe/Berlin")));
     let by_train = facts
         | summarize trips = count(), p50 = percentile(delay, 50), p80 = percentile(delay, 80),
