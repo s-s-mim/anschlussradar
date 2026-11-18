@@ -91,6 +91,13 @@ function De({ stage }: { stage: Stage | null }) {
           </a>{" "}
           (CC BY 4.0).
         </li>
+        <li>
+          Adressen und Fußwege:{" "}
+          <a href="https://www.openstreetmap.org/copyright" {...ext}>
+            © OpenStreetMap contributors
+          </a>{" "}
+          (ODbL), über Transitous.
+        </li>
         <li>Wetterdaten: Deutscher Wetterdienst (DWD), über Bright Sky.</li>
         <li>
           Texte zu den Verspätungsgründen nach den Codes aus{" "}
@@ -197,6 +204,13 @@ function En({ withWhy = true, stage }: { withWhy?: boolean; stage: Stage | null 
             gtfs.de
           </a>{" "}
           (CC BY 4.0).
+        </li>
+        <li>
+          Addresses and walking routes:{" "}
+          <a href="https://www.openstreetmap.org/copyright" {...ext}>
+            © OpenStreetMap contributors
+          </a>{" "}
+          (ODbL), via Transitous.
         </li>
         <li>Weather data: Deutscher Wetterdienst (DWD), via Bright Sky.</li>
         <li>

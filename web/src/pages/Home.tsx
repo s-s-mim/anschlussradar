@@ -56,8 +56,8 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
         <form className="search" onSubmit={submit} noValidate>
           <div className="stations">
             <div className="from-field">
-              <StationInput label={t("home.from")} value={from} onChange={setFrom} invalid={tried && !from} />
-              <NearMe onPick={setFrom} />
+              <StationInput label={t("home.from")} value={from} onChange={setFrom} invalid={tried && !from} all={local} />
+              <NearMe onPick={setFrom} all={local} />
             </div>
             <button
               type="button"
@@ -73,7 +73,7 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
                 <path d="M7 4v14m0 0-3-3m3 3 3-3M17 20V6m0 0-3 3m3-3 3 3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <StationInput label={t("home.to")} value={to} onChange={setTo} invalid={tried && !to} />
+            <StationInput label={t("home.to")} value={to} onChange={setTo} invalid={tried && !to} all={local} />
           </div>
           {tried && (!from || !to) && <p className="error-text">{t("home.pickStation")}</p>}
 

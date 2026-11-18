@@ -86,6 +86,11 @@ class TransitousClient:
         self._http = http or httpx.Client(timeout=httpx.Timeout(15.0, connect=5.0))
         self._headers = {"User-Agent": user_agent, "Accept": "application/json"}
         self._cache = TtlCache(cache_seconds)
+        # Station names change rarely: keep those lookups a day, so a name typed by
+        # many people is looked up once. Anything that may be a home address or a
+        # position (text with a digit, nearby stops) is kept only two minutes.
+        self._lookups = TtlCache(86400, max_entries=2000)
+        self._short = TtlCache(120, max_entries=500)
         self.usage = UsageCounter()
 
     def plan(
@@ -128,3 +133,40 @@ class TransitousClient:
         data: dict[str, Any] = resp.json()
         self._cache.put(key, data)
         return data
+
+    def _get_list(
+        self, path: str, params: dict[str, str], *, short: bool = False
+    ) -> list[dict[str, Any]]:
+        cache = self._short if short else self._lookups
+        key = path + "?" + "&".join(f"{k}={v}" for k, v in sorted(params.items()))
+        cached = cache.get(key)
+        if cached is not None:
+            return cached  # type: ignore[no-any-return]
+        try:
+            resp = self._http.get(f"{self.base_url}{path}", params=params, headers=self._headers)
+        except httpx.TransportError as exc:
+            raise TransitousError(f"geocoder not reachable: {type(exc).__name__}") from exc
+        if resp.status_code != 200:
+            raise TransitousError(f"geocoder answered HTTP {resp.status_code}")
+        data = resp.json()
+        result = data if isinstance(data, list) else []
+        cache.put(key, result)
+        return result
+
+    def geocode(self, text: str, lang: str, stops_only: bool = False) -> list[dict[str, Any]]:
+        """Stops and addresses for typed text (OpenStreetMap data), Germany only."""
+        params = {
+            "text": text,
+            "language": lang,
+            "type": "STOP" if stops_only else "STOP,ADDRESS",
+            "numResults": "8",
+            "min": "47.2,5.8",  # lower right / upper left of a box around Germany
+            "max": "55.1,15.1",
+        }
+        short = any(c.isdigit() for c in text)
+        return self._get_list("/api/v1/geocode", params, short=short)
+
+    def nearby_stops(self, lat: float, lon: float) -> list[dict[str, Any]]:
+        """Stops of every kind around a position (bus, tram, U-Bahn, trains)."""
+        params = {"place": f"{lat},{lon}", "type": "STOP", "numResults": "10"}
+        return self._get_list("/api/v1/reverse-geocode", params, short=True)

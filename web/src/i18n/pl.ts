@@ -267,6 +267,14 @@ export const pl: Translation = {
     denied: "Dostęp do lokalizacji jest zablokowany. Możesz go włączyć w ustawieniach przeglądarki.",
     failed: "Nie udało się ustalić lokalizacji. Wpisz stację.",
     none: "Brak stacji w promieniu 3 km.",
+    listAll: "Przystanki w pobliżu",
+    noneAll: "Brak przystanku w promieniu 3 km.",
+  },
+  walk: {
+    toStop: "Pieszo do {stop}",
+    fromStop: "Pieszo z {stop} do celu",
+    amount: "{distance}, ok. {min} min",
+    total: "w tym {distance} pieszo",
   },
   about: {
     soonTitle: "Wkrótce",

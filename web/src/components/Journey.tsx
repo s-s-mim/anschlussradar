@@ -35,6 +35,33 @@ const RAIL_MODES = new Set([
 ]);
 const isRail = (leg: Leg) => RAIL_MODES.has(leg.mode);
 
+const privatePlace = (s: Station) => s.kind === "here" || s.kind === "address";
+const metres = (m: number, lang: string) =>
+  m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toLocaleString(lang, { maximumFractionDigits: 1 })} km`;
+const km = (v: number, lang: string) => `${v < 10 ? v.toLocaleString(lang, { maximumFractionDigits: 1 }) : Math.round(v)} km`;
+
+function WalkRow({ walk, text }: { walk: { meters: number; minutes: number }; text: string }) {
+  const { t, lang } = useI18n();
+  return (
+    <li className="walk-row">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <path
+          d="M13 4.5a1.5 1.5 0 1 1 0 .01M10 21l2-6 2 2v4M8 11l3-3 3 1 2 3h3M11 8l-1 6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <span>
+        {text}
+        <span className="muted"> · {t("walk.amount", { distance: metres(walk.meters, lang), min: walk.minutes })}</span>
+      </span>
+    </li>
+  );
+}
+
 function Delay({ min }: { min: number | null }) {
   if (min === null || min === 0) return null;
   return <span className={min > 0 ? "delay late" : "delay early"}>{min > 0 ? `+${min}` : min}</span>;
@@ -253,7 +280,7 @@ export function JourneyCard({
   local?: boolean;
   onTip?: (tip: Tip) => void;
 }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [open, setOpen] = useState(false);
   const first = journey.legs[0];
   const last = journey.legs[journey.legs.length - 1];
@@ -267,9 +294,11 @@ export function JourneyCard({
     <article className={`journey${cancelled ? " has-cancel" : ""}`}>
       <button type="button" className="journey-summary" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
         <span className="times">
+          {/* With a walk, the summary shows when to leave and when you are there, so
+              the times match the total duration. Train delays stay in the details. */}
           <span className="time">
-            {hhmm(first?.departurePlanned ?? journey.departure)}
-            <Delay min={depDelay} />
+            {journey.walkStart ? hhmm(journey.departure) : hhmm(first?.departurePlanned ?? journey.departure)}
+            {!journey.walkStart && <Delay min={depDelay} />}
           </span>
           <span className="route-bar" aria-hidden="true">
             {journey.transfers.map((tr, i) => (
@@ -277,8 +306,8 @@ export function JourneyCard({
             ))}
           </span>
           <span className="time">
-            {hhmm(last?.arrivalPlanned ?? journey.arrival)}
-            <Delay min={arrDelay} />
+            {journey.walkEnd ? hhmm(journey.arrival) : hhmm(last?.arrivalPlanned ?? journey.arrival)}
+            {!journey.walkEnd && <Delay min={arrDelay} />}
           </span>
         </span>
         <span className="facts">
@@ -286,6 +315,12 @@ export function JourneyCard({
           <span>
             {journey.transfersCount === 0 ? t("results.direct") : t("results.transfers", { count: journey.transfersCount })}
           </span>
+          {journey.distanceKm !== null && journey.distanceKm !== undefined && (
+            <span className="ltr">{km(journey.distanceKm, lang)}</span>
+          )}
+          {journey.walkMeters >= 100 && (
+            <span>{t("walk.total", { distance: metres(journey.walkMeters, lang) })}</span>
+          )}
           <span className="lines">
             {journey.legs.map((l, i) => (
               <span key={i} className={`line-badge small${isRail(l) ? "" : " local"}`}>
@@ -311,6 +346,9 @@ export function JourneyCard({
       <Tips tips={journey.tips} onShow={(tip) => onTip?.(tip)} />
       {open && (
         <ol className="itinerary">
+          {journey.walkStart && first && (
+            <WalkRow walk={journey.walkStart} text={t("walk.toStop", { stop: first.from })} />
+          )}
           {journey.legs.flatMap((leg, i) => {
             const tr = journey.transfers[i];
             const rows = [<LegRow key={`l${i}`} leg={leg} />];
@@ -318,7 +356,11 @@ export function JourneyCard({
             if (tr && next) rows.push(<TransferNode key={`t${i}`} tr={tr} legIn={leg} legOut={next} />);
             return rows;
           })}
-          {from && to && first?.departurePlanned && (
+          {journey.walkEnd && last && (
+            <WalkRow walk={journey.walkEnd} text={t("walk.fromStop", { stop: last.to })} />
+          )}
+          {/* No daily check from "Mein Standort" or an address: it would store a position on the server. */}
+          {from && to && !privatePlace(from) && !privatePlace(to) && first?.departurePlanned && (
             <li className="watch-row">
               <WatchPanel from={from} to={to} departure={hhmm(first.departurePlanned)} local={local} />
             </li>

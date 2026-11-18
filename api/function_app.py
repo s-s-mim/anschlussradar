@@ -54,11 +54,27 @@ def stations_nearby(req: func.HttpRequest) -> func.HttpResponse:
         body = req.get_json()
     except ValueError:
         body = None
-    return respond(service().post_nearby(body))
+    return respond(service().post_nearby(body, _client(req)))
 
 
-@app.route(route="journeys", methods=["GET"])
+@app.route(route="places", methods=["POST"])
+def places(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        body = req.get_json()
+    except ValueError:
+        body = None
+    return respond(service().post_places(body, _client(req)))
+
+
+@app.route(route="journeys", methods=["GET", "POST"])
 def journeys(req: func.HttpRequest) -> func.HttpResponse:
+    if req.method == "POST":
+        # The web app posts: a position or a typed address then never shows up in a URL log.
+        try:
+            body = req.get_json()
+        except ValueError:
+            body = None
+        return respond(service().post_journeys(body))
     return respond(service().get_journeys(dict(req.params)), 60)
 
 

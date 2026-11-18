@@ -9,6 +9,11 @@ export interface Station {
   name: string;
   lat: number;
   lon: number;
+  /** station: from the app's train station list; stop: bus/tram/U-Bahn stop; address; here: my location */
+  kind?: "station" | "stop" | "address" | "here";
+  /** Town or post code, shown under the name in the search list. */
+  detail?: string | null;
+  modes?: string[];
 }
 
 export interface NearbyStation extends Station {
@@ -161,6 +166,12 @@ export interface Journey {
   durationMinutes: number;
   transfersCount: number;
   reliability: number | null;
+  /** Walk to the first stop and from the last stop, when there is one worth showing. */
+  walkStart: { meters: number; minutes: number } | null;
+  walkEnd: { meters: number; minutes: number } | null;
+  walkMeters: number;
+  /** Whole trip along the route, when every part has a length. */
+  distanceKm: number | null;
   /** True when the reliability covers only the train-to-train transfers. */
   reliabilityTrainsOnly: boolean;
   legs: Leg[];

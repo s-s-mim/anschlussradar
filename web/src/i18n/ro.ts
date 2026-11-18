@@ -265,6 +265,14 @@ export const ro: Translation = {
     denied: "Accesul la locație nu este permis. Îl poți permite în setările browserului.",
     failed: "Locația nu a putut fi determinată. Te rog scrie gara.",
     none: "Nicio gară pe o rază de 3 km.",
+    listAll: "Stații în apropiere",
+    noneAll: "Nicio stație pe o rază de 3 km.",
+  },
+  walk: {
+    toStop: "Pe jos până la {stop}",
+    fromStop: "Pe jos de la {stop} la destinație",
+    amount: "{distance}, cam {min} min",
+    total: "din care {distance} pe jos",
   },
   about: {
     soonTitle: "În curând",

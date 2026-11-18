@@ -370,3 +370,71 @@ def test_nearby_stations_round_the_position(tmp_path: Path) -> None:
     }  # Paris
     assert svc.post_nearby({"lat": "x"})[0] == 400
     assert svc.post_nearby(None)[0] == 400
+
+
+GEOCODE = [
+    {"type": "ADDRESS", "name": "Sodener Straße 5", "street": "Sodener Straße", "houseNumber": "5",
+     "zip": "60326", "lat": 50.1061, "lon": 8.6334, "areas": [{"name": "Frankfurt am Main", "default": True}]},
+    {"type": "STOP", "name": "Frankfurt-Gallus Sodener Str.", "lat": 50.1058, "lon": 8.6341,
+     "modes": ["BUS"], "areas": [{"name": "Frankfurt am Main", "default": True}]},
+    {"type": "PLACE", "name": "Some park", "lat": 50.1, "lon": 8.6, "areas": []},
+]  # fmt: skip
+
+
+def test_places_add_addresses_and_stops_without_urls(tmp_path: Path) -> None:
+    seen: list[httpx.URL] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request.url)
+        return httpx.Response(200, json=GEOCODE)
+
+    svc = make_service(tmp_path, handler=handler)
+    status, body = svc.post_places({"text": "Sodener Str 5", "lang": "de"}, "c")
+    assert status == 200
+    kinds = [(p["kind"], p["name"]) for p in body["places"]]
+    assert ("address", "Sodener Straße 5") in kinds and (
+        "stop",
+        "Frankfurt-Gallus Sodener Str.",
+    ) in kinds
+    assert all(k != "place" for k, _ in kinds)  # parks and other places are left out
+    assert body["places"][0]["kind"] == "address"  # a house number: the address comes first
+    addr = next(p for p in body["places"] if p["kind"] == "address")
+    assert addr["id"] == "50.10610,8.63340" and addr["detail"] == "60326 Frankfurt am Main"
+    assert seen[0].path == "/api/v1/geocode" and seen[0].params["type"] == "STOP,ADDRESS"
+    # A station name with enough hits in the app's own list needs no lookup.
+    seen.clear()
+    svc.post_places({"text": "Köln", "lang": "de"}, "c")
+    assert svc.post_places({"text": "x"}, "c")[0] == 400
+
+
+def test_nearby_all_modes_uses_transitous_stops(tmp_path: Path) -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path == "/api/v1/reverse-geocode"
+        return httpx.Response(200, json=GEOCODE)
+
+    svc = make_service(tmp_path, handler=handler)
+    status, body = svc.post_nearby({"lat": 50.10612, "lon": 8.63339, "all": True}, "c")
+    assert status == 200
+    (stop,) = body["stations"]  # the address is not a stop; only stops come back
+    assert stop["kind"] == "stop" and stop["modes"] == ["BUS"] and 0 < stop["distanceM"] < 200
+
+
+def test_post_journeys_and_walking(tmp_path: Path) -> None:
+    walk = {"mode": "WALK", "from": {"name": "START"}, "to": {"name": "Kriftel"}, "distance": 420.4,
+            "startTime": "2026-11-16T06:30:00Z", "endTime": "2026-11-16T06:36:00Z"}  # fmt: skip
+    plan = {
+        "itineraries": [{**PLAN["itineraries"][0], "legs": [walk, *PLAN["itineraries"][0]["legs"]]}]
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.params["fromPlace"] == "50.08,8.46"
+        return httpx.Response(200, json=plan)
+
+    svc = make_service(tmp_path, stage="early", handler=handler)
+    status, body = svc.post_journeys(
+        {"from": "50.08,8.46", "to": "s5", "extra": "ignored"}, now=NOW
+    )
+    assert status == 200
+    j = body["journeys"][0]
+    assert j["walkStart"] == {"meters": 420, "minutes": 6} and j["walkMeters"] == 420
+    assert j["walkEnd"] is None

@@ -262,6 +262,14 @@ export const en: Translation = {
     denied: "Location access is not allowed. You can allow it in your browser settings.",
     failed: "Your location could not be found. Please type the station.",
     none: "No station within 3 km.",
+    listAll: "Stops nearby",
+    noneAll: "No stop within 3 km.",
+  },
+  walk: {
+    toStop: "Walk to {stop}",
+    fromStop: "Walk from {stop} to your destination",
+    amount: "{distance}, about {min} min",
+    total: "{distance} on foot",
   },
   about: {
     soonTitle: "Coming soon",

@@ -1,10 +1,12 @@
-// "Mein Standort" and "Bahnhöfe in der Nähe" under the From field.
-// The phone asks for the position only after a tap. The position is rounded to about
-// 100 m on the phone, sent in the request body (never in a web address) and used once
-// to find the nearest stations; the search then uses a station, not the position.
+// "Mein Standort" and "In der Nähe" under the From field.
+// The phone asks for the position only after a tap and rounds it to about 100 m.
+// "Mein Standort" plans from that point, so the trip starts with the walk to the stop;
+// "In der Nähe" lists stations (or, with bus/tram ticked, stops of every kind).
+// The position travels only in request bodies, never in a web address, and is not stored.
 import { useState } from "react";
 import { useI18n } from "../i18n";
 import { nearbyStations } from "../lib/api";
+import { PlaceIcon } from "./StationInput";
 import type { NearbyStation, Station } from "../lib/types";
 
 type State = "idle" | "locating" | "denied" | "failed" | "none" | "list";
@@ -22,7 +24,7 @@ function position(): Promise<{ lat: number; lon: number }> {
 
 const PIN = "M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 4.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Z";
 
-export function NearMe({ onPick }: { onPick: (s: Station) => void }) {
+export function NearMe({ onPick, all }: { onPick: (s: Station) => void; all: boolean }) {
   const { t, lang } = useI18n();
   const [state, setState] = useState<State>("idle");
   const [items, setItems] = useState<NearbyStation[]>([]);
@@ -36,16 +38,19 @@ export function NearMe({ onPick }: { onPick: (s: Station) => void }) {
       setState((e as GeolocationPositionError)?.code === 1 ? "denied" : "failed");
       return;
     }
+    if (mode === "mine") {
+      // The search starts at the position itself, so the planner adds the walk to the
+      // best stop. The position stays in this tab; the address bar only says "here" (lib/query.ts).
+      const me: Station = { id: "here", kind: "here", name: t("near.mine"), lat: pos.lat, lon: pos.lon };
+      onPick(me);
+      setState("idle");
+      return;
+    }
     try {
-      const found = await nearbyStations(pos.lat, pos.lon);
+      const found = await nearbyStations(pos.lat, pos.lon, all);
       if (found.length === 0) return setState("none");
-      if (mode === "mine") {
-        onPick(found[0]);
-        setState("idle");
-      } else {
-        setItems(found);
-        setState("list");
-      }
+      setItems(found);
+      setState("list");
     } catch {
       setState("failed");
     }
@@ -64,7 +69,7 @@ export function NearMe({ onPick }: { onPick: (s: Station) => void }) {
           {t("near.mine")}
         </button>
         <button type="button" className="chip" onClick={() => find("list")} disabled={state === "locating"}>
-          {t("near.list")}
+          {t(all ? "near.listAll" : "near.list")}
         </button>
       </div>
       {state === "locating" && (
@@ -74,7 +79,7 @@ export function NearMe({ onPick }: { onPick: (s: Station) => void }) {
       )}
       {state === "denied" && <p className="small error-text">{t("near.denied")}</p>}
       {state === "failed" && <p className="small error-text">{t("near.failed")}</p>}
-      {state === "none" && <p className="small muted">{t("near.none")}</p>}
+      {state === "none" && <p className="small muted">{t(all ? "near.noneAll" : "near.none")}</p>}
       {state === "list" && (
         <ul className="near-list">
           {items.map((s) => (
@@ -86,7 +91,8 @@ export function NearMe({ onPick }: { onPick: (s: Station) => void }) {
                   setState("idle");
                 }}
               >
-                <span>{s.name}</span>
+                <PlaceIcon kind={s.kind} />
+                <span className="place-text">{s.name}</span>
                 <span className="muted small">{metres(s.distanceM)}</span>
               </button>
             </li>

@@ -263,6 +263,14 @@ export const tr: Translation = {
     denied: "Konum erişimine izin verilmiyor. Tarayıcı ayarlarından izin verebilirsin.",
     failed: "Konum belirlenemedi. Lütfen istasyonu yaz.",
     none: "3 km içinde istasyon yok.",
+    listAll: "Yakındaki duraklar",
+    noneAll: "3 km içinde durak yok.",
+  },
+  walk: {
+    toStop: "{stop} durağına yürü",
+    fromStop: "{stop} durağından hedefe yürü",
+    amount: "{distance}, yaklaşık {min} dk.",
+    total: "{distance} yürüyüş",
   },
   about: {
     soonTitle: "Yakında",

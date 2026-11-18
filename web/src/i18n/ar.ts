@@ -271,6 +271,14 @@ export const ar: Translation = {
     denied: "الوصول إلى الموقع غير مسموح. يمكنك السماح به من إعدادات المتصفح.",
     failed: "تعذّر تحديد موقعك. اكتب اسم المحطة من فضلك.",
     none: "لا توجد محطة في نطاق 3 كم.",
+    listAll: "محطات قريبة",
+    noneAll: "لا توجد محطة في نطاق 3 كم.",
+  },
+  walk: {
+    toStop: "سيرًا إلى {stop}",
+    fromStop: "سيرًا من {stop} إلى وجهتك",
+    amount: "{distance}، نحو {min} دقيقة",
+    total: "منها {distance} سيرًا",
   },
   about: {
     soonTitle: "قريبًا",

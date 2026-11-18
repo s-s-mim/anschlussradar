@@ -263,6 +263,14 @@ export const am: Translation = {
     denied: "የአካባቢ መዳረሻ አልተፈቀደም። በአሳሽዎ ቅንብሮች ውስጥ መፍቀድ ይችላሉ።",
     failed: "አካባቢዎ ሊገኝ አልቻለም። እባክዎ ጣቢያውን ይጻፉ።",
     none: "በ3 ኪ.ሜ ውስጥ ጣቢያ የለም።",
+    listAll: "በአቅራቢያ ያሉ ማቆሚያዎች",
+    noneAll: "በ3 ኪ.ሜ ውስጥ ማቆሚያ የለም።",
+  },
+  walk: {
+    toStop: "ወደ {stop} በእግር",
+    fromStop: "ከ{stop} ወደ መድረሻ በእግር",
+    amount: "{distance}፣ {min} ደቂቃ ገደማ",
+    total: "ከዚህ {distance} በእግር",
   },
   about: {
     soonTitle: "በቅርቡ",

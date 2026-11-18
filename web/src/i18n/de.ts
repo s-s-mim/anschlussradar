@@ -262,6 +262,14 @@ export const de = {
     denied: "Der Standortzugriff ist nicht erlaubt. Du kannst ihn in den Einstellungen deines Browsers erlauben.",
     failed: "Der Standort konnte nicht ermittelt werden. Bitte gib den Bahnhof ein.",
     none: "Kein Bahnhof im Umkreis von 3 km.",
+    listAll: "Haltestellen in der Nähe",
+    noneAll: "Keine Haltestelle im Umkreis von 3 km.",
+  },
+  walk: {
+    toStop: "Zu Fuß zu {stop}",
+    fromStop: "Zu Fuß von {stop} zum Ziel",
+    amount: "{distance}, etwa {min} Min.",
+    total: "davon {distance} zu Fuß",
   },
   about: {
     soonTitle: "Bald verfügbar",

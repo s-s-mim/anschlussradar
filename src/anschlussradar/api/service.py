@@ -1,7 +1,9 @@
 """The API's handlers as plain Python: (status code, JSON body) in, no HTTP framework.
 
 GET  /api/v1/stations?q=frankfurt
-POST /api/v1/stations/nearby          up to 5 stations within 3 km of a position (in the body)
+POST /api/v1/stations/nearby          stations (or, with all, stops of every kind) near a position
+POST /api/v1/places                    stations, stops and addresses for the From and To fields
+POST /api/v1/journeys                  like GET /journeys, parameters in the body
 GET  /api/v1/journeys?from=<id or lat,lon>&to=...&time=<ISO>&arriveBy=false&sort=fastest|reliable&rail=true
 GET  /api/v1/model/status
 GET  /api/v1/hubs                      recorded stations
@@ -52,7 +54,7 @@ from .questions import (
     valid_id,
 )
 from .questions import validate as validate_question
-from .stations import HubMatcher, StationIndex
+from .stations import HubMatcher, StationIndex, distance_m, normalize
 from .tips import EARLIER_WINDOW, earlier_tip, needs_earlier, transfer_tips
 from .transitous import TransitousClient, TransitousError
 from .watch import (
@@ -67,6 +69,38 @@ from .watch import validate as validate_watch
 
 log = logging.getLogger(__name__)
 Response = tuple[int, dict[str, Any]]
+_JOURNEY_KEYS = {"from", "to", "time", "arriveBy", "sort", "rail"}
+
+
+def _match_place(m: dict[str, Any]) -> dict[str, Any] | None:
+    """A Transitous geocoding match as a place for the search fields."""
+    try:
+        lat, lon = float(m["lat"]), float(m["lon"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    kind = {"STOP": "stop", "ADDRESS": "address"}.get(str(m.get("type")))
+    if kind is None:
+        return None
+    name = str(m.get("name") or "")
+    if kind == "address":
+        street = str(m.get("street") or name)
+        number = str(m.get("houseNumber") or "")
+        name = f"{street} {number}" if number and not street.endswith(number) else street
+    areas = [a for a in m.get("areas") or [] if isinstance(a, dict)]
+    default = next((a.get("name") for a in areas if a.get("default")), None)
+    detail = " ".join(x for x in (m.get("zip") if kind == "address" else None, default) if x)
+    return {
+        # Coordinates as the id: the planner walks from there, and nothing else is passed on.
+        "id": f"{lat:.5f},{lon:.5f}",
+        "name": name,
+        "lat": lat,
+        "lon": lon,
+        "kind": kind,
+        "detail": detail or None,
+        "modes": [str(x) for x in m.get("modes") or []][:4],
+    }
+
+
 _LATLON = re.compile(r"^-?\d{1,2}(\.\d+)?,-?\d{1,3}(\.\d+)?$")
 
 
@@ -101,6 +135,8 @@ class ApiService:
         default_factory=lambda: RateLimiter(QUESTIONS_PER_DAY, window_s=86400.0)
     )
     question_cap: DailyCap = field(default_factory=lambda: DailyCap(QUESTIONS_DAILY_TOTAL))
+    # Address and stop lookups at Transitous, per person and hour (answers are cached a day).
+    lookup_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(120))
     ask_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(10))
     ask_cap: DailyCap = field(default_factory=DailyCap)
     started_at: float = field(default_factory=time.time)
@@ -117,10 +153,13 @@ class ApiService:
             n = 8
         return 200, {"stations": [s.to_dict() for s in self.stations.search(q, n)]}
 
-    def post_nearby(self, body: Any) -> Response:
+    def post_nearby(self, body: Any, client: str = "") -> Response:
         """Stations near a position. The position comes in the request body, so it
         never appears in a URL or a request log, and it is rounded to about 100 m
-        before use. Nothing about it is stored."""
+        before use. Nothing about it is stored.
+
+        With `all`, stops of every kind (bus, tram, U-Bahn) come from Transitous;
+        otherwise, or if that fails, train stations from the app's own list."""
         try:
             lat = round(float(body["lat"]), 3)
             lon = round(float(body["lon"]), 3)
@@ -128,8 +167,61 @@ class ApiService:
             return error(400, "invalid_field", "Expected lat and lon.", field="position")
         if not (47.0 <= lat <= 55.2 and 5.5 <= lon <= 15.5):
             return 200, {"stations": [], "outside": True}
+        if body.get("all") is True and self.lookup_limiter.allow(client or "anon"):
+            try:
+                found = (_match_place(m) for m in self.transitous.nearby_stops(lat, lon))
+                stops = [p for p in found if p and p["kind"] == "stop"]
+                for s in stops:
+                    s["distanceM"] = round(distance_m(lat, lon, s["lat"], s["lon"]))
+                stops = [s for s in stops if s["distanceM"] <= 3000]
+                stops.sort(key=lambda s: s["distanceM"])
+                if stops:
+                    return 200, {"stations": stops[:6]}
+            except TransitousError:
+                log.warning("nearby stops lookup failed; using the train station list")
         hits = self.stations.nearby(lat, lon)
-        return 200, {"stations": [{**s.to_dict(), "distanceM": d} for s, d in hits]}
+        return 200, {
+            "stations": [{**s.to_dict(), "kind": "station", "distanceM": d} for s, d in hits]
+        }
+
+    def post_places(self, body: Any, client: str = "") -> Response:
+        """Search for the From and To fields: train stations from the app's list, plus
+        stops and addresses from Transitous (OpenStreetMap) when the list has too
+        little or the person wants all modes. POST, so a typed home address never
+        appears in a URL or request log."""
+        if not isinstance(body, dict):
+            return error(400, "invalid_field", "Expected a JSON object.", field="body")
+        text = " ".join(str(body.get("text") or "").split())[:100]
+        if len(text) < 2:
+            return error(400, "query_too_short", "Type at least 2 characters.")
+        lang = str(body.get("lang") or "de")[:5]
+        everything = body.get("all") is True
+        places = [{**s.to_dict(), "kind": "station"} for s in self.stations.search(text, 6)]
+        wants_more = everything or len(places) < 3 or any(c.isdigit() for c in text)
+        if len(text) >= 3 and wants_more and self.lookup_limiter.allow(client or "anon"):
+            try:
+                found = [
+                    p for p in (_match_place(m) for m in self.transitous.geocode(text, lang)) if p
+                ]
+            except TransitousError:
+                found = []
+                log.warning("geocode lookup failed; showing train stations only")
+            known = {normalize(p["name"]) for p in places}
+            for p in found:
+                if p["kind"] == "stop" and normalize(p["name"]) in known:
+                    continue  # the same station, already in the list
+                places.append(p)
+            if any(c.isdigit() for c in text):
+                # "Sodener Str. 5" is an address; keep the order otherwise.
+                places.sort(key=lambda p: p["kind"] != "address")
+        return 200, {"places": places[:10]}
+
+    def post_journeys(self, body: Any, now: datetime | None = None) -> Response:
+        """POST version of GET /journeys: positions and addresses stay out of URLs."""
+        if not isinstance(body, dict):
+            return error(400, "invalid_field", "Expected a JSON object.", field="body")
+        params = {k: str(v) for k, v in body.items() if v is not None and k in _JOURNEY_KEYS}
+        return self.get_journeys(params, now=now)
 
     # journeys -----------------------------------------------------------------
 

@@ -38,7 +38,8 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
 
   useEffect(() => {
     if (!s) return;
-    store.addRecent({ from: s.from, to: s.to });
+    // A position is not a route to come back to: no recent entry for "Mein Standort".
+    if (s.from.kind !== "here" && s.to.kind !== "here") store.addRecent({ from: s.from, to: s.to });
     const ctrl = new AbortController();
     setLoading(true);
     setError(null);
@@ -94,17 +95,19 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
         <Link className="change" href={`/?${toParams(s)}`}>
           {t("results.change")}
         </Link>
-        <button
-          type="button"
-          className={saved ? "save on" : "save"}
-          aria-pressed={saved}
-          onClick={() => setSaved(store.toggleSaved({ from: s.from, to: s.to }))}
-        >
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-          </svg>
-          {saved ? t("results.unsave") : t("results.save")}
-        </button>
+        {s.from.kind !== "here" && s.to.kind !== "here" && (
+          <button
+            type="button"
+            className={saved ? "save on" : "save"}
+            aria-pressed={saved}
+            onClick={() => setSaved(store.toggleSaved({ from: s.from, to: s.to }))}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+            </svg>
+            {saved ? t("results.unsave") : t("results.save")}
+          </button>
+        )}
         </div>
       </header>
 

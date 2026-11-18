@@ -28,7 +28,7 @@ from ..ml.serving import LoadedModel, live_check, score_transfer
 from ..ml.stages import Stage
 from .forecast import DelayForecast, ForecastProvider
 from .messages import MessageProvider, TrainMessage
-from .stations import HubMatcher
+from .stations import HubMatcher, distance_m
 
 NON_TRANSIT_MODES = {
     "WALK", "BIKE", "RENTAL", "CAR", "CAR_PARKING", "CAR_DROPOFF", "ODM", "RIDE_SHARING", "FLEX",
@@ -101,6 +101,7 @@ class Leg:
     from_hub: int | None = None  # station group EVA when the stop is a recorded hub
     to_hub: int | None = None
     forecast: DelayForecast | None = None  # typical departure delay at a recorded hub
+    distance_m: int | None = None  # walking: from the planner; transit: along the route shape
 
     @classmethod
     def from_motis(cls, leg: dict[str, Any]) -> Leg:
@@ -128,6 +129,7 @@ class Leg:
             arr_track_planned=to.get("scheduledTrack"),
             real_time=bool(leg.get("realTime")),
             cancelled=bool(leg.get("cancelled") or frm.get("cancelled") or to.get("cancelled")),
+            distance_m=leg_distance(leg),
         )
 
     @property
@@ -226,6 +228,30 @@ class Journey:
     transfers: list[Transfer] = field(default_factory=list)
     tips: list[dict[str, Any]] = field(default_factory=list)
 
+    def walking(self) -> dict[str, Any]:
+        """Walk to the first stop, from the last stop, and the whole distance."""
+
+        def walk(leg: Leg | None) -> dict[str, int] | None:
+            if leg is None or leg.transit or leg.arr_actual is None or leg.dep_actual is None:
+                return None
+            if not leg.distance_m or leg.distance_m < 30:
+                return None  # stepping out of the door, not a walk worth showing
+            return {
+                "meters": leg.distance_m,
+                "minutes": max(1, minutes(leg.dep_actual, leg.arr_actual) or 0),
+            }
+
+        known = [leg.distance_m for leg in self.legs if leg.distance_m is not None]
+        return {
+            "walkStart": walk(self.legs[0] if self.legs else None),
+            "walkEnd": walk(self.legs[-1] if len(self.legs) > 1 else None),
+            "walkMeters": sum(leg.distance_m or 0 for leg in self.legs if not leg.transit),
+            # Only when every leg has a length; a partial sum would mislead.
+            "distanceKm": round(sum(known) / 1000, 1)
+            if known and len(known) == len(self.legs)
+            else None,
+        }
+
     @property
     def scored_transfers(self) -> list[Transfer]:
         """Transfers that can get a score: train to train."""
@@ -260,9 +286,52 @@ class Journey:
             "reliability": self.reliability,
             "reliabilityTrainsOnly": self.partial,
             "legs": [leg.to_dict() for leg in self.legs if leg.transit],
+            **self.walking(),
             "transfers": [t.to_dict() for t in self.transfers],
             "tips": self.tips,
         }
+
+
+def decode_polyline(points: str, precision: int = 7) -> list[tuple[float, float]]:
+    """Google encoded polyline to (lat, lon) pairs."""
+    coords: list[tuple[float, float]] = []
+    index = lat = lon = 0
+    factor = 10.0**precision
+    while index < len(points):
+        for is_lon in (False, True):
+            result = shift = 0
+            while True:
+                b = ord(points[index]) - 63
+                index += 1
+                result |= (b & 0x1F) << shift
+                shift += 5
+                if b < 0x20:
+                    break
+            delta = ~(result >> 1) if result & 1 else result >> 1
+            if is_lon:
+                lon += delta
+            else:
+                lat += delta
+        coords.append((lat / factor, lon / factor))
+    return coords
+
+
+def leg_distance(leg: dict[str, Any]) -> int | None:
+    """Metres for one leg: the planner's figure for walking, the route shape otherwise."""
+    if leg.get("distance") is not None:
+        try:
+            return round(float(leg["distance"]))
+        except (TypeError, ValueError):
+            return None
+    geom = leg.get("legGeometry") or {}
+    points = geom.get("points")
+    if not points:
+        return None
+    try:
+        pts = decode_polyline(points, int(geom.get("precision", 7)))
+    except (IndexError, ValueError):
+        return None
+    return round(sum(distance_m(*a, *b) for a, b in zip(pts, pts[1:], strict=False)))
 
 
 def build_journeys(

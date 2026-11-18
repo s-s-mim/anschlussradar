@@ -263,6 +263,14 @@ export const hi: Translation = {
     denied: "स्थान की अनुमति नहीं है। आप इसे ब्राउज़र की सेटिंग में दे सकते हैं।",
     failed: "स्थान पता नहीं चल सका। कृपया स्टेशन लिखें।",
     none: "3 किमी के भीतर कोई स्टेशन नहीं।",
+    listAll: "आस-पास के स्टॉप",
+    noneAll: "3 किमी के अंदर कोई स्टॉप नहीं।",
+  },
+  walk: {
+    toStop: "{stop} तक पैदल",
+    fromStop: "{stop} से मंज़िल तक पैदल",
+    amount: "{distance}, लगभग {min} मिनट",
+    total: "इसमें {distance} पैदल",
   },
   about: {
     soonTitle: "जल्द आ रहा है",

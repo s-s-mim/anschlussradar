@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { useI18n } from "../i18n";
-import { searchStations } from "../lib/api";
+import { searchPlaces } from "../lib/api";
 import type { Station } from "../lib/types";
 
 interface Props {
@@ -12,10 +12,12 @@ interface Props {
   onChange: (s: Station | null) => void;
   invalid?: boolean;
   autoFocus?: boolean;
+  /** Also bus, tram and U-Bahn stops, not only train stations. */
+  all?: boolean;
 }
 
-export function StationInput({ label, value, onChange, invalid, autoFocus }: Props) {
-  const { t } = useI18n();
+export function StationInput({ label, value, onChange, invalid, autoFocus, all = false }: Props) {
+  const { t, lang } = useI18n();
   const id = useId();
   const [text, setText] = useState(value?.name ?? "");
   const [items, setItems] = useState<Station[]>([]);
@@ -42,7 +44,7 @@ export function StationInput({ label, value, onChange, invalid, autoFocus }: Pro
     const ctrl = new AbortController();
     const timer = setTimeout(() => {
       setLoading(true);
-      searchStations(q, ctrl.signal)
+      searchPlaces(q, lang, all, ctrl.signal)
         .then((list) => {
           setItems(list);
           setActive(list.length ? 0 : -1);
@@ -59,7 +61,7 @@ export function StationInput({ label, value, onChange, invalid, autoFocus }: Pro
       clearTimeout(timer);
       ctrl.abort();
     };
-  }, [text]);
+  }, [text, all, lang]);
 
   const choose = (s: Station) => {
     typed.current = false;
@@ -130,12 +132,33 @@ export function StationInput({ label, value, onChange, invalid, autoFocus }: Pro
               }}
               onMouseEnter={() => setActive(i)}
             >
-              {s.name}
+              <PlaceIcon kind={s.kind} />
+              <span className="place-text">
+                <span>{s.name}</span>
+                {s.detail && <span className="place-detail">{s.detail}</span>}
+              </span>
             </li>
           ))}
         </ul>
       )}
       {showEmpty && <p className="hint">{t("station.noMatch")}</p>}
     </div>
+  );
+}
+
+/** Train, stop or house: what kind of place a suggestion is, at a glance. */
+export function PlaceIcon({ kind }: { kind?: string }) {
+  const d =
+    kind === "address"
+      ? "M4 11 12 4l8 7v9h-5v-6H9v6H4Z"
+      : kind === "stop"
+        ? "M7 4h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 6h10M8 17v3m8-3v3"
+        : kind === "here"
+          ? "M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z"
+          : "M8 3h8a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm-3 8h14M9 21l-2 0 2-4m6 4h2l-2-4";
+  return (
+    <svg className="place-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+      <path d={d} fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }

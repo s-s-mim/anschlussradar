@@ -147,22 +147,30 @@ function PrivacyDe() {
 
       <Section title="3. Bahnhofs- und Verbindungssuche">
         <p>
-          Was du in die Bahnhofssuche tippst, geht an den Server von AnschlussRadar, damit er passende Bahnhöfe vorschlagen kann. Bei
-          einer Verbindungssuche schickt der Server die Koordinaten von Start und Ziel und die gewünschte Zeit an den
-          freien Routenplaner <a href="https://transitous.org" {...ext}>Transitous</a>. Deine IP-Adresse oder andere
-          Angaben über dich werden dabei nicht weitergegeben.
+          Was du in die Suche tippst, geht an den Server von AnschlussRadar, damit er passende Bahnhöfe vorschlagen
+          kann. Wenn du eine Adresse oder eine Bus-, Tram- oder U-Bahn-Haltestelle suchst, gibt der Server den Text
+          an den freien Routenplaner <a href="https://transitous.org" {...ext}>Transitous</a> weiter, der ihn mit
+          Daten von OpenStreetMap auflöst. Bei einer Verbindungssuche schickt der Server die Koordinaten von Start
+          und Ziel und die gewünschte Zeit an Transitous. Deine IP-Adresse oder andere Angaben über dich werden
+          dabei nicht weitergegeben. Die Suche läuft im Inhalt der Anfrage, nicht in der Adresszeile, damit Adressen
+          nicht im Browserverlauf oder in Server-Protokollen landen.
         </p>
         <p>
           Suchergebnisse bleiben höchstens zwei Minuten im Arbeitsspeicher, damit gleiche Suchen schneller gehen.
+          Nur Treffer für Bahnhofs- und Haltestellennamen ohne Ziffern bleiben bis zu einem Tag dort.
           Außerdem wird gezählt, wie viele Suchen es pro Tag gibt. Beides lässt sich keiner Person zuordnen.
           Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO: Ohne diese Verarbeitung könnte die App keine Verbindungen
           anzeigen.
         </p>
         <p>
           Wenn du auf „Mein Standort“ oder „Bahnhöfe in der Nähe“ tippst, fragt dein Browser nach deinem Standort.
-          Die App rundet ihn auf deinem Gerät auf etwa 100 Meter und schickt ihn an den Server von AnschlussRadar,
-          der damit die nächsten Bahnhöfe sucht. Der Standort wird nicht gespeichert, nicht weitergegeben und nicht
-          in Adressen oder Protokolle geschrieben; die Suche arbeitet danach nur mit dem gewählten Bahnhof.
+          Die App rundet ihn auf deinem Gerät auf etwa 100 Meter. Bei „Bahnhöfe in der Nähe“ sucht der Server von
+          AnschlussRadar damit die nächsten Bahnhöfe; ist „Auch Bus, Tram und U-Bahn“ an, fragt er dafür Transitous.
+          Bei „Mein Standort“ ist der gerundete Standort der Start der Verbindungssuche und geht wie oben an
+          Transitous, damit der Fußweg zur ersten Haltestelle berechnet werden kann. Der Standort wird nicht
+          dauerhaft gespeichert und nicht in Protokolle geschrieben. In der Adresszeile steht nur „here“; die
+          Koordinaten bleiben in diesem Browser-Tab und sind weg, sobald du ihn schließt. Suchen mit deinem
+          Standort landen nicht in den letzten Suchen und lassen sich nicht als Strecke speichern.
           Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die du mit dem Tippen und der
           Freigabe im Browser gibst und dort jederzeit widerrufen kannst.
         </p>
@@ -310,20 +318,27 @@ function PrivacyEn() {
 
       <Section title="3. Station and journey search">
         <p>
-          What you type into the station search goes to the AnschlussRadar server so it can suggest stations. For a journey search
-          the server sends the coordinates of start and destination and the time you chose to the free journey planner{" "}
-          <a href="https://transitous.org" {...ext}>Transitous</a>. Your IP address and other details about you are
-          not passed on.
+          What you type into the search goes to the AnschlussRadar server so it can suggest stations. When you search
+          for an address or a bus, tram or U-Bahn stop, the server passes the text on to the free journey planner{" "}
+          <a href="https://transitous.org" {...ext}>Transitous</a>, which looks it up in OpenStreetMap data. For a
+          journey search the server sends the coordinates of start and destination and the time you chose to
+          Transitous. Your IP address and other details about you are not passed on. The search travels in the body
+          of the request, not in the address bar, so addresses don't end up in your browser history or in server
+          logs.
         </p>
         <p>
-          Search results stay in memory for up to two minutes so that repeated searches are faster, and the server counts how many searches there are per day. Neither can be linked to a person. The legal basis is Art. 6(1)(f)
+          Search results stay in memory for up to two minutes so that repeated searches are faster (only matches for
+          station and stop names without digits are kept up to a day), and the server counts how many searches there are per day. Neither can be linked to a person. The legal basis is Art. 6(1)(f)
           GDPR: without this the app couldn't show connections.
         </p>
         <p>
           When you tap "My location" or "Stations nearby", your browser asks for your location. The app rounds it
-          on your device to about 100 metres and sends it to the AnschlussRadar server, which uses it to find the
-          nearest stations. The location is not stored, not passed on and not written into addresses or logs; the
-          search then works with the station you picked. The legal basis is your consent (Art. 6(1)(a) GDPR), which
+          on your device to about 100 metres. For "Stations nearby" the AnschlussRadar server uses it to find the
+          nearest stations; with "Include buses, trams and underground" switched on, it asks Transitous for them. For "My
+          location" the rounded position is the start of the journey search and goes to Transitous as described
+          above, so the walk to the first stop can be worked out. The location is not stored and not written into
+          logs. The address bar only shows "here"; the coordinates stay in this browser tab and are gone once you
+          close it. Searches from your location are not added to recent searches and can't be saved as a route. The legal basis is your consent (Art. 6(1)(a) GDPR), which
           you give by tapping and allowing it in the browser, and can withdraw there at any time.
         </p>
       </Section>

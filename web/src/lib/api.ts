@@ -28,9 +28,14 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
-export function searchStations(q: string, signal?: AbortSignal): Promise<Station[]> {
-  const params = new URLSearchParams({ q, limit: "8" });
-  return request<{ stations: Station[] }>(`/stations?${params}`, { signal }).then((b) => b.stations);
+/** Stations, and stops and addresses when needed. POST, so a typed address stays out of URLs. */
+export function searchPlaces(text: string, lang: string, all: boolean, signal?: AbortSignal): Promise<Station[]> {
+  return request<{ places: Station[] }>("/places", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, lang, all }),
+    signal,
+  }).then((b) => b.places);
 }
 
 export interface JourneyQuery {
@@ -42,14 +47,13 @@ export interface JourneyQuery {
 }
 
 export function findJourneys(q: JourneyQuery, signal?: AbortSignal): Promise<JourneysResponse> {
-  const params = new URLSearchParams({
-    from: q.from,
-    to: q.to,
-    time: q.time,
-    arriveBy: String(q.arriveBy),
+  // POST: a position or an address never ends up in a URL or a request log.
+  return request<JourneysResponse>("/journeys", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ from: q.from, to: q.to, time: q.time, arriveBy: String(q.arriveBy), rail: String(!q.local) }),
+    signal,
   });
-  if (q.local) params.set("rail", "false");
-  return request<JourneysResponse>(`/journeys?${params}`, { signal });
 }
 
 export function getModelStatus(): Promise<ModelStatus> {
@@ -127,11 +131,11 @@ export function ask(text: string, lang: string): Promise<{ available: boolean; a
 }
 
 /** Stations near a position. The position goes in the body, never in the address. */
-export function nearbyStations(lat: number, lon: number): Promise<NearbyStation[]> {
+export function nearbyStations(lat: number, lon: number, all: boolean): Promise<NearbyStation[]> {
   return request<{ stations: NearbyStation[] }>("/stations/nearby", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ lat, lon }),
+    body: JSON.stringify({ lat, lon, all }),
   }).then((r) => r.stations);
 }
 
