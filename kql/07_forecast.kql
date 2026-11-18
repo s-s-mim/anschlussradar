@@ -4,24 +4,24 @@
 // The API loads the result once an hour.
 
 .create-or-alter function with (folder = "api", docstring = "Typical departure delays, last 4 weeks")
-DelayForecastStats(days: int) {
+DelayForecastStats(lookback: int) {
     let facts = StopFacts
-        | where service_date > ago(days * 1d)
+        | where service_date > ago(lookback * 1d)
         | where not(incomplete) and isnotnull(dep_pt) and not(dep_cancelled) and isnotnull(dep_delay_min)
         // max_of/min_of want one type: the column is int, the literals are long.
         | extend delay = max_of(0, min_of(tolong(dep_delay_min), 120)),
                  hour = toint(hourofday(datetime_utc_to_local(dep_pt, "Europe/Berlin")));
-    let by_train = facts
+    let train_rows = facts
         | summarize trips = count(), p50 = percentile(delay, 50), p80 = percentile(delay, 80),
                     late = countif(delay >= 6) by eva, number
         | where trips >= 3
         | extend row_kind = "train", category = "", hour = toint(-1);
-    let by_group = facts
+    let group_rows = facts
         | summarize trips = count(), p50 = percentile(delay, 50), p80 = percentile(delay, 80),
                     late = countif(delay >= 6) by eva, category, hour
         | where trips >= 10
         | extend row_kind = "group", number = "";
     // Both sides must have the same column types, or union splits a column in two.
-    union by_train, by_group
+    union train_rows, group_rows
     | project row_kind, eva, number, category, hour, trips, p50, p80, late
 }
