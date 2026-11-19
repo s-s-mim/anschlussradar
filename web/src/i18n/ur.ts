@@ -80,6 +80,11 @@ export const ur: Translation = {
     trackChanged: "پلیٹ فارم بدل گیا: اب پلیٹ فارم {track}",
     cancelled: "منسوخ",
     towards: "بطرف {headsign}",
+    stand: "پلیٹ فارم {track}",
+    standChanged: "پلیٹ فارم بدل گیا: اب {track}",
+    ride: "{min} منٹ",
+    stops_one: "{count} درمیانی اسٹاپ",
+    stops_other: "{count} درمیانی اسٹاپ",
     reason: "وجہ: {text}",
     attribution: "کنکشن کا ڈیٹا: Transitous",
   },
@@ -135,6 +140,7 @@ export const ur: Translation = {
     cleared: "مٹا دیا گیا۔ اس ڈیوائس پر اب AnschlussRadar کا کچھ بھی محفوظ نہیں۔",
   },
   footer: {
+    test: "آزمائشی ورژن، تمام معلومات بغیر ضمانت۔",
     dbData: "ریئل ٹائم ڈیٹا: DB InfraGO AG (CC BY 4.0)",
     planner: "کنکشن تلاش: Transitous",
     notDb: "یہ Deutsche Bahn کی سروس نہیں ہے۔",
@@ -271,6 +277,13 @@ export const ur: Translation = {
     fromStop: "{stop} سے منزل تک پیدل",
     amount: "{distance}، تقریباً {min} منٹ",
     total: "جن میں {distance} پیدل",
+  },
+  notice: {
+    title: "آزمائشی ورژن",
+    body: "AnschlussRadar کی ابھی جانچ ہو رہی ہے۔ کنکشن، پلیٹ فارم اور اندازے نامکمل، پرانے یا غلط ہو سکتے ہیں۔",
+    check: "سفر سے پہلے اپنا کنکشن Deutsche Bahn ‏(bahn.de یا DB Navigator) یا اپنی مقامی ٹرانسپورٹ ایپ میں چیک کریں۔",
+    ok: "سمجھ گیا",
+    short: "آزمائشی ورژن: معلومات کی کوئی ضمانت نہیں۔ سفر سے پہلے bahn.de یا مقامی ٹرانسپورٹ ایپ میں اپنا کنکشن چیک کریں۔",
   },
   about: {
     soonTitle: "جلد آ رہا ہے",

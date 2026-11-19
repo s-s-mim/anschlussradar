@@ -80,6 +80,11 @@ export const am: Translation = {
     trackChanged: "መድረክ ተቀይሯል፡ አሁን መድረክ {track}",
     cancelled: "ተሰርዟል",
     towards: "ወደ {headsign}",
+    stand: "መድረክ {track}",
+    standChanged: "መድረክ ተቀይሯል፦ አሁን {track}",
+    ride: "{min} ደቂቃ",
+    stops_one: "{count} መካከለኛ ፌርማታ",
+    stops_other: "{count} መካከለኛ ፌርማታዎች",
     reason: "ምክንያት፡ {text}",
     attribution: "የጉዞ መረጃ፡ Transitous",
   },
@@ -135,6 +140,7 @@ export const am: Translation = {
     cleared: "ተሰርዟል። በዚህ መሣሪያ ላይ ከAnschlussRadar ምንም የተቀመጠ ነገር የለም።",
   },
   footer: {
+    test: "የሙከራ ስሪት፣ ሁሉም መረጃ ያለ ዋስትና።",
     dbData: "የቀጥታ መረጃ፦ DB InfraGO AG (CC BY 4.0)",
     planner: "የጉዞ ፍለጋ፡ Transitous",
     notDb: "የDeutsche Bahn አገልግሎት አይደለም።",
@@ -271,6 +277,13 @@ export const am: Translation = {
     fromStop: "ከ{stop} ወደ መድረሻ በእግር",
     amount: "{distance}፣ {min} ደቂቃ ገደማ",
     total: "ከዚህ {distance} በእግር",
+  },
+  notice: {
+    title: "የሙከራ ስሪት",
+    body: "AnschlussRadar ገና በሙከራ ላይ ነው። ግንኙነቶች፣ መድረኮች እና ትንበያዎች ሊጎድሉ፣ ያረጁ ወይም የተሳሳቱ ሊሆኑ ይችላሉ።",
+    check: "ከጉዞ በፊት ግንኙነትዎን በDeutsche Bahn (bahn.de ወይም DB Navigator) ወይም በአካባቢዎ የትራንስፖርት መተግበሪያ ያረጋግጡ።",
+    ok: "ገባኝ",
+    short: "የሙከራ ስሪት፦ ዋስትና የለም። ከጉዞ በፊት ግንኙነትዎን በbahn.de ወይም በአካባቢ የትራንስፖርት መተግበሪያ ያረጋግጡ።",
   },
   about: {
     soonTitle: "በቅርቡ",

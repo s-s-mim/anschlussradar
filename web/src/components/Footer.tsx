@@ -32,6 +32,7 @@ export function Footer() {
           </a>
           . {t("footer.notDb")}
         </p>
+        <p>{t("footer.test")}</p>
         <p>© 2026 {SITE.operatorName}</p>
       </div>
     </footer>

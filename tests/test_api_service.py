@@ -438,3 +438,23 @@ def test_post_journeys_and_walking(tmp_path: Path) -> None:
     j = body["journeys"][0]
     assert j["walkStart"] == {"meters": 420, "minutes": 6} and j["walkMeters"] == 420
     assert j["walkEnd"] is None
+
+
+def test_leg_lists_intermediate_stops() -> None:
+    from anschlussradar.api.journeys import Leg
+
+    raw = {
+        "mode": "BUS",
+        "from": {"name": "Kriftel Bahnhof", "track": "B"},
+        "to": {"name": "Hofheim Bahnhof"},
+        "scheduledStartTime": "2026-11-16T06:32:00Z",
+        "scheduledEndTime": "2026-11-16T06:45:00Z",
+        "intermediateStops": [
+            {"name": "Kriftel Rathaus", "scheduledDeparture": "2026-11-16T06:35:00Z", "track": "2"},
+            {"name": "Hofheim Kreishaus", "scheduledArrival": "2026-11-16T06:41:00Z"},
+        ],
+    }
+    d = Leg.from_motis(raw).to_dict()
+    assert [s["name"] for s in d["stops"]] == ["Kriftel Rathaus", "Hofheim Kreishaus"]
+    assert d["stops"][0]["time"].startswith("2026-11-16T07:35") and d["stops"][0]["track"] == "2"
+    assert d["departureTrack"] == "B"

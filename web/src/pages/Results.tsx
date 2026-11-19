@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { JourneyCard } from "../components/Journey";
 import { LearningBanner } from "../components/LearningBanner";
+import { TestNote, TestNotice } from "../components/TestNotice";
 import { useI18n } from "../i18n";
 import { ApiError, findJourneys } from "../lib/api";
 import { fromParams, place, toParams } from "../lib/query";
@@ -111,6 +112,8 @@ export function Results({ search, onStage }: { search: URLSearchParams; onStage:
         </div>
       </header>
 
+      <TestNotice />
+      <TestNote />
       <LearningBanner stage={data?.stage ?? null} />
 
       <div className="toolbar">

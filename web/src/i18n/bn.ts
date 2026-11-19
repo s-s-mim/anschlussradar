@@ -80,6 +80,11 @@ export const bn: Translation = {
     trackChanged: "প্ল্যাটফর্ম বদল: এখন প্ল্যাটফর্ম {track}",
     cancelled: "বাতিল",
     towards: "{headsign} অভিমুখে",
+    stand: "প্ল্যাটফর্ম {track}",
+    standChanged: "প্ল্যাটফর্ম বদলেছে: এখন {track}",
+    ride: "{min} মিনিট",
+    stops_one: "মাঝে {count}টি স্টপ",
+    stops_other: "মাঝে {count}টি স্টপ",
     reason: "কারণ: {text}",
     attribution: "সংযোগের তথ্য: Transitous",
   },
@@ -135,6 +140,7 @@ export const bn: Translation = {
     cleared: "মুছে ফেলা হয়েছে। এই ডিভাইসে AnschlussRadar-এর আর কিছু সংরক্ষিত নেই।",
   },
   footer: {
+    test: "পরীক্ষামূলক সংস্করণ, সব তথ্য নিশ্চয়তা ছাড়া।",
     dbData: "রিয়েল-টাইম ডেটা: DB InfraGO AG (CC BY 4.0)",
     planner: "সংযোগ খোঁজা: Transitous",
     notDb: "এটি Deutsche Bahn-এর কোনো পরিষেবা নয়।",
@@ -271,6 +277,13 @@ export const bn: Translation = {
     fromStop: "{stop} থেকে গন্তব্যে হেঁটে",
     amount: "{distance}, প্রায় {min} মিনিট",
     total: "এর মধ্যে {distance} হেঁটে",
+  },
+  notice: {
+    title: "পরীক্ষামূলক সংস্করণ",
+    body: "AnschlussRadar এখনও পরীক্ষা করা হচ্ছে। সংযোগ, প্ল্যাটফর্ম ও পূর্বাভাস অসম্পূর্ণ, পুরনো বা ভুল হতে পারে।",
+    check: "যাত্রার আগে Deutsche Bahn (bahn.de বা DB Navigator) বা আপনার স্থানীয় পরিবহন অ্যাপে সংযোগটি যাচাই করুন।",
+    ok: "বুঝেছি",
+    short: "পরীক্ষামূলক সংস্করণ: তথ্যের কোনো নিশ্চয়তা নেই। যাত্রার আগে bahn.de বা স্থানীয় পরিবহন অ্যাপে সংযোগটি যাচাই করুন।",
   },
   about: {
     soonTitle: "শীঘ্রই আসছে",

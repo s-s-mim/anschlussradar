@@ -79,6 +79,11 @@ export const en: Translation = {
     trackChanged: "Platform change: now pl. {track}",
     cancelled: "cancelled",
     towards: "to {headsign}",
+    stand: "Bay {track}",
+    standChanged: "Bay changed: now bay {track}",
+    ride: "{min} min",
+    stops_one: "{count} stop in between",
+    stops_other: "{count} stops in between",
     reason: "Reason: {text}",
     attribution: "Journey data: Transitous",
   },
@@ -134,6 +139,7 @@ export const en: Translation = {
     cleared: "Deleted. Nothing from AnschlussRadar is stored on this device any more.",
   },
   footer: {
+    test: "Test version, all information without guarantee.",
     dbData: "Real-time data: DB InfraGO AG (CC BY 4.0)",
     planner: "Journey planning by Transitous",
     notDb: "Not a Deutsche Bahn service.",
@@ -270,6 +276,13 @@ export const en: Translation = {
     fromStop: "Walk from {stop} to your destination",
     amount: "{distance}, about {min} min",
     total: "{distance} on foot",
+  },
+  notice: {
+    title: "Test version",
+    body: "AnschlussRadar is still being tested. Connections, platforms and forecasts may be missing, out of date or wrong.",
+    check: "Check your connection before you travel with Deutsche Bahn (bahn.de or DB Navigator) or in your local transport app.",
+    ok: "Got it",
+    short: "Test version: no guarantee. Check your connection on bahn.de or in your local transport app before you travel.",
   },
   about: {
     soonTitle: "Coming soon",

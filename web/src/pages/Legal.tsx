@@ -60,6 +60,12 @@ export function Impressum() {
         AnschlussRadar ist ein privates, nicht kommerzielles Projekt. Es ist kein Angebot der Deutschen Bahn AG und
         steht in keiner Verbindung zu ihr. Alle Angaben zu Verbindungen und ihrer Zuverlässigkeit sind ohne Gewähr.
       </p>
+      <p>
+        Die App befindet sich in einer Testphase. Fahrplan-, Echtzeit- und Ortsdaten stammen von Dritten (DB InfraGO,
+        Transitous, OpenStreetMap) und können fehlen, veraltet oder falsch sein. Die Zuverlässigkeitswerte sind
+        Schätzungen aus vergangenen Fahrten, keine Zusage. Bitte prüfe deine Verbindung vor der Fahrt bei der
+        Deutschen Bahn oder deinem Verkehrsverbund.
+      </p>
     </div>
   );
 }

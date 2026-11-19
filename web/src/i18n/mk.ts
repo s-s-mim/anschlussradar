@@ -80,6 +80,11 @@ export const mk: Translation = {
     trackChanged: "Промена на колосек: сега колосек {track}",
     cancelled: "откажан",
     towards: "Правец {headsign}",
+    stand: "Перон {track}",
+    standChanged: "Променет перон: сега {track}",
+    ride: "{min} мин.",
+    stops_one: "{count} попатна постојка",
+    stops_other: "{count} попатни постојки",
     reason: "Причина: {text}",
     attribution: "Податоци за врските: Transitous",
   },
@@ -135,6 +140,7 @@ export const mk: Translation = {
     cleared: "Избришано. На овој уред повеќе нема ништо зачувано од AnschlussRadar.",
   },
   footer: {
+    test: "Тест-верзија, сите податоци без гаранција.",
     dbData: "Податоци во реално време: DB InfraGO AG (CC BY 4.0)",
     planner: "Пребарување врски: Transitous",
     notDb: "Не е услуга на Deutsche Bahn.",
@@ -271,6 +277,13 @@ export const mk: Translation = {
     fromStop: "Пешки од {stop} до целта",
     amount: "{distance}, околу {min} мин.",
     total: "од тоа {distance} пешки",
+  },
+  notice: {
+    title: "Тест-верзија",
+    body: "AnschlussRadar сè уште се тестира. Врските, пероните и прогнозите може да недостасуваат, да се застарени или погрешни.",
+    check: "Пред патувањето проверете ја врската кај Deutsche Bahn (bahn.de или DB Navigator) или во апликацијата на локалниот превоз.",
+    ok: "Разбрав",
+    short: "Тест-верзија: без гаранција. Пред патувањето проверете ја врската на bahn.de или во апликацијата на локалниот превоз.",
   },
   about: {
     soonTitle: "Наскоро",

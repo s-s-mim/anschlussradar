@@ -49,6 +49,16 @@ LOCAL_MIN_TRANSFER = 2
 _KNOWN = {c for cats in CATEGORY_GROUPS.values() for c in cats}
 
 
+def intermediate_stop(place: dict[str, Any]) -> dict[str, Any]:
+    """A stop the vehicle passes between boarding and alighting."""
+    return {
+        "name": place.get("name", ""),
+        "time": parse_time(place.get("scheduledDeparture") or place.get("scheduledArrival")),
+        "track": place.get("track") or place.get("scheduledTrack"),
+        "cancelled": bool(place.get("cancelled")),
+    }
+
+
 def parse_time(value: str | None) -> datetime | None:
     if not value:
         return None
@@ -102,6 +112,8 @@ class Leg:
     to_hub: int | None = None
     forecast: DelayForecast | None = None  # typical departure delay at a recorded hub
     distance_m: int | None = None  # walking: from the planner; transit: along the route shape
+    # Stops in between (name, planned time, platform or bus bay), shown on request.
+    stops: list[dict[str, Any]] = field(default_factory=list)
 
     @classmethod
     def from_motis(cls, leg: dict[str, Any]) -> Leg:
@@ -130,6 +142,7 @@ class Leg:
             real_time=bool(leg.get("realTime")),
             cancelled=bool(leg.get("cancelled") or frm.get("cancelled") or to.get("cancelled")),
             distance_m=leg_distance(leg),
+            stops=[intermediate_stop(p) for p in leg.get("intermediateStops") or []],
         )
 
     @property
@@ -172,6 +185,7 @@ class Leg:
             "fromHub": self.from_hub,
             "toHub": self.to_hub,
             "forecast": self.forecast.to_dict() if self.forecast else None,
+            "stops": [{**st, "time": iso(st["time"])} for st in self.stops],
         }
 
 

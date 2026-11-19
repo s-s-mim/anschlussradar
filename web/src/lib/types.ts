@@ -48,6 +48,8 @@ export interface Leg {
   toHub: number | null;
   /** Typical departure delay at a recorded hub over the last 4 weeks. */
   forecast: { typical: number; high: number; lateShare: number; trips: number } | null;
+  /** Stops in between, with planned time and platform or bus bay. */
+  stops?: { name: string; time: string | null; track: string | null; cancelled: boolean }[];
 }
 
 export interface TrainNote {

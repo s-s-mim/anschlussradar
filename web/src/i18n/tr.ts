@@ -80,6 +80,11 @@ export const tr: Translation = {
     trackChanged: "Peron değişti: şimdi peron {track}",
     cancelled: "iptal",
     towards: "Yön: {headsign}",
+    stand: "Peron {track}",
+    standChanged: "Peron değişti: şimdi {track}",
+    ride: "{min} dk.",
+    stops_one: "{count} ara durak",
+    stops_other: "{count} ara durak",
     reason: "Neden: {text}",
     attribution: "Bağlantı verileri: Transitous",
   },
@@ -135,6 +140,7 @@ export const tr: Translation = {
     cleared: "Silindi. Bu cihazda artık AnschlussRadar'a ait hiçbir şey kayıtlı değil.",
   },
   footer: {
+    test: "Test sürümü, tüm bilgiler garanti dışıdır.",
     dbData: "Gerçek zamanlı veriler: DB InfraGO AG (CC BY 4.0)",
     planner: "Sefer bilgisi: Transitous",
     notDb: "Deutsche Bahn'ın bir hizmeti değildir.",
@@ -271,6 +277,13 @@ export const tr: Translation = {
     fromStop: "{stop} durağından hedefe yürü",
     amount: "{distance}, yaklaşık {min} dk.",
     total: "{distance} yürüyüş",
+  },
+  notice: {
+    title: "Test sürümü",
+    body: "AnschlussRadar hâlâ test ediliyor. Bağlantılar, peronlar ve tahminler eksik, güncel olmayan ya da hatalı olabilir.",
+    check: "Yolculuktan önce bağlantını Deutsche Bahn'da (bahn.de veya DB Navigator) ya da bölgendeki toplu taşıma uygulamasında kontrol et.",
+    ok: "Anladım",
+    short: "Test sürümü: bilgiler garanti edilmez. Yola çıkmadan önce bahn.de'de veya bölgesel toplu taşıma uygulamasında kontrol et.",
   },
   about: {
     soonTitle: "Yakında",

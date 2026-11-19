@@ -80,6 +80,11 @@ export const hi: Translation = {
     trackChanged: "प्लेटफ़ॉर्म बदला: अब प्लेटफ़ॉर्म {track}",
     cancelled: "रद्द",
     towards: "{headsign} की ओर",
+    stand: "प्लेटफ़ॉर्म {track}",
+    standChanged: "प्लेटफ़ॉर्म बदला: अब {track}",
+    ride: "{min} मिनट",
+    stops_one: "बीच में {count} स्टॉप",
+    stops_other: "बीच में {count} स्टॉप",
     reason: "कारण: {text}",
     attribution: "कनेक्शन डेटा: Transitous",
   },
@@ -135,6 +140,7 @@ export const hi: Translation = {
     cleared: "मिटा दिया गया। इस डिवाइस पर अब AnschlussRadar का कुछ भी सहेजा नहीं है।",
   },
   footer: {
+    test: "परीक्षण संस्करण, सारी जानकारी बिना गारंटी।",
     dbData: "रीयल-टाइम डेटा: DB InfraGO AG (CC BY 4.0)",
     planner: "कनेक्शन खोज: Transitous",
     notDb: "यह Deutsche Bahn की सेवा नहीं है।",
@@ -271,6 +277,13 @@ export const hi: Translation = {
     fromStop: "{stop} से मंज़िल तक पैदल",
     amount: "{distance}, लगभग {min} मिनट",
     total: "इसमें {distance} पैदल",
+  },
+  notice: {
+    title: "परीक्षण संस्करण",
+    body: "AnschlussRadar की अभी जाँच चल रही है। कनेक्शन, प्लेटफ़ॉर्म और अनुमान अधूरे, पुराने या ग़लत हो सकते हैं।",
+    check: "यात्रा से पहले अपना कनेक्शन Deutsche Bahn (bahn.de या DB Navigator) या अपने स्थानीय परिवहन ऐप में जाँच लें।",
+    ok: "समझ गया",
+    short: "परीक्षण संस्करण: जानकारी की कोई गारंटी नहीं। यात्रा से पहले bahn.de या स्थानीय परिवहन ऐप में अपना कनेक्शन जाँच लें।",
   },
   about: {
     soonTitle: "जल्द आ रहा है",

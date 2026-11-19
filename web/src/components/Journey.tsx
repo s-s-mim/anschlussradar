@@ -67,14 +67,56 @@ function Delay({ min }: { min: number | null }) {
   return <span className={min > 0 ? "delay late" : "delay early"}>{min > 0 ? `+${min}` : min}</span>;
 }
 
-function Track({ actual, planned }: { actual: string | null; planned: string | null }) {
+/** Buses and trams stop at a bay ("Steig"), trains at a platform ("Gleis"). */
+const BAY_MODES = new Set(["BUS", "COACH", "TRAM", "CABLE_CAR", "AERIAL_LIFT", "FERRY"]);
+
+function Track({ actual, planned, mode }: { actual: string | null; planned: string | null; mode: string }) {
   const { t } = useI18n();
   if (!actual && !planned) return null;
   const changed = !!actual && !!planned && actual !== planned;
+  const bay = BAY_MODES.has(mode);
+  const track = actual ?? planned!;
+  const changedText = bay ? t("results.standChanged", { track }) : t("results.trackChanged", { track });
   return (
-    <span className={changed ? "track changed" : "track"} title={changed ? t("results.trackChanged", { track: actual! }) : undefined}>
-      {t("results.track", { track: actual ?? planned! })}
+    <span className={changed ? "track changed" : "track"} title={changed ? changedText : undefined}>
+      {bay ? t("results.stand", { track }) : t("results.track", { track })}
+      {changed && <span className="sr-only"> ({changedText})</span>}
     </span>
+  );
+}
+
+function rideMinutes(leg: Leg): number | null {
+  if (!leg.departurePlanned || !leg.arrivalPlanned) return null;
+  return Math.round((Date.parse(leg.arrivalPlanned) - Date.parse(leg.departurePlanned)) / 60_000);
+}
+
+/** "12 Min. · 5 Zwischenhalte", and the stops themselves when opened. */
+function Ride({ leg }: { leg: Leg }) {
+  const { t } = useI18n();
+  const min = rideMinutes(leg);
+  const stops = leg.stops ?? [];
+  const ride = min !== null && min > 0 ? t("results.ride", { min }) : null;
+  if (!stops.length) return ride ? <p className="ride small muted">{ride}</p> : null;
+  return (
+    <details className="ride small">
+      <summary className="muted">
+        {ride && <>{ride} · </>}
+        {t("results.stops", { count: stops.length })}
+      </summary>
+      <ol className="stop-list">
+        {stops.map((st, i) => (
+          <li key={`${st.name}-${i}`} className={st.cancelled ? "cancelled" : undefined}>
+            <time>{st.time ? hhmm(st.time) : ""}</time>
+            <span>{st.name}</span>
+            {st.track && (
+              <span className="track">
+                {BAY_MODES.has(leg.mode) ? t("results.stand", { track: st.track }) : t("results.track", { track: st.track })}
+              </span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </details>
   );
 }
 
@@ -219,20 +261,21 @@ function LegRow({ leg }: { leg: Leg }) {
         <time>{hhmm(leg.departurePlanned)}</time>
         <Delay min={leg.departureDelay} />
         <StopName name={leg.from} hub={leg.fromHub} />
-        <Track actual={leg.departureTrack} planned={leg.departureTrackPlanned} />
+        <Track actual={leg.departureTrack} planned={leg.departureTrackPlanned} mode={leg.mode} />
       </div>
       <div className="leg-ride">
         <span className={`line-badge${isRail(leg) ? "" : " local"}`}>{lineName(leg)}</span>
         {leg.headsign && <span className="muted small">{t("results.towards", { headsign: leg.headsign })}</span>}
         {leg.cancelled && <span className="cancel-flag">{t("results.cancelled")}</span>}
       </div>
+      <Ride leg={leg} />
       <Forecast leg={leg} />
       <LegNotes leg={leg} />
       <div className="leg-stop">
         <time>{hhmm(leg.arrivalPlanned)}</time>
         <Delay min={leg.arrivalDelay} />
         <StopName name={leg.to} hub={leg.toHub} />
-        <Track actual={leg.arrivalTrack} planned={leg.arrivalTrackPlanned} />
+        <Track actual={leg.arrivalTrack} planned={leg.arrivalTrackPlanned} mode={leg.mode} />
       </div>
     </li>
   );

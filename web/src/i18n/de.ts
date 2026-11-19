@@ -79,6 +79,11 @@ export const de = {
     trackChanged: "Gleiswechsel: jetzt Gl. {track}",
     cancelled: "fällt aus",
     towards: "Richtung {headsign}",
+    stand: "Steig {track}",
+    standChanged: "Steigwechsel: jetzt Steig {track}",
+    ride: "{min} Min.",
+    stops_one: "{count} Zwischenhalt",
+    stops_other: "{count} Zwischenhalte",
     reason: "Grund: {text}",
     attribution: "Verbindungsdaten: Transitous",
   },
@@ -134,6 +139,7 @@ export const de = {
     cleared: "Gelöscht. Auf diesem Gerät ist nichts mehr von AnschlussRadar gespeichert.",
   },
   footer: {
+    test: "Testversion, alle Angaben ohne Gewähr.",
     dbData: "Echtzeitdaten: DB InfraGO AG (CC BY 4.0)",
     planner: "Fahrplanauskunft über Transitous",
     notDb: "Kein Angebot der Deutschen Bahn.",
@@ -270,6 +276,13 @@ export const de = {
     fromStop: "Zu Fuß von {stop} zum Ziel",
     amount: "{distance}, etwa {min} Min.",
     total: "davon {distance} zu Fuß",
+  },
+  notice: {
+    title: "Testversion",
+    body: "AnschlussRadar wird noch getestet. Verbindungen, Gleise und Prognosen können fehlen, veraltet oder falsch sein.",
+    check: "Prüfe deine Verbindung vor der Fahrt bei der Deutschen Bahn (bahn.de oder DB Navigator) oder in der App deines Verkehrsverbunds.",
+    ok: "Verstanden",
+    short: "Testversion: Angaben ohne Gewähr. Prüfe deine Verbindung vor der Fahrt bei bahn.de oder deinem Verkehrsverbund.",
   },
   about: {
     soonTitle: "Bald verfügbar",
