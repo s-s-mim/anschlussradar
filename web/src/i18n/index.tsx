@@ -67,15 +67,11 @@ function lookup(dict: unknown, key: string): string | undefined {
 }
 
 function initialLang(): Lang {
+  // German first, whatever the phone's language: the app is about German trains and
+  // most texts in the data are German. People pick another language in the menu,
+  // and that choice is remembered.
   const saved = store.lang();
-  if (isLang(saved)) return saved;
-  // The phone's languages in order of preference; the first one the app has wins.
-  const wanted = typeof navigator !== "undefined" ? navigator.languages ?? [navigator.language] : [];
-  for (const tag of wanted) {
-    const code = tag.toLowerCase().split("-")[0];
-    if (isLang(code)) return code;
-  }
-  return "de";
+  return isLang(saved) ? saved : "de";
 }
 
 interface I18n {
