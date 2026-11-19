@@ -51,6 +51,7 @@ export const de = {
     ],
   },
   station: {
+    searchingMore: "Suche weitere Haltestellen und Adressen …",
     placeholder: "Bahnhof oder Haltestelle",
     noMatch: "Kein Bahnhof gefunden. Stimmt die Schreibweise?",
     loading: "Suche …",
@@ -276,6 +277,13 @@ export const de = {
     fromStop: "Zu Fuß von {stop} zum Ziel",
     amount: "{distance}, etwa {min} Min.",
     total: "davon {distance} zu Fuß",
+  },
+  install: {
+    title: "AnschlussRadar als App installieren",
+    lead: "Startet schneller und funktioniert wie eine normale App.",
+    button: "Installieren",
+    later: "Nicht jetzt",
+    ios: "Auf dem iPhone: Tippe in Safari unten auf „Teilen“ und dann auf „Zum Home-Bildschirm“.",
   },
   notice: {
     title: "Testversion",

@@ -53,6 +53,7 @@ export const ar: Translation = {
     ],
   },
   station: {
+    searchingMore: "جارٍ البحث عن محطات وعناوين أخرى …",
     placeholder: "محطة أو موقف",
     noMatch: "لم يتم العثور على محطة. هل الكتابة صحيحة؟",
     loading: "جارٍ البحث …",
@@ -289,6 +290,13 @@ export const ar: Translation = {
     fromStop: "سيرًا من {stop} إلى وجهتك",
     amount: "{distance}، نحو {min} دقيقة",
     total: "منها {distance} سيرًا",
+  },
+  install: {
+    title: "ثبّت AnschlussRadar كتطبيق",
+    lead: "يفتح أسرع ويعمل كتطبيق عادي.",
+    button: "تثبيت",
+    later: "ليس الآن",
+    ios: "على iPhone: في Safari اضغط «مشاركة» في الأسفل ثم «إضافة إلى الشاشة الرئيسية».",
   },
   notice: {
     title: "نسخة تجريبية",

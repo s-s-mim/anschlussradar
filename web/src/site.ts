@@ -12,7 +12,7 @@ export const SITE = {
   sourceCode: "https://github.com/s-s-mim/anschlussradar",
   // The GitHub repository is private until the public launch. Set to true once it is
   // public, so the app shows the link (a private repository answers "404" to visitors).
-  sourcePublic: true,
+  sourcePublic: false,
   privacyUpdated: "November 2026",
 };
 

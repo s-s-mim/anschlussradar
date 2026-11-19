@@ -52,6 +52,7 @@ export const tr: Translation = {
     ],
   },
   station: {
+    searchingMore: "Başka duraklar ve adresler aranıyor …",
     placeholder: "İstasyon veya durak",
     noMatch: "İstasyon bulunamadı. Yazım doğru mu?",
     loading: "Aranıyor …",
@@ -277,6 +278,13 @@ export const tr: Translation = {
     fromStop: "{stop} durağından hedefe yürü",
     amount: "{distance}, yaklaşık {min} dk.",
     total: "{distance} yürüyüş",
+  },
+  install: {
+    title: "AnschlussRadar'ı uygulama olarak yükle",
+    lead: "Daha hızlı açılır ve normal bir uygulama gibi çalışır.",
+    button: "Yükle",
+    later: "Şimdi değil",
+    ios: "iPhone'da: Safari'de alttaki “Paylaş”a, sonra “Ana Ekrana Ekle”ye dokun.",
   },
   notice: {
     title: "Test sürümü",

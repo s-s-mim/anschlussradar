@@ -88,6 +88,13 @@ def health(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_health())
 
 
+@app.route(route="warm", methods=["GET"])
+def warm(req: func.HttpRequest) -> func.HttpResponse:
+    # The web app calls this when it opens, so the first search finds a running
+    # instance with its statistics loading or loaded.
+    return respond(service().warm())
+
+
 @app.route(route="hubs", methods=["GET"])
 def hubs(req: func.HttpRequest) -> func.HttpResponse:
     return respond(service().get_hubs(), 3600)

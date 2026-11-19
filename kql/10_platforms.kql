@@ -1,0 +1,22 @@
+// Platforms of upcoming trains at the recorded stations, for the web app.
+// Transitous sometimes has no platform number (often at underground S-Bahn stations);
+// the API then shows the one from our own DB data. One query for all hubs, loaded
+// every 5 minutes in the background; searches never query Data Explorer directly.
+// The current platform is the changed one if DB announced a change, else the planned one.
+
+.create-or-alter function with (folder = "api", docstring = "Planned and current platforms of upcoming trains per stop")
+UpcomingPlatforms() {
+    PlannedLatest
+    | where coalesce(dep_pt, arr_pt) > ago(2h)
+    | join kind=leftouter (StopLatest | project stop_id, arr_cp, dep_cp) on stop_id
+    | project
+        eva,
+        number,
+        arr_pt,
+        dep_pt,
+        arr_platform = coalesce(arr_cp, arr_pp),
+        dep_platform = coalesce(dep_cp, dep_pp),
+        arr_planned_platform = arr_pp,
+        dep_planned_platform = dep_pp
+    | where isnotempty(arr_platform) or isnotempty(dep_platform)
+}

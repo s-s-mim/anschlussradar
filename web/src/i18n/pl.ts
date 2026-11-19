@@ -52,6 +52,7 @@ export const pl: Translation = {
     ],
   },
   station: {
+    searchingMore: "Szukam kolejnych przystanków i adresów …",
     placeholder: "Stacja lub przystanek",
     noMatch: "Nie znaleziono stacji. Sprawdź pisownię.",
     loading: "Szukam …",
@@ -283,6 +284,13 @@ export const pl: Translation = {
     fromStop: "Pieszo z {stop} do celu",
     amount: "{distance}, ok. {min} min",
     total: "w tym {distance} pieszo",
+  },
+  install: {
+    title: "Zainstaluj AnschlussRadar jako aplikację",
+    lead: "Uruchamia się szybciej i działa jak zwykła aplikacja.",
+    button: "Zainstaluj",
+    later: "Nie teraz",
+    ios: "Na iPhonie: w Safari stuknij „Udostępnij” na dole, a potem „Do ekranu początkowego”.",
   },
   notice: {
     title: "Wersja testowa",

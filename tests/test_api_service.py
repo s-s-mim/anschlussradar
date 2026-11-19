@@ -458,3 +458,82 @@ def test_leg_lists_intermediate_stops() -> None:
     assert [s["name"] for s in d["stops"]] == ["Kriftel Rathaus", "Hofheim Kreishaus"]
     assert d["stops"][0]["time"].startswith("2026-11-16T07:35") and d["stops"][0]["track"] == "2"
     assert d["departureTrack"] == "B"
+
+
+def test_places_in_two_steps(tmp_path: Path) -> None:
+    calls: list[httpx.URL] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request.url)
+        return httpx.Response(200, json=GEOCODE)
+
+    svc = make_service(tmp_path, handler=handler)
+    status, body = svc.post_places({"text": "Sodener Str 5", "step": "local"}, "c")
+    assert status == 200 and body["more"] is True and not calls  # no Transitous call yet
+    assert all(p["kind"] == "station" for p in body["places"])
+    status, more = svc.post_places({"text": "Sodener Str 5", "step": "more"}, "c")
+    assert len(calls) == 1 and more["places"][0]["kind"] == "address"
+    assert all(p["kind"] != "station" for p in more["places"])
+
+
+def test_refresh_reloads_in_the_background() -> None:
+    import threading
+
+    from anschlussradar.api.refresh import Refresh
+
+    now = [0.0]
+    loads: list[int] = []
+    release = threading.Event()
+
+    def load() -> None:
+        loads.append(1)
+        if len(loads) > 1:
+            release.wait(2)  # a slow reload must not block the caller
+
+    r = Refresh(load, every_s=10, what="test", clock=lambda: now[0])
+    r.ensure()
+    assert loads == [1]  # first use loads at once
+    now[0] = 20.0
+    r.ensure()  # stale: returns at once, reload runs in a thread
+    assert r.loaded_at == 0.0
+    release.set()
+    for _ in range(100):
+        if r.loaded_at == 20.0:
+            break
+        threading.Event().wait(0.01)
+    assert len(loads) == 2 and r.loaded_at == 20.0
+
+
+def test_warm_starts_loading(tmp_path: Path) -> None:
+    svc = make_service(tmp_path)
+    assert svc.warm() == (200, {"ok": True})
+
+
+def test_missing_platform_comes_from_own_data() -> None:
+    from anschlussradar.api.journeys import Leg, _fill_platforms
+    from anschlussradar.api.platforms import KustoPlatforms
+    from anschlussradar.api.stations import HubMatch
+
+    rows = [
+        {"eva": 8098105, "number": "35145", "dep_pt": "2026-11-16T06:52:00Z",
+         "arr_pt": None, "dep_platform": "103", "dep_planned_platform": "102"},
+    ]  # fmt: skip
+    platforms = KustoPlatforms(lambda: rows)
+    leg = Leg.from_motis(
+        {
+            "mode": "SUBURBAN",
+            "tripShortName": "35145",
+            "from": {"name": "Frankfurt(Main)Hbf tief"},
+            "to": {"name": "Offenbach Ost"},
+            "scheduledStartTime": "2026-11-16T06:53:00Z",
+            "scheduledEndTime": "2026-11-16T07:05:00Z",
+        }
+    )
+    leg.number = "35145"
+    hub = HubMatch(8098105, 8000105, "Frankfurt Hbf (tief)")
+    _fill_platforms(leg, hub, None, platforms)
+    assert (leg.dep_track, leg.dep_track_planned) == ("103", "102")  # change shows in red
+    other = Leg.from_motis({**{"mode": "BUS"}, "from": {"name": "x", "track": "4"}})
+    other.number = "35145"
+    _fill_platforms(other, hub, None, platforms)
+    assert other.dep_track == "4"  # Transitous' own platform is kept

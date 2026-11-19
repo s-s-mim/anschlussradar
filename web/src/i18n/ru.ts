@@ -52,6 +52,7 @@ export const ru: Translation = {
     ],
   },
   station: {
+    searchingMore: "Ищем другие остановки и адреса …",
     placeholder: "Станция или остановка",
     noMatch: "Станция не найдена. Проверьте написание.",
     loading: "Поиск …",
@@ -283,6 +284,13 @@ export const ru: Translation = {
     fromStop: "Пешком от {stop} до цели",
     amount: "{distance}, около {min} мин",
     total: "из них {distance} пешком",
+  },
+  install: {
+    title: "Установить AnschlussRadar как приложение",
+    lead: "Запускается быстрее и работает как обычное приложение.",
+    button: "Установить",
+    later: "Не сейчас",
+    ios: "На iPhone: в Safari нажмите «Поделиться» внизу, затем «На экран „Домой“».",
   },
   notice: {
     title: "Тестовая версия",

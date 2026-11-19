@@ -13,6 +13,7 @@ const KEYS = {
   local: "ar.local",
   questions: "ar.questions",
   notice: "ar.testNotice",
+  install: "ar.installLater",
 } as const;
 
 /** The test-phase notice comes back after this many days, so people are reminded now and then. */
@@ -52,6 +53,8 @@ const same = (a: Route, b: Route) => a.from.id === b.from.id && a.to.id === b.to
 export const store = {
   noticeDue: () => Date.now() - read<number>(KEYS.notice, 0) > NOTICE_DAYS * 86_400_000,
   noticeSeen: () => write(KEYS.notice, Date.now()),
+  installDue: () => Date.now() - read<number>(KEYS.install, 0) > NOTICE_DAYS * 86_400_000,
+  installLater: () => write(KEYS.install, Date.now()),
 
   lang: () => read<string | null>(KEYS.lang, null),
   setLang: (lang: string) => write(KEYS.lang, lang),

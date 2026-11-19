@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { InstallBox } from "../components/InstallBox";
 import { MyQuestions, QuestionBox } from "../components/QuestionBox";
 import { useI18n } from "../i18n";
 import { Link } from "../lib/router";
+
 
 export function Help({ search }: { search: URLSearchParams }) {
   const { dict } = useI18n();
@@ -17,6 +19,7 @@ export function Help({ search }: { search: URLSearchParams }) {
   return (
     <div className="page prose wrap narrow">
       <h1>{help.title}</h1>
+      <InstallBox dismissable={false} />
       <QuestionBox onSent={() => setVersion((v) => v + 1)} />
       <MyQuestions version={version} highlight={highlight} />
       <h2>{dict.qbox.all}</h2>

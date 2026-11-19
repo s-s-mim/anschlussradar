@@ -2119,3 +2119,52 @@ body {
 .stop-list li.cancelled span {
   text-decoration: line-through;
 }
+
+/* "Install as app" box on the start and help pages */
+.install-box {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 16px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--petrol);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.install-box > svg {
+  flex: none;
+  color: var(--petrol);
+  margin-top: 2px;
+}
+
+.install-title {
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.install-box .small {
+  margin: 0;
+}
+
+.install-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.install-actions .small-btn {
+  width: auto;
+  font-size: 0.95rem;
+  padding: 8px 14px;
+  min-height: 40px;
+}
+
+/* Second step of the suggestions: stops and addresses still on their way */
+.suggestions li.more-loading {
+  color: var(--muted);
+  font-size: 0.88em;
+  cursor: default;
+  pointer-events: none;
+}

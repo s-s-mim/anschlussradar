@@ -52,6 +52,7 @@ export const ur: Translation = {
     ],
   },
   station: {
+    searchingMore: "مزید اسٹاپ اور پتے تلاش ہو رہے ہیں …",
     placeholder: "اسٹیشن یا اسٹاپ",
     noMatch: "کوئی اسٹیشن نہیں ملا۔ کیا ہجے درست ہیں؟",
     loading: "تلاش جاری ہے …",
@@ -277,6 +278,13 @@ export const ur: Translation = {
     fromStop: "{stop} سے منزل تک پیدل",
     amount: "{distance}، تقریباً {min} منٹ",
     total: "جن میں {distance} پیدل",
+  },
+  install: {
+    title: "AnschlussRadar کو ایپ کے طور پر انسٹال کریں",
+    lead: "جلدی کھلتی ہے اور عام ایپ کی طرح کام کرتی ہے۔",
+    button: "انسٹال کریں",
+    later: "ابھی نہیں",
+    ios: "iPhone پر: Safari میں نیچے “Share” پر، پھر “Add to Home Screen” پر ٹیپ کریں۔",
   },
   notice: {
     title: "آزمائشی ورژن",

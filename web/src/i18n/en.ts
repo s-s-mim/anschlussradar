@@ -51,6 +51,7 @@ export const en: Translation = {
     ],
   },
   station: {
+    searchingMore: "Looking for more stops and addresses …",
     placeholder: "Station or stop",
     noMatch: "No station found. Check the spelling?",
     loading: "Searching …",
@@ -276,6 +277,13 @@ export const en: Translation = {
     fromStop: "Walk from {stop} to your destination",
     amount: "{distance}, about {min} min",
     total: "{distance} on foot",
+  },
+  install: {
+    title: "Install AnschlussRadar as an app",
+    lead: "Starts faster and works like a normal app.",
+    button: "Install",
+    later: "Not now",
+    ios: "On iPhone: in Safari, tap “Share” at the bottom, then “Add to Home Screen”.",
   },
   notice: {
     title: "Test version",

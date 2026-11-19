@@ -52,6 +52,7 @@ export const am: Translation = {
     ],
   },
   station: {
+    searchingMore: "ተጨማሪ ፌርማታዎችንና አድራሻዎችን በመፈለግ ላይ …",
     placeholder: "ጣቢያ ወይም ፌርማታ",
     noMatch: "ጣቢያ አልተገኘም። አጻጻፉ ትክክል ነው?",
     loading: "በመፈለግ ላይ …",
@@ -277,6 +278,13 @@ export const am: Translation = {
     fromStop: "ከ{stop} ወደ መድረሻ በእግር",
     amount: "{distance}፣ {min} ደቂቃ ገደማ",
     total: "ከዚህ {distance} በእግር",
+  },
+  install: {
+    title: "AnschlussRadarን እንደ መተግበሪያ ይጫኑ",
+    lead: "በፍጥነት ይከፈታል፤ እንደ መደበኛ መተግበሪያ ይሰራል።",
+    button: "ጫን",
+    later: "አሁን አይደለም",
+    ios: "በiPhone ላይ፦ በSafari ከታች “Share”ን፣ ከዚያ “Add to Home Screen”ን ይንኩ።",
   },
   notice: {
     title: "የሙከራ ስሪት",

@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import logging
 import re
+import threading
 import time
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -44,6 +45,7 @@ from .journeys import HistoryProvider, Journey, build_journeys, sort_journeys
 from .lines import Lines
 from .messages import MessageProvider, NoMessages
 from .network import NetworkStatus
+from .platforms import NoPlatforms, PlatformProvider
 from .push import Pusher
 from .questions import (
     QUESTIONS_DAILY_TOTAL,
@@ -118,6 +120,7 @@ class ApiService:
     email: EmailSender | None = None
     feedback: FeedbackStore | None = None
     messages: MessageProvider = field(default_factory=NoMessages)
+    platforms: PlatformProvider = field(default_factory=NoPlatforms)
     boards: StationBoards | None = None
     network: NetworkStatus | None = None
     lines: Lines | None = None
@@ -196,9 +199,19 @@ class ApiService:
             return error(400, "query_too_short", "Type at least 2 characters.")
         lang = str(body.get("lang") or "de")[:5]
         everything = body.get("all") is True
+        # The web app asks in two steps so train stations show at once: step "local"
+        # (own list only, plus whether more is worth asking for), then step "more"
+        # (only the additions from Transitous). Without a step, both come together.
+        step = body.get("step")
         places = [{**s.to_dict(), "kind": "station"} for s in self.stations.search(text, 6)]
-        wants_more = everything or len(places) < 3 or any(c.isdigit() for c in text)
-        if len(text) >= 3 and wants_more and self.lookup_limiter.allow(client or "anon"):
+        has_digit = any(c.isdigit() for c in text)
+        wants_more = len(text) >= 3 and (everything or len(places) < 3 or has_digit)
+        if step == "local":
+            return 200, {"places": places, "more": wants_more}
+        local = places
+        if step == "more":
+            places = []
+        if wants_more and self.lookup_limiter.allow(client or "anon"):
             try:
                 found = [
                     p for p in (_match_place(m) for m in self.transitous.geocode(text, lang)) if p
@@ -206,12 +219,12 @@ class ApiService:
             except TransitousError:
                 found = []
                 log.warning("geocode lookup failed; showing train stations only")
-            known = {normalize(p["name"]) for p in places}
+            known = {normalize(p["name"]) for p in local}
             for p in found:
                 if p["kind"] == "stop" and normalize(p["name"]) in known:
                     continue  # the same station, already in the list
                 places.append(p)
-            if any(c.isdigit() for c in text):
+            if has_digit:
                 # "Sodener Str. 5" is an address; keep the order otherwise.
                 places.sort(key=lambda p: p["kind"] != "address")
         return 200, {"places": places[:10]}
@@ -233,8 +246,19 @@ class ApiService:
             return v
         raise ValueError(f"'{name}' must be a station id from /stations or 'lat,lon'.")
 
+    def warm(self) -> Response:
+        """Called by the web app when it opens: wakes this instance and starts loading
+        the statistics in the background, so the first search does not wait for them."""
+        for provider in (self.history, self.messages, self.forecasts, self.platforms):
+            warm = getattr(provider, "warm", None)
+            if callable(warm):
+                warm()
+        threading.Thread(target=self.models.get, daemon=True).start()
+        return 200, {"ok": True}
+
     def get_journeys(self, params: dict[str, str], now: datetime | None = None) -> Response:
         now = now or datetime.now(UTC)
+        self.warm()  # after a cold start, statistics load while the planner answers
         try:
             from_place = self._place(params.get("from"), "from")
             to_place = self._place(params.get("to"), "to")
@@ -266,7 +290,14 @@ class ApiService:
 
         model = self.models.get()
         journeys = build_journeys(
-            plan, model, self.hubs, self.history, now, self.messages, self.forecasts
+            plan,
+            model,
+            self.hubs,
+            self.history,
+            now,
+            self.messages,
+            self.forecasts,
+            self.platforms,
         )
         if model.stage.value != "live_only":
             self._add_tips(journeys, from_place, to_place, when, arrive_by, rail_only, model, now)

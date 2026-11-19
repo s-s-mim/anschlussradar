@@ -52,6 +52,7 @@ export const mk: Translation = {
     ],
   },
   station: {
+    searchingMore: "Барам други постојки и адреси …",
     placeholder: "Станица или постојка",
     noMatch: "Не е пронајдена станица. Проверете го правописот.",
     loading: "Се пребарува …",
@@ -277,6 +278,13 @@ export const mk: Translation = {
     fromStop: "Пешки од {stop} до целта",
     amount: "{distance}, околу {min} мин.",
     total: "од тоа {distance} пешки",
+  },
+  install: {
+    title: "Инсталирајте го AnschlussRadar како апликација",
+    lead: "Се отвора побрзо и работи како обична апликација.",
+    button: "Инсталирај",
+    later: "Не сега",
+    ios: "На iPhone: во Safari допрете „Сподели“ долу, па „Додај на почетен екран“.",
   },
   notice: {
     title: "Тест-верзија",

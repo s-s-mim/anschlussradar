@@ -17,13 +17,13 @@ web/src/i18n/messages.
 from __future__ import annotations
 
 import logging
-import threading
-import time
 from collections import defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Protocol
+
+from .refresh import Refresh
 
 log = logging.getLogger(__name__)
 
@@ -117,21 +117,16 @@ class KustoMessages:
         self.query = query
         self.refresh_s = refresh_s
         self._data: dict[tuple[int, str], list[TrainMessage]] = {}
-        self._loaded_at: float | None = None
-        self._lock = threading.Lock()
+        self._refresher = Refresh(self._load, refresh_s, "train messages")
+
+    def _load(self) -> None:
+        self._data = summarize(self.query())
 
     def _refresh(self) -> None:
-        now = time.monotonic()
-        if self._loaded_at is not None and now - self._loaded_at < self.refresh_s:
-            return
-        with self._lock:
-            if self._loaded_at is not None and time.monotonic() - self._loaded_at < self.refresh_s:
-                return
-            try:
-                self._data = summarize(self.query())
-            except Exception:
-                log.exception("could not load train messages; keeping the previous state")
-            self._loaded_at = time.monotonic()
+        self._refresher.ensure()
+
+    def warm(self) -> None:
+        self._refresher.warm()
 
     def for_stop(self, eva: int, number: str) -> list[TrainMessage]:
         self._refresh()

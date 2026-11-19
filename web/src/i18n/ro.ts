@@ -52,6 +52,7 @@ export const ro: Translation = {
     ],
   },
   station: {
+    searchingMore: "Caut alte stații și adrese …",
     placeholder: "Gară sau stație",
     noMatch: "Nu am găsit nicio gară. Verifică scrierea.",
     loading: "Se caută …",
@@ -280,6 +281,13 @@ export const ro: Translation = {
     fromStop: "Pe jos de la {stop} la destinație",
     amount: "{distance}, cam {min} min",
     total: "din care {distance} pe jos",
+  },
+  install: {
+    title: "Instalează AnschlussRadar ca aplicație",
+    lead: "Pornește mai repede și funcționează ca o aplicație obișnuită.",
+    button: "Instalează",
+    later: "Nu acum",
+    ios: "Pe iPhone: în Safari, atinge „Partajează” jos, apoi „Adaugă pe ecranul principal”.",
   },
   notice: {
     title: "Versiune de test",

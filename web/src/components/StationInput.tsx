@@ -24,6 +24,7 @@ export function StationInput({ label, value, onChange, invalid, autoFocus, all =
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [searched, setSearched] = useState("");
   const typed = useRef(false);
 
@@ -42,20 +43,37 @@ export function StationInput({ label, value, onChange, invalid, autoFocus, all =
       return;
     }
     const ctrl = new AbortController();
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       setLoading(true);
-      searchPlaces(q, lang, all, ctrl.signal)
-        .then((list) => {
-          setItems(list);
-          setActive(list.length ? 0 : -1);
+      setLoadingMore(false);
+      try {
+        // Step 1: train stations at once.
+        const first = await searchPlaces(q, lang, all, "local", ctrl.signal);
+        setItems(first.places);
+        setActive(first.places.length ? 0 : -1);
+        setLoading(false);
+        if (!first.more) {
           setSearched(q);
-        })
-        .catch(() => {
-          if (!ctrl.signal.aborted) setItems([]);
-        })
-        .finally(() => {
-          if (!ctrl.signal.aborted) setLoading(false);
-        });
+          return;
+        }
+        // Step 2: stops and addresses, added when they arrive.
+        setLoadingMore(true);
+        const more = await searchPlaces(q, lang, all, "more", ctrl.signal).catch(() => ({ places: [] as Station[] }));
+        const seen = new Set(first.places.map((p) => p.id));
+        let merged = [...first.places, ...more.places.filter((p) => !seen.has(p.id))];
+        if (/\d/.test(q)) merged = [...merged.filter((p) => p.kind === "address"), ...merged.filter((p) => p.kind !== "address")];
+        merged = merged.slice(0, 10);
+        setItems(merged);
+        setActive(merged.length ? 0 : -1);
+        setSearched(q);
+      } catch {
+        if (!ctrl.signal.aborted) setItems([]);
+      } finally {
+        if (!ctrl.signal.aborted) {
+          setLoading(false);
+          setLoadingMore(false);
+        }
+      }
     }, 180);
     return () => {
       clearTimeout(timer);
@@ -88,7 +106,7 @@ export function StationInput({ label, value, onChange, invalid, autoFocus, all =
   };
 
   const listId = `${id}-list`;
-  const showEmpty = open && !loading && searched && !items.length && text.trim() === searched;
+  const showEmpty = open && !loading && !loadingMore && searched && !items.length && text.trim() === searched;
 
   return (
     <div className={`field station${invalid ? " invalid" : ""}`}>
@@ -139,8 +157,14 @@ export function StationInput({ label, value, onChange, invalid, autoFocus, all =
               </span>
             </li>
           ))}
+          {loadingMore && (
+            <li className="more-loading" aria-hidden="true">
+              {t("station.searchingMore")}
+            </li>
+          )}
         </ul>
       )}
+      {open && loadingMore && !items.length && <p className="hint">{t("station.searchingMore")}</p>}
       {showEmpty && <p className="hint">{t("station.noMatch")}</p>}
     </div>
   );

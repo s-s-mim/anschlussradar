@@ -8,12 +8,11 @@ queries per request.
 from __future__ import annotations
 
 import logging
-import threading
-import time
 from collections.abc import Callable
 from typing import Any
 
 from ..ml.features import DEFAULT_GLOBAL_RATE, HistoryCounts
+from .refresh import Refresh
 
 log = logging.getLogger(__name__)
 
@@ -66,8 +65,7 @@ class KustoHistory:
         self._exact: dict[tuple[int, str, str], tuple[float, float]] = {}
         self._group: dict[tuple[int, str, str, str], tuple[float, float]] = {}
         self._global_rate = DEFAULT_GLOBAL_RATE
-        self._loaded_at: float | None = None
-        self._lock = threading.Lock()
+        self._refresher = Refresh(self._load, refresh_s, "history counts")
 
     def load_rows(self, rows: list[dict[str, Any]]) -> None:
         exact: dict[tuple[int, str, str], tuple[float, float]] = {}
@@ -85,17 +83,14 @@ class KustoHistory:
                 global_rate = made / n
         self._exact, self._group, self._global_rate = exact, group, global_rate
 
+    def _load(self) -> None:
+        self.load_rows(self.query())
+
     def _refresh(self) -> None:
-        if self._loaded_at is not None and time.monotonic() - self._loaded_at < self.refresh_s:
-            return
-        with self._lock:
-            if self._loaded_at is not None and time.monotonic() - self._loaded_at < self.refresh_s:
-                return
-            try:
-                self.load_rows(self.query())
-            except Exception:
-                log.exception("could not load history counts; scores use the global rate")
-            self._loaded_at = time.monotonic()
+        self._refresher.ensure()
+
+    def warm(self) -> None:
+        self._refresher.warm()
 
     def counts(
         self,

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { LearningBanner } from "../components/LearningBanner";
+import { InstallBox } from "../components/InstallBox";
 import { NearMe } from "../components/NearMe";
 import { StationInput } from "../components/StationInput";
 import { AnsweredHint } from "../components/QuestionBox";
@@ -124,6 +125,8 @@ export function Home({ search, stage }: { search: URLSearchParams; stage: Stage 
             {t("home.search")}
           </button>
         </form>
+
+        <InstallBox />
 
         {newVisitor ? (
           <section className="why" aria-labelledby="why-title">

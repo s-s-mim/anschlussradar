@@ -52,6 +52,7 @@ export const uk: Translation = {
     ],
   },
   station: {
+    searchingMore: "Шукаємо інші зупинки й адреси …",
     placeholder: "Станція або зупинка",
     noMatch: "Станцію не знайдено. Перевірте написання.",
     loading: "Пошук …",
@@ -283,6 +284,13 @@ export const uk: Translation = {
     fromStop: "Пішки від {stop} до мети",
     amount: "{distance}, близько {min} хв",
     total: "з них {distance} пішки",
+  },
+  install: {
+    title: "Встановити AnschlussRadar як застосунок",
+    lead: "Запускається швидше й працює як звичайний застосунок.",
+    button: "Встановити",
+    later: "Не зараз",
+    ios: "На iPhone: у Safari торкніться «Поширити» внизу, потім «На початковий екран».",
   },
   notice: {
     title: "Тестова версія",

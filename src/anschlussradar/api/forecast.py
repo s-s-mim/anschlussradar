@@ -14,8 +14,6 @@ champion/challenger rule as the transfer model.
 from __future__ import annotations
 
 import logging
-import threading
-import time
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
@@ -23,6 +21,7 @@ from typing import Any, Protocol
 from zoneinfo import ZoneInfo
 
 from ..ml.features import category_group
+from .refresh import Refresh
 
 log = logging.getLogger(__name__)
 BERLIN = ZoneInfo("Europe/Berlin")
@@ -77,8 +76,7 @@ class KustoForecast:
         self.refresh_s = refresh_s
         self._train: dict[tuple[int, str], DelayForecast] = {}
         self._group: dict[tuple[int, str, int], DelayForecast] = {}
-        self._loaded_at: float | None = None
-        self._lock = threading.Lock()
+        self._refresher = Refresh(self._load, refresh_s, "delay statistics")
 
     def load_rows(self, rows: list[dict[str, Any]]) -> None:
         train: dict[tuple[int, str], DelayForecast] = {}
@@ -94,17 +92,14 @@ class KustoForecast:
                     group[key] = _fc(r, "group")
         self._train, self._group = train, group
 
+    def _load(self) -> None:
+        self.load_rows(self.query())
+
     def _refresh(self) -> None:
-        if self._loaded_at is not None and time.monotonic() - self._loaded_at < self.refresh_s:
-            return
-        with self._lock:
-            if self._loaded_at is not None and time.monotonic() - self._loaded_at < self.refresh_s:
-                return
-            try:
-                self.load_rows(self.query())
-            except Exception:
-                log.exception("could not load delay statistics; keeping the previous ones")
-            self._loaded_at = time.monotonic()
+        self._refresher.ensure()
+
+    def warm(self) -> None:
+        self._refresher.warm()
 
     def forecast(
         self, eva: int, number: str | None, category: str | None, departure: datetime

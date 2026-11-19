@@ -52,6 +52,7 @@ export const bn: Translation = {
     ],
   },
   station: {
+    searchingMore: "আরও স্টপ ও ঠিকানা খোঁজা হচ্ছে …",
     placeholder: "স্টেশন বা স্টপ",
     noMatch: "কোনো স্টেশন পাওয়া যায়নি। বানান ঠিক আছে কি?",
     loading: "খোঁজা হচ্ছে …",
@@ -277,6 +278,13 @@ export const bn: Translation = {
     fromStop: "{stop} থেকে গন্তব্যে হেঁটে",
     amount: "{distance}, প্রায় {min} মিনিট",
     total: "এর মধ্যে {distance} হেঁটে",
+  },
+  install: {
+    title: "AnschlussRadar অ্যাপ হিসেবে ইনস্টল করুন",
+    lead: "দ্রুত খোলে এবং সাধারণ অ্যাপের মতো চলে।",
+    button: "ইনস্টল করুন",
+    later: "এখন নয়",
+    ios: "iPhone-এ: Safari-তে নিচে “Share”, তারপর “Add to Home Screen” চাপুন।",
   },
   notice: {
     title: "পরীক্ষামূলক সংস্করণ",

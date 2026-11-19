@@ -28,14 +28,27 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
-/** Stations, and stops and addresses when needed. POST, so a typed address stays out of URLs. */
-export function searchPlaces(text: string, lang: string, all: boolean, signal?: AbortSignal): Promise<Station[]> {
-  return request<{ places: Station[] }>("/places", {
+/** Stations, and stops and addresses when needed. POST, so a typed address stays out of URLs.
+ * Two steps: "local" answers at once from the app's own station list and says whether
+ * more is worth asking for; "more" then brings the stops and addresses from Transitous. */
+export function searchPlaces(
+  text: string,
+  lang: string,
+  all: boolean,
+  step: "local" | "more",
+  signal?: AbortSignal,
+): Promise<{ places: Station[]; more?: boolean }> {
+  return request<{ places: Station[]; more?: boolean }>("/places", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text, lang, all }),
+    body: JSON.stringify({ text, lang, all, step }),
     signal,
-  }).then((b) => b.places);
+  });
+}
+
+/** Wakes the API when the app opens, so the first search does not wait for a cold start. */
+export function warmUp(): void {
+  fetch(`${BASE}/warm`).catch(() => undefined);
 }
 
 export interface JourneyQuery {

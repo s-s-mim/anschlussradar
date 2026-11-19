@@ -28,7 +28,8 @@ from ..ml.serving import LoadedModel, live_check, score_transfer
 from ..ml.stages import Stage
 from .forecast import DelayForecast, ForecastProvider
 from .messages import MessageProvider, TrainMessage
-from .stations import HubMatcher, distance_m
+from .platforms import PlatformProvider
+from .stations import HubMatch, HubMatcher, distance_m
 
 NON_TRANSIT_MODES = {
     "WALK", "BIKE", "RENTAL", "CAR", "CAR_PARKING", "CAR_DROPOFF", "ODM", "RIDE_SHARING", "FLEX",
@@ -356,6 +357,7 @@ def build_journeys(
     today: datetime,
     messages: MessageProvider | None = None,
     forecasts: ForecastProvider | None = None,
+    platforms: PlatformProvider | None = None,
 ) -> list[Journey]:
     out: list[Journey] = []
     for it in [*plan.get("direct", []), *plan.get("itineraries", [])]:
@@ -377,12 +379,29 @@ def build_journeys(
             leg.to_hub = to_hub.group_eva if to_hub else None
             if messages is not None:
                 leg.messages = _leg_messages(leg, hubs, messages)
+            if platforms is not None and leg.number:
+                _fill_platforms(leg, from_hub, to_hub, platforms)
             if forecasts is not None and from_hub is not None and leg.dep_planned is not None:
                 leg.forecast = forecasts.forecast(
                     from_hub.eva, leg.number, leg.category, leg.dep_planned
                 )
         out.append(journey)
     return out
+
+
+def _fill_platforms(
+    leg: Leg, from_hub: HubMatch | None, to_hub: HubMatch | None, platforms: PlatformProvider
+) -> None:
+    """Our own DB platform where Transitous has none (see platforms.py)."""
+    assert leg.number
+    if from_hub and leg.dep_planned and not (leg.dep_track or leg.dep_track_planned):
+        found = platforms.find(from_hub.eva, leg.number, leg.dep_planned, "dep")
+        if found:
+            leg.dep_track, leg.dep_track_planned = found.current, found.planned
+    if to_hub and leg.arr_planned and not (leg.arr_track or leg.arr_track_planned):
+        found = platforms.find(to_hub.eva, leg.number, leg.arr_planned, "arr")
+        if found:
+            leg.arr_track, leg.arr_track_planned = found.current, found.planned
 
 
 def _leg_messages(leg: Leg, hubs: HubMatcher, messages: MessageProvider) -> list[TrainMessage]:
